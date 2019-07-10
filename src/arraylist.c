@@ -1,4 +1,6 @@
 #include "arraylist.h"
+#include <stdlib.h>
+#include <string.h>
 
 ArrayList *arraylist_new(unsigned int length)
 {
@@ -63,7 +65,7 @@ int arraylist_insert(ArrayList *arraylist, unsigned int index,
 
   memmove(&arraylist->data[index + 1], 
           &arraylist->data[index], 
-          (arraylist->length - index) * sizeof(ArrayListValue);
+          (arraylist->length - index) * sizeof(ArrayListValue));
 
   arraylist->data[index] = data;
   arraylist->length += 1;
@@ -73,12 +75,12 @@ int arraylist_insert(ArrayList *arraylist, unsigned int index,
 
 int arraylist_append(ArrayList *arraylist, ArrayListValue data)
 {
-  arraylist_insert(arraylist, arraylist->length, data);
+  return arraylist_insert(arraylist, arraylist->length, data);
 }
 
 int arraylist_prepend(ArrayList *arraylist, ArrayListValue data)
 {
-  arraylist_insert(arraylist, 0, data);
+  return arraylist_insert(arraylist, 0, data);
 }
 
 int arraylist_remove_range(ArrayList *arraylist, unsigned int index, 
@@ -120,7 +122,7 @@ int arraylist_index_of(ArrayList *arraylist,
   }
 
   for (index = 0; index < arraylist->length; ++index) {
-    if (callback(arraylist[index], data) == 0) {
+    if (callback(arraylist->data[index], data) == 0) {
       return index;
     }
   }
@@ -157,15 +159,22 @@ static int arraylist_sort_internal(ArrayListValue *list_data,
       // do nothing
     }
   }
-  swap_with_tmp(list_data[left_length], pivot, tmp);
+  swap_with_tmp(list_data[left_length], list_data[list_length - 1], tmp);
   right_length = list_length - left_length - 1; // 1 for pivot
 
-  arraylist_sort_internal(list_data, left_length, compare_func);
-  arraylist_sort_internal(&list_data[left_length + 1], right_length, compare_func);
+  if (left_length > 1) {
+    arraylist_sort_internal(list_data, left_length, compare_func);
+  }
+
+  if (right_length > 1) {
+    arraylist_sort_internal(&list_data[left_length + 1], right_length, compare_func);
+  }
+
+  return 0;
 }
 
 int arraylist_sort(ArrayList *arraylist, 
                    ArrayListValueCompareFunc compare_func)
 {
-  return arraylist_sort(arraylist->data, arraylist->length, compare_func);
+  return arraylist_sort_internal(arraylist->data, arraylist->length, compare_func);
 }
