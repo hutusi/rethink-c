@@ -1,10 +1,6 @@
 #ifndef RETHINK_C_ARRAYLIST_H
 #define RETHINK_C_ARRAYLIST_H
 
-#ifndef NULL
-#define NULL 0
-#endif
-
 typedef void *ArrayListValue;
 
 typedef struct _ArrayList {
