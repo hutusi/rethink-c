@@ -25,7 +25,7 @@ void test_bitmap()
     assert(flag == 0xFFFFFFFF);
 
     int len = 10;
-    word_t* flags = (word_t*)malloc(sizeof(word_t) * len);
+    word_t *flags = (word_t *)malloc(sizeof(word_t) * len);
     set_bitmap(flags, 10);
     for (int i = 0; i < len * BITS_PER_WORD; ++i) {
         assert(get_bit(flags, i) == 1);
@@ -36,4 +36,3 @@ void test_bitmap()
         assert(get_bit(flags, i) == 0);
     }
 }
-

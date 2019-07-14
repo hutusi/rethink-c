@@ -9,7 +9,7 @@ extern void test_list_sort();
 
 extern void test_bitmap();
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     printf("======= Tests start ======= \n");
     test_arraylist();

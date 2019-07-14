@@ -1,0 +1,8 @@
+---
+# BasedOnStyle:  LLVM
+IndentWidth:     4
+BreakBeforeBraces: Linux
+PointerAlignment: Right
+BinPackArguments: false
+BinPackParameters: false
+AlignEscapedNewlines: Left
