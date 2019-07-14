@@ -4,6 +4,9 @@
  *
  */
 
+#ifndef RETHINK_C_BITMAP_H
+#define RETHINK_C_BITMAP_H
+
 #include <limits.h> /* for CHAR_BIT */
 #include <stdint.h> /* for uint32_t */
 
@@ -24,3 +27,5 @@ int get_bit(word_t *words, int n);
 void set_bitmap(word_t *words, int len);
 
 void clear_bitmap(word_t *words, int len);
+
+#endif /* #ifndef RETHINK_C_BITMAP_H */

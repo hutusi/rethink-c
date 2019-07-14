@@ -9,6 +9,8 @@ extern void test_list_sort();
 
 extern void test_bitmap();
 
+extern void test_matrix();
+
 int main(int argc, char *argv[])
 {
     printf("======= Tests start ======= \n");
@@ -20,6 +22,8 @@ int main(int argc, char *argv[])
     test_list_sort();
 
     test_bitmap();
+
+    test_matrix();
     printf("======= Tests finished ======= \n");
     return 0;
 }

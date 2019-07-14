@@ -1,1 +1,1 @@
-add_library(algorithm arraylist.c list.c bitmap.c)
+add_library(algorithm arraylist.c list.c bitmap.c matrix.c)
