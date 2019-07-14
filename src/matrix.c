@@ -1,4 +1,5 @@
 #include "matrix.h"
+#include <stdlib.h>
 #include <string.h>
 
 Matrix *matrix_new(unsigned int width, unsigned int height)

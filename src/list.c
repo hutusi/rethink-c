@@ -1,8 +1,7 @@
 #include "list.h"
 #include <stdlib.h>
 #include <string.h>
-
-#include "error.h"
+#include <errno.h>
 
 List *list_new()
 {
@@ -45,7 +44,7 @@ int list_append(List *list, ListValue data)
 {
     ListNode *node = listnode_new(data);
     if (node == NULL) {
-        return MALLOC_ERROR;
+        return ENOMEM;
     }
 
     if (list->length == 0) {
@@ -64,7 +63,7 @@ int list_prepend(List *list, ListValue data)
 {
     ListNode *node = listnode_new(data);
     if (node == NULL) {
-        return MALLOC_ERROR;
+        return ENOMEM;
     }
 
     if (list->length == 0) {
