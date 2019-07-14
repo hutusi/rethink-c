@@ -72,12 +72,4 @@ void test_arraylist_sort(void)
 	}
 
 	arraylist_free(arraylist);
-} 
-
-int main(int argc, char *argv[])
-{
-  test_arraylist();
-  test_arraylist_index_of();
-  test_arraylist_sort();
-  return 0;
 }

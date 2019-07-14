@@ -119,10 +119,3 @@ void test_list_sort()
 
   list_free(list);
 }
-
-int main(int argc, char *argv[])
-{
-  test_list();
-  test_list_sort();
-  return 0;
-}
