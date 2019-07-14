@@ -11,6 +11,9 @@ extern void test_bitmap();
 
 extern void test_matrix();
 
+extern void test_bstree();
+extern void test_bstree_remove();
+
 int main(int argc, char *argv[])
 {
     printf("======= Tests start ======= \n");
@@ -24,6 +27,10 @@ int main(int argc, char *argv[])
     test_bitmap();
 
     test_matrix();
+
+    test_bstree();
+    test_bstree_remove();
+
     printf("======= Tests finished ======= \n");
     return 0;
 }
