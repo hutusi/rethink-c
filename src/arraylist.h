@@ -19,6 +19,9 @@ int arraylist_insert(ArrayList *arraylist,
                      unsigned int index,
                      ArrayListValue data);
 
+int arraylist_push(ArrayList *arraylist, ArrayListValue data);
+ArrayListValue arraylist_pop(ArrayList *arraylist);
+
 int arraylist_remove(ArrayList *arraylist, unsigned int index);
 int arraylist_remove_range(ArrayList *arraylist,
                            unsigned int index,

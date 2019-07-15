@@ -28,6 +28,20 @@ void test_arraylist()
     assert(arraylist->data[2] == &values[0]);
     assert(arraylist->data[3] == &values[1]);
 
+    arraylist_push(arraylist, &values[4]);
+    arraylist_push(arraylist, &values[5]);
+    arraylist_push(arraylist, &values[6]);
+
+    assert(arraylist->length == 7);
+    assert(arraylist->data[arraylist->length - 1] == &values[6]);
+
+    assert(arraylist_pop(arraylist) == &values[6]);
+    assert(arraylist->length == 6);
+    assert(arraylist_pop(arraylist) == &values[5]);
+    assert(arraylist_pop(arraylist) == &values[4]);
+    assert(arraylist_pop(arraylist) == &values[1]);
+    assert(arraylist->length == 3);
+
     arraylist_free(arraylist);
 }
 

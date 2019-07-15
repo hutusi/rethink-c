@@ -84,6 +84,16 @@ int arraylist_prepend(ArrayList *arraylist, ArrayListValue data)
     return arraylist_insert(arraylist, 0, data);
 }
 
+int arraylist_push(ArrayList *arraylist, ArrayListValue data)
+{
+    return arraylist_insert(arraylist, arraylist->length, data);
+}
+
+ArrayListValue arraylist_pop(ArrayList *arraylist) {
+  --(arraylist->length);
+  return arraylist->data[arraylist->length];
+}
+
 int arraylist_remove_range(ArrayList *arraylist,
                            unsigned int index,
                            unsigned int length)
