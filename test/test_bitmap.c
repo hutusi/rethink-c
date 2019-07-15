@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "alloc-testing.h"
 
 void test_bitmap()
 {
@@ -35,4 +36,6 @@ void test_bitmap()
     for (int i = 0; i < len * BITS_PER_WORD; ++i) {
         assert(get_bit(flags, i) == 0);
     }
+
+    free(flags);
 }

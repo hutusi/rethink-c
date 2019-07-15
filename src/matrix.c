@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 Matrix *matrix_new(unsigned int width, unsigned int height)
 {
     Matrix *matrix = (Matrix *)malloc(sizeof(Matrix));

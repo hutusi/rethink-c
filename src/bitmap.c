@@ -7,6 +7,10 @@
 #include "bitmap.h"
 #include <string.h>
 
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 void set_bit(word_t *words, int n)
 {
     words[WORD_OFFSET(n)] |= ((word_t)1 << BIT_OFFSET(n));

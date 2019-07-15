@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "alloc-testing.h"
 
 typedef struct _CBValue {
     void *data[100];

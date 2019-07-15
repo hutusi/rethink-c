@@ -1,40 +1,49 @@
 #include <stdio.h>
+#include <assert.h>
+#include "alloc-testing.h"
 
 extern void test_arraylist();
 extern void test_arraylist_index_of();
 extern void test_arraylist_sort();
-
 extern void test_list();
 extern void test_list_sort();
-
 extern void test_queue();
-
 extern void test_bitmap();
-
 extern void test_matrix();
-
 extern void test_bstree();
 extern void test_bstree_remove();
 
+typedef void (*TestcaseFunc)(void);
+
+static TestcaseFunc all_tests[] = {test_arraylist,
+                                   test_arraylist_index_of,
+                                   test_arraylist_sort,
+                                   test_list,
+                                   test_list_sort,
+                                   test_queue,
+                                   test_bitmap,
+                                   test_matrix,
+                                   test_bstree,
+                                   test_bstree_remove,
+                                   NULL};
+
+static void run_test(TestcaseFunc test)
+{
+    alloc_test_set_limit(-1);
+    test();
+    assert(alloc_test_get_allocated() == 0);
+    printf(".");
+}
+
 int main(int argc, char *argv[])
 {
-    printf("======= Tests start ======= \n");
-    test_arraylist();
-    test_arraylist_index_of();
-    test_arraylist_sort();
+    printf("======= Tests[%lu testcases] start ======= \n",
+           sizeof(all_tests) / sizeof(TestcaseFunc));
 
-    test_list();
-    test_list_sort();
+    for (int i = 0; all_tests[i] != NULL; ++i) {
+        run_test(all_tests[i]);
+    }
 
-    test_queue();
-
-    test_bitmap();
-
-    test_matrix();
-
-    test_bstree();
-    test_bstree_remove();
-
-    printf("======= Tests finished ======= \n");
+    printf("\n======= Tests finished ======= \n");
     return 0;
 }

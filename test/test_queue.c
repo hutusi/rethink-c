@@ -2,6 +2,7 @@
 #include "test_helper.h"
 #include <assert.h>
 #include <stdio.h>
+#include "alloc-testing.h"
 
 void test_queue()
 {

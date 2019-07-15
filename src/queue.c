@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 Queue *queue_new()
 {
     Queue *queue = (Queue *)malloc(sizeof(Queue));

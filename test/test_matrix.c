@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "alloc-testing.h"
 
 void test_matrix()
 {
@@ -27,4 +28,6 @@ void test_matrix()
     assert(int_equal(matrix_get(matrix, 4, 2), &values[2]));
     assert(int_equal(matrix_get(matrix, 4, 2),
                      matrix->data[4 * matrix->width + 2]));
+
+    matrix_free(matrix);
 }

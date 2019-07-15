@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 List *list_new()
 {
     List *list = (List *)malloc(sizeof(List));

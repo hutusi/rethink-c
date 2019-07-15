@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "alloc-testing.h"
 
 void check_list_integrity(List *list)
 {

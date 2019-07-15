@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 ArrayList *arraylist_new(unsigned int length)
 {
     ArrayList *new_arraylist;
