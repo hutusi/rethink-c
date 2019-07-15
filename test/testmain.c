@@ -7,6 +7,8 @@ extern void test_arraylist_sort();
 extern void test_list();
 extern void test_list_sort();
 
+extern void test_queue();
+
 extern void test_bitmap();
 
 extern void test_matrix();
@@ -23,6 +25,8 @@ int main(int argc, char *argv[])
 
     test_list();
     test_list_sort();
+
+    test_queue();
 
     test_bitmap();
 
