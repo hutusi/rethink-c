@@ -130,11 +130,11 @@ int arraylist_index_of(ArrayList *arraylist,
 }
 
 #define swap_with_tmp(a, b, tmp) \
-    do {                         \
+    if (a != b) {                \
         tmp = a;                 \
         a = b;                   \
         b = tmp;                 \
-    } while (0)
+    }
 
 static int arraylist_sort_internal(ArrayListValue *list_data,
                                    unsigned int list_length,

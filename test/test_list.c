@@ -71,10 +71,12 @@ void test_list()
            list_nth_node(list, 3));
 
     ListNode *node = list_nth_node(list, 3);
-    assert(list_remove_node(list, node) == 0);
+    node = list_remove_node(list, node);
+    free(node);
     assert(list->length == 5);
     assert(int_equal(list_nth_data(list, 3), &values[0]));
-    assert(list_remove_node(list, list->head) == 0);
+    node = list_remove_node(list, list->head);
+    free(node);
     assert(list->length == 4);
     assert(int_equal(list_nth_data(list, 0), &values[4]));
     // check

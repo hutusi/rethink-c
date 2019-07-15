@@ -33,7 +33,7 @@ typedef int (*ListEqualFunc)(ListValue value1, ListValue value2);
 ListNode *list_find_node(List *list, ListNode *node);
 ListNode *list_find_data(List *list, ListEqualFunc callback, ListValue data);
 
-int list_remove_node(List *list, ListNode *node);
+ListNode *list_remove_node(List *list, ListNode *node);
 int list_remove_data(List *list, ListEqualFunc callback, ListValue data);
 
 int list_sort(List *list, ListCompareFunc compare_func);

@@ -1,7 +1,6 @@
 #include "list.h"
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 List *list_new()
 {
@@ -44,7 +43,7 @@ int list_append(List *list, ListValue data)
 {
     ListNode *node = listnode_new(data);
     if (node == NULL) {
-        return ENOMEM;
+        return -1;
     }
 
     if (list->length == 0) {
@@ -63,7 +62,7 @@ int list_prepend(List *list, ListValue data)
 {
     ListNode *node = listnode_new(data);
     if (node == NULL) {
-        return ENOMEM;
+        return -1;
     }
 
     if (list->length == 0) {
@@ -159,12 +158,8 @@ ListNode *list_find_data(List *list, ListEqualFunc callback, ListValue data)
     return NULL;
 }
 
-int list_remove_node(List *list, ListNode *node)
+ListNode *list_remove_node(List *list, ListNode *node)
 {
-    if (list_find_node(list, node) == NULL) {
-        return -1; // not found
-    }
-
     if (list->head == node) {
         list->head = node->next;
     }
@@ -181,10 +176,8 @@ int list_remove_node(List *list, ListNode *node)
         node->next->prev = node->prev;
     }
 
-    free(node);
     --(list->length);
-
-    return 0;
+    return node;
 }
 
 int list_remove_data(List *list, ListEqualFunc callback, ListValue data)
@@ -194,7 +187,11 @@ int list_remove_data(List *list, ListEqualFunc callback, ListValue data)
         return -1; // not found
     }
 
-    return list_remove_node(list, node);
+    node = list_remove_node(list, node);
+    if (node != NULL) {
+        free(node);
+    }
+    return 0;
 }
 
 static ListNode *list_split_mid_node(ListNode *head)
