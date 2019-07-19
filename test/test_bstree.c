@@ -16,10 +16,10 @@ static void bs_tree_traverse_callback(BSTreeNode *node, void *args)
     value->data[(value->index)++] = node->data;
 }
 
-static void bs_tree_traverse_print(BSTreeNode *node, void *args)
-{
-    printf("%d, ", *((int *)node->data));
-}
+// static void bs_tree_traverse_print(BSTreeNode *node, void *args)
+// {
+//     printf("%d, ", *((int *)node->data));
+// }
 
 void test_bstree()
 {

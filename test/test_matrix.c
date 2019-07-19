@@ -12,8 +12,8 @@ void test_matrix()
     Matrix *matrix = matrix_new(width, height);
     matrix_reset(matrix);
 
-    for (int row; row < matrix->height; ++row) {
-        for (int col; col < matrix->width; ++col) {
+    for (int row = 0; row < matrix->height; ++row) {
+        for (int col = 0; col < matrix->width; ++col) {
             assert(matrix_get(matrix, row, col) == 0);
         }
     }

@@ -122,7 +122,7 @@ bs_tree_replace_node(BSTree *tree, BSTreeNode *node, BSTreeNode *replace)
 
 BSTreeNode *bs_tree_remove_node(BSTree *tree, BSTreeNode *node)
 {
-    BSTreeNode *parent = node->parent;
+    // BSTreeNode *parent = node->parent;
     BSTreeNode *left = node->left;
     BSTreeNode *right = node->right;
     BSTreeNode *removed = NULL;
