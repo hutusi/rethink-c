@@ -20,11 +20,11 @@ Sign bignum_int_addition(const char *addend, const char *aug, char *sum);
 Sign bignum_int_subtraction(const char *minuend,
                             const char *subtractor,
                             char *difference);
-Sign bignum_int_multiplication(char *multiplicand,
-                               char *multiplier,
+Sign bignum_int_multiplication(const char *multiplicand,
+                               const char *multiplier,
                                char *product);
-Sign bignum_int_division(char *dividend,
-                         char *divisor,
+Sign bignum_int_division(const char *dividend,
+                         const char *divisor,
                          char *quotient,
                          char *remainder);
 

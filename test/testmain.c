@@ -14,6 +14,8 @@ extern void test_bstree();
 extern void test_bstree_remove();
 extern void test_bignum_int_addition();
 extern void test_bignum_int_subtraction();
+extern void test_bignum_int_multiplication();
+extern void test_bignum_int_division();
 
 typedef void (*TestcaseFunc)(void);
 
@@ -29,6 +31,8 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_bstree_remove,
                                    test_bignum_int_addition,
                                    test_bignum_int_subtraction,
+                                   test_bignum_int_multiplication,
+                                   test_bignum_int_division,
                                    NULL};
 
 static void run_test(TestcaseFunc test)
