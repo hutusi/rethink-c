@@ -6,6 +6,59 @@
 #include <string.h>
 #include "alloc-testing.h"
 
+void test_bignum()
+{
+    char num[100];
+
+    strcpy(num, "0000000");
+    assert(bignum_int_sanitize(num) == Positive);
+    assert(strcmp(num, "0") == 0);
+
+    strcpy(num, "0000123400");
+    assert(bignum_int_sanitize(num) == Positive);
+    assert(strcmp(num, "123400") == 0);
+
+    strcpy(num, "+0000123400  ");
+    assert(bignum_int_sanitize(num) == Positive);
+    assert(strcmp(num, "123400") == 0);
+
+    strcpy(num, "  +0000123400  ");
+    assert(bignum_int_sanitize(num) == Positive);
+    assert(strcmp(num, "123400") == 0);
+
+    strcpy(num, "-0000000");
+    assert(bignum_int_sanitize(num) == Negative);
+    assert(strcmp(num, "0") == 0);
+
+    strcpy(num, "-0000123400");
+    assert(bignum_int_sanitize(num) == Negative);
+    assert(strcmp(num, "123400") == 0);
+
+    strcpy(num, "-0000123400  ");
+    assert(bignum_int_sanitize(num) == Negative);
+    assert(strcmp(num, "123400") == 0);
+
+    strcpy(num, "  -0000123400  ");
+    assert(bignum_int_sanitize(num) == Negative);
+    assert(strcmp(num, "123400") == 0);
+
+    strcpy(num, "  A-0000123400  ");
+    assert(bignum_int_sanitize(num) == NaN);
+    assert(strcmp(num, "0") == 0);
+
+    strcpy(num, "");
+    assert(bignum_int_sanitize(num) == NaN);
+    assert(strcmp(num, "0") == 0);
+
+    strcpy(num, "ABC");
+    assert(bignum_int_sanitize(num) == NaN);
+    assert(strcmp(num, "0") == 0);
+
+    strcpy(num, "+-123");
+    assert(bignum_int_sanitize(num) == NaN);
+    assert(strcmp(num, "0") == 0);
+}
+
 void test_bignum_int_addition()
 {
     char sum[100];

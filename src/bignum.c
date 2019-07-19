@@ -1,10 +1,16 @@
 #include "bignum.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 
 #define char_to_int(ch) (ch - '0')
 #define int_to_char(ch) (ch + '0')
+#define char_is_blank(ch) (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n' )
+#define char_is_zero(ch) (ch == '0')
+#define char_is_digit(ch) (ch >= '0' && ch <= '9')
+#define char_is_positive_sign(ch) (ch == '+')
+#define char_is_negative_sign(ch) (ch == '-')
 
 #define BIG_NUM_ZERO "0"
 #define BIG_NUM_ONE "1"
@@ -29,6 +35,50 @@ int bignum_int_compare(const char *left, const char *right)
     }
 }
 
+static size_t bignum_int_trim_tail(char *num, size_t len)
+{
+    int blank = 0;
+    for (int i = len - 1; i >= 0; --i) {
+        if (char_is_blank(num[i])) {
+            ++blank;
+        } else {
+            break;
+        }
+    }
+
+    size_t new_len = len - blank;
+    num[new_len] = '\0';
+    return new_len;
+}
+
+static size_t bignum_int_trim_head(char *num, size_t len)
+{
+    int blank = 0;
+    for (int i = 0; i < len; ++i) {
+        if (char_is_blank(num[i])) {
+            ++blank;
+        } else {
+            break;
+        }
+    }
+
+    size_t new_len = len - blank;
+    if (blank > 0) {
+        memmove(num, &num[blank], new_len + 1);
+    }
+    
+    return new_len;
+}
+
+static inline size_t bignum_int_delete_head(char *num, size_t len, size_t delete)
+{
+    size_t new_len = len - delete;
+    if (delete > 0) {
+        memmove(num, &num[delete], new_len + 1);
+    }
+    return new_len;
+}
+
 static size_t bignum_int_trim_head_zero(char *num, size_t len)
 {
     int zero = 0;
@@ -40,13 +90,61 @@ static size_t bignum_int_trim_head_zero(char *num, size_t len)
         }
     }
 
+    if (zero >= len) {
+        zero = len - 1; // at least leave 1 zero
+    }
+
     if (zero > 0) {
-        for (int i = zero; i <= len + 1; ++i) {
+        for (int i = zero; i <= len; ++i) {
             num[i - zero] = num[i];
         }
     }
 
     return len - zero;
+}
+
+static bool string_is_all_digits(const char *num, size_t len)
+{
+    for (int i = 0; i < len; ++i) {
+        if (!char_is_digit(num[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// "0000000" => "0" ret Positive
+// "0000123400" => "123400" ret Positive
+// "  +0000123400  " => "123400" ret Positive
+// "-0000000" => "0" ret Negative
+// "-0000123400" => "123400" ret Negative
+// "  -0000123400  " => "123400" ret Negative
+// "  A-0000123400  " => "0" ret NaN
+Sign bignum_int_sanitize(char *num)
+{
+    Sign sign = Positive;
+    size_t len = strlen(num);
+    len = bignum_int_trim_tail(num, len);
+    len = bignum_int_trim_head(num,len);
+
+    if (char_is_negative_sign(num[0])) {
+        sign = Negative;
+        len = bignum_int_delete_head(num, len, 1);
+    } else if (char_is_positive_sign(num[0])) {
+        sign = Positive;
+        len = bignum_int_delete_head(num, len, 1);
+    } else {
+
+    }
+
+    len = bignum_int_trim_head_zero(num, len);
+
+    if (!string_is_all_digits(num, len)) {
+        strcpy(num, BIG_NUM_ZERO);
+        return NaN;
+    }
+
+    return sign;
 }
 
 size_t static bignum_int_addition_internal(const char *addend,
