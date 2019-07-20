@@ -93,9 +93,10 @@ int arraylist_push(ArrayList *arraylist, ArrayListValue data)
     return arraylist_insert(arraylist, arraylist->length, data);
 }
 
-ArrayListValue arraylist_pop(ArrayList *arraylist) {
-  --(arraylist->length);
-  return arraylist->data[arraylist->length];
+ArrayListValue arraylist_pop(ArrayList *arraylist)
+{
+    --(arraylist->length);
+    return arraylist->data[arraylist->length];
 }
 
 int arraylist_remove_range(ArrayList *arraylist,
