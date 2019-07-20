@@ -1,3 +1,13 @@
+/**
+ * @file matrix.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to matrix.h
+ * @date 2019-07-20
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #include "matrix.h"
 #include <stdlib.h>
 #include <string.h>

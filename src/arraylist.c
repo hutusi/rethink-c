@@ -1,3 +1,14 @@
+/**
+ * @file arraylist.c
+ * 
+ * @author hutusi (hutusi@outlook.com)
+ * 
+ * @brief Automatically resizing array(stack) 
+ * 
+ * @copyright Copyright (c) 2019, hutusi.com
+ * 
+ */
+
 #include "arraylist.h"
 #include <stdlib.h>
 #include <string.h>
@@ -151,6 +162,16 @@ int arraylist_index_of(ArrayList *arraylist,
         b = tmp;                 \
     }
 
+/**
+ * @brief Sort internal function.
+ * 
+ * Use quick sort.
+ * 
+ * @param list_data 
+ * @param list_length 
+ * @param compare_func 
+ * @return int 
+ */
 static int arraylist_sort_internal(ArrayListValue *list_data,
                                    unsigned int list_length,
                                    ArrayListValueCompareFunc compare_func)

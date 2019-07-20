@@ -1,3 +1,13 @@
+/**
+ * @file bignum.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to bignum.h
+ * @date 2019-07-20
+ * 
+ * @copyright Copyright (c) 2019, hutusi.com
+ * 
+ */
+
 #include "bignum.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -113,13 +123,21 @@ static bool string_is_all_digits(const char *num, size_t len)
     return true;
 }
 
-// "0000000" => "0" ret Positive
-// "0000123400" => "123400" ret Positive
-// "  +0000123400  " => "123400" ret Positive
-// "-0000000" => "0" ret Negative
-// "-0000123400" => "123400" ret Negative
-// "  -0000123400  " => "123400" ret Negative
-// "  A-0000123400  " => "0" ret NaN
+/**
+ * @brief Sanitize number.
+ * 
+ * examples:
+ *      "0000000" => "0" ret Positive
+ *      "0000123400" => "123400" ret Positive
+ *      "  +0000123400  " => "123400" ret Positive
+ *      "-0000000" => "0" ret Negative
+ *      "-0000123400" => "123400" ret Negative
+ *      "  -0000123400  " => "123400" ret Negative
+ *      "  A-0000123400  " => "0" ret NaN
+ * 
+ * @param num 
+ * @return Sign 
+ */
 Sign bignum_int_sanitize(char *num)
 {
     Sign sign = Positive;
@@ -147,6 +165,18 @@ Sign bignum_int_sanitize(char *num)
     return sign;
 }
 
+/**
+ * @brief Addition internal function.
+ * 
+ * addend length always >= aug length.
+ * 
+ * @param addend 
+ * @param addend_len 
+ * @param aug 
+ * @param aug_len 
+ * @param sum 
+ * @return size_t 
+ */
 size_t static bignum_int_addition_internal(const char *addend,
                                            size_t addend_len,
                                            const char *aug,
@@ -176,6 +206,7 @@ size_t static bignum_int_addition_internal(const char *addend,
     }
 
     assert(index == 1);
+    /** carry should be >= 0 and < 9 */
     if (carry > 0) {
         sum[--index] = int_to_char(carry);
     } else {
@@ -199,6 +230,16 @@ Sign bignum_int_addition(const char *addend, const char *aug, char *sum)
     return Positive;
 }
 
+/**
+ * @brief Subtraction internal function.
+ * 
+ * minuend length always >= subtractor length.
+ * 
+ * @param minuend 
+ * @param subtractor 
+ * @param difference 
+ * @return size_t 
+ */
 static size_t bignum_int_subtraction_internal(const char *minuend,
                                               const char *subtractor,
                                               char *difference)
@@ -225,6 +266,7 @@ static size_t bignum_int_subtraction_internal(const char *minuend,
         }
     }
 
+    /** If minuend_len > subtractor_len */
     for (int i = subtractor_len + 1; i <= minuend_len; ++i) {
         int m = char_to_int(minuend[minuend_len - i]) - borrow;
         --index;
@@ -269,6 +311,18 @@ static size_t bignum_int_multiplication_move(char *num, size_t len, size_t move)
     return new_len;
 }
 
+/**
+ * @brief Multiplication internal function.
+ * 
+ * multiplicand length always >= multiplier length.
+ * 
+ * @param multiplicand 
+ * @param multiplicand_len 
+ * @param multiplier 
+ * @param multiplier_len 
+ * @param product 
+ * @return size_t 
+ */
 static size_t bignum_int_multiplication_internal(const char *multiplicand,
                                                  size_t multiplicand_len,
                                                  const char *multiplier,
@@ -285,6 +339,10 @@ static size_t bignum_int_multiplication_internal(const char *multiplicand,
     char *tmp_multip = (char *)malloc(sizeof(char) * product_len);
     size_t tmp_multip_len = 0;
 
+    /**
+     * 123 * 10 = 1230, 123 * 100 = 12300,
+     * If a number multiply by a multiple of ten, it will append the multiple of 0.
+     */
     for (int i = multiplier_len - 1; i >= 0; --i, ++move) {
         strcpy(tmp_multip, multiplicand);
         tmp_multip_len =
@@ -345,6 +403,17 @@ static size_t bignum_int_append_char(char *num, size_t len, char ch)
     return new_len;
 }
 
+
+/**
+ * @brief Division internal function.
+ * 
+ * dividend length always >= divisor length.
+ * 
+ * @param dividend 
+ * @param divisor 
+ * @param quotient 
+ * @param remainder 
+ */
 static void bignum_int_division_internal(const char *dividend,
                                          const char *divisor,
                                          char *quotient,
@@ -356,6 +425,10 @@ static void bignum_int_division_internal(const char *dividend,
     char *tmp_dividend = (char *)malloc(sizeof(char) * dividend_len);
     char *tmp_diff = (char *)malloc(sizeof(char) * dividend_len);
     size_t quotient_len = 0;
+
+    /**
+     * Treat division as couple of subtractions.
+     */
 
     // 123456 / 789 => first try: 123 / 789 , then move to right
     size_t tmp_dividend_len =

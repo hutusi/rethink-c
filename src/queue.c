@@ -1,3 +1,13 @@
+/**
+ * @file queue.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to queue.h
+ * @date 2019-07-20
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #include "queue.h"
 #include <stdlib.h>
 #include <string.h>
@@ -111,7 +121,6 @@ int queue_push_tail(Queue *queue, QueueValue data)
     return 0;
 }
 
-
 QueueValue queue_pop_tail(Queue *queue)
 {
     if (queue->length == 0) {
@@ -142,7 +151,4 @@ QueueValue queue_peek_tail(Queue *queue)
     }
 }
 
-int queue_is_empty(Queue *queue)
-{
-    return queue->length == 0;
-}
+int queue_is_empty(Queue *queue) { return queue->length == 0; }

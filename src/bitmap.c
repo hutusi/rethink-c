@@ -1,6 +1,10 @@
 /**
- * Inspired (and copied) from:
- * https://stackoverflow.com/questions/1225998/what-is-a-bitmap-in-c
+ * @file bignum.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to bignum.h
+ * @date 2019-07-20
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
  *
  */
 

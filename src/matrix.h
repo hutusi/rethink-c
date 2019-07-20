@@ -1,3 +1,16 @@
+/**
+ * @file matrix.h
+ *
+ * @author hutusi (hutusi@outlook.com)
+ *
+ * @brief Multi-demensional Matrix.
+ *
+ * @date 2019-07-20
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #ifndef RETHINK_C_MATRIX_H
 #define RETHINK_C_MATRIX_H
 

@@ -1,3 +1,13 @@
+/**
+ * @file bstree.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to bstree.h
+ * @date 2019-07-20
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #include "bstree.h"
 #include <stdio.h>
 #include <stdlib.h>

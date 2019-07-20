@@ -1,3 +1,13 @@
+/**
+ * @file list.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to list.h
+ * @date 2019-07-20
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #include "list.h"
 #include <stdlib.h>
 #include <string.h>
