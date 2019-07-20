@@ -10,6 +10,7 @@ extern void test_list_sort();
 extern void test_queue();
 extern void test_bitmap();
 extern void test_matrix();
+extern void test_matrix_2_dimensions();
 extern void test_bstree();
 extern void test_bstree_remove();
 extern void test_bignum();
@@ -28,6 +29,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_queue,
                                    test_bitmap,
                                    test_matrix,
+                                   test_matrix_2_dimensions,
                                    test_bstree,
                                    test_bstree_remove,
                                    test_bignum,

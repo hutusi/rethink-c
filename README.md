@@ -6,7 +6,7 @@ The code is licensed under the MIT license, copyright by [hutusi.com](http://hut
 
 Some of the code inspired (copied) by Simon Howard's [c-algorithms](https://github.com/fragglet/c-algorithms), like ArrayList, etc. This project also reused his alloc-testing framework for memory testing.
 
-RETHINK-C aim to build a reused codebase for C Programming Language. 
+RETHINK-C aims to build a reuseable codebase for C Programming Language. 
 
 ## How to build and test
 

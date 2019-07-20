@@ -42,9 +42,9 @@ typedef struct _Queue {
 } Queue;
 
 /**
- * @brief Allcate a new List.
+ * @brief Allcate a new Queue.
  *
- * @return Queue*    The new List if success, otherwise return NULL.
+ * @return Queue*    The new Queue if success, otherwise return NULL.
  */
 Queue *queue_new();
 
