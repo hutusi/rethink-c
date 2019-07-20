@@ -9,6 +9,7 @@ extern void test_list();
 extern void test_list_sort();
 extern void test_queue();
 extern void test_bitmap();
+extern void test_bitmap_words();
 extern void test_matrix();
 extern void test_matrix_2_dimensions();
 extern void test_bstree();
@@ -28,6 +29,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_list_sort,
                                    test_queue,
                                    test_bitmap,
+                                   test_bitmap_words,
                                    test_matrix,
                                    test_matrix_2_dimensions,
                                    test_bstree,

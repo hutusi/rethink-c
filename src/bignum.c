@@ -14,6 +14,10 @@
 #include <stdbool.h>
 #include <string.h>
 
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 #define char_to_int(ch) (ch - '0')
 #define int_to_char(ch) (ch + '0')
 #define char_is_blank(ch) (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n' )

@@ -40,6 +40,7 @@ make
 - [ ] AVL Tree
 - [ ] Red Black Tree
 - [ ] Binary Heap
+- [ ] B+ Tree
 
 ### Graphs
 - [ ] Union-Find
@@ -58,3 +59,8 @@ make
 ### Sorting
 - [x] Quick Sort [arraylist.h](src/arraylist.h)
 - [x] Merge Sort [list.h](src/list.h)
+
+### Math
+- [ ] Matrix multiplication
+- [ ] Eratosthenes sieve (prime numbers)
+- [ ] Carmichael Numbers (prime number)

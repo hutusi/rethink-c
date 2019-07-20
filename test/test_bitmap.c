@@ -7,6 +7,50 @@
 
 void test_bitmap()
 {
+    unsigned int bitsnum = 100;
+    BitMap *bitmap = bitmap_new(bitsnum);
+
+    assert(bitmap->num_bits == bitsnum);
+    assert(bitmap->num_words == bitsnum / BITS_PER_WORD + 1);
+
+    bitmap_set_all(bitmap);
+
+    for (int i = 0; i < bitsnum; ++i) {
+        assert(bitmap_get(bitmap, i) == 1);
+    }
+
+    bitmap_clear_all(bitmap);
+
+    for (int i = 0; i < bitsnum; ++i) {
+        assert(bitmap_get(bitmap, i) == 0);
+    }
+
+    bitmap_set(bitmap, 12);
+    assert(bitmap_get(bitmap, 12) == 1);
+    bitmap_clear(bitmap, 12);
+    assert(bitmap_get(bitmap, 12) == 0);
+
+    BitMap *other = bitmap_new(bitsnum);
+    bitmap_clear_all(other);
+    bitmap_clear_all(bitmap);
+
+    bitmap_set(bitmap, 12);
+    bitmap_set(other, 12);
+    bitmap_and(bitmap, other);
+    assert(bitmap_get(bitmap, 12) == 1);
+    bitmap_xor(bitmap, other);
+    assert(bitmap_get(bitmap, 12) == 0);
+    bitmap_and(bitmap, other);
+    assert(bitmap_get(bitmap, 12) == 0);
+    bitmap_or(bitmap, other);
+    assert(bitmap_get(bitmap, 12) == 1);
+
+    bitmap_free(bitmap);
+    bitmap_free(other);
+}
+
+void test_bitmap_words()
+{
     word_t flag = WORD_ALL_CLEARED;
     set_bit(&flag, 0);
     // printf("===%d====", flag);
