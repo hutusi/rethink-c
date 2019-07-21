@@ -161,4 +161,12 @@ void bitmap_and(BitMap *bitmap, const BitMap *other);
  */
 void bitmap_xor(BitMap *bitmap, const BitMap *other);
 
+/**
+ * @brief Count the sum of 1 value bits of a BitMap.
+ * 
+ * @param bitmap            The BitMap.
+ * @return unsigned int     The sum.
+ */
+unsigned int bitmap_count(const BitMap *bitmap);
+
 #endif /* #ifndef RETHINK_C_BITMAP_H */

@@ -1,3 +1,13 @@
+/**
+ * @file dijkstra.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to dijkstra.h
+ * @date 2019-07-21
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #include "dijkstra.h"
 #include <stdlib.h>
 

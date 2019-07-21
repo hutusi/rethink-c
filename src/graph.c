@@ -1,3 +1,13 @@
+/**
+ * @file graph.c
+ * @author hutusi (hutusi@outlook.com)
+ * @brief Refer to graph.h
+ * @date 2019-07-21
+ *
+ * @copyright Copyright (c) 2019, hutusi.com
+ *
+ */
+
 #include "graph.h"
 #include <stdlib.h>
 

@@ -105,3 +105,12 @@ void bitmap_xor(BitMap *bitmap, const BitMap *other)
         bitmap->words[i] ^= other->words[i];
     }
 }
+
+unsigned int bitmap_count(const BitMap *bitmap)
+{
+    unsigned int count = 0;
+    for (unsigned int i = 0; i < bitmap->num_bits; ++i) {
+        if (bitmap_get(bitmap, i)) ++count;
+    }
+    return count;
+}

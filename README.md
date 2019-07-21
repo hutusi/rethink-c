@@ -32,7 +32,7 @@ make
 - [x] LinkedList [list.h](src/list.h)
 - [x] Queue [queue.h](src/queue.h)
 - [x] BitMap [bitmap.h](src/bitmap.h)
-- [x] Matrix [matrix.h](src/matrix.h)
+- [x] Muti-dimensional Matrix [matrix.h](src/matrix.h)
 - [ ] Hash Table
 
 ### Trees
@@ -43,10 +43,11 @@ make
 - [ ] B+ Tree
 
 ### Graphs
+- [x] Adjacency Matrix [graph.h](src/graph.h)
 - [ ] Union-Find
 - [ ] BFS & DFS
 - [ ] Floyd
-- [ ] Dijkstra
+- [x] Dijkstra [dijkstra.h](src/dijkstra.h)
 - [ ] Prim
 - [ ] Kruskal
 
@@ -62,5 +63,5 @@ make
 
 ### Math
 - [ ] Matrix multiplication
-- [ ] Eratosthenes sieve (prime numbers)
+- [x] Eratosthenes sieve (prime numbers) [prime.h](src/prime.h)
 - [ ] Carmichael Numbers (prime number)
