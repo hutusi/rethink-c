@@ -19,6 +19,7 @@ extern void test_bignum_int_addition();
 extern void test_bignum_int_subtraction();
 extern void test_bignum_int_multiplication();
 extern void test_bignum_int_division();
+extern void test_dijkstra();
 
 typedef void (*TestcaseFunc)(void);
 
@@ -39,6 +40,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_bignum_int_subtraction,
                                    test_bignum_int_multiplication,
                                    test_bignum_int_division,
+                                   test_dijkstra,
                                    NULL};
 
 static void run_test(TestcaseFunc test)
