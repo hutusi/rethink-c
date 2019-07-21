@@ -48,7 +48,7 @@ typedef struct _Matrix {
  *
  * @param num_dimensions    The number of dimensions.
  * @param ...               The length of each dimensions.
- * @return Matrix*          The new Queue if success, otherwise return NULL.
+ * @return Matrix*          The new Matrix if success, otherwise NULL.
  */
 Matrix *matrix_new(unsigned int num_dimensions, ...);
 

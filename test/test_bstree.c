@@ -46,18 +46,19 @@ void test_bstree()
         assert(int_equal(cb.data[i], &sorted[i]));
     }
 
-    //                    38
-    //                    /\
-    //                  23  42
-    //                  /\  /\
-    //                 4 30   99
-    //                /\      /
-    //                  16   50
-    //                  /
-    //                 15
-    //                 /
-    //                8 
-
+    /** 
+                        38
+                        /\
+                      23  42
+                      /\  /\
+                     4 30   99
+                    /\      /
+                      16   50
+                      /
+                     15
+                     /
+                    8 
+    */
     // 38, 23, 42, 4, 16, 15, 8, 99, 50, 30 => 4
     node = bs_tree_remove_node(tree, bs_tree_lookup_data(tree, &entries[3]));
     free(node);
@@ -100,17 +101,19 @@ void test_bstree_remove()
     // bs_tree_inorder_traverse(tree, bs_tree_traverse_print, NULL);
     // printf("\n==========\n");
 
-    //                       38
-    //                       /\
-    //                  23       42
-    //                  /\       /\
-    //                 4 30    40   99
-    //                /\       /\   /\
-    //               2  16   39 41 50 120
-    //              /\   /\        /\
-    //             1 3 15  20    45  60
-    //                 /
-    //                8 
+    /*
+                           38
+                           /\
+                      23       42
+                      /\       /\
+                     4 30    40   99
+                    /\       /\   /\
+                   2  16   39 41 50 120
+                  /\   /\        /\
+                 1 3 15  20    45  60
+                     /
+                    8 
+     */
 
     for (int i = 2; i < num_entries; i += 3) {
         node = bs_tree_remove_node(tree, bs_tree_lookup_data(tree, &entries[i]));

@@ -3,7 +3,7 @@
  *
  * @author hutusi (hutusi@outlook.com)
  *
- * @brief Automatically resizing array(stack)
+ * @brief Automatically resizing array(stack).
  *
  * ArrayLists are arrays of pointers which automatically increase in
  * size.
@@ -46,7 +46,7 @@ typedef struct _ArrayList {
     /** Allocated length of the array.
      * (Private data and should not be accessed) */
     unsigned int _allocated;
-} ArrayList;
+} ArrayList, Stack;
 
 /**
  * @brief Allocated a new ArrayList for use.
