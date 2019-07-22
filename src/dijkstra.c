@@ -36,7 +36,7 @@ static void dijkstra_refresh_candidates(const AdjacencyMatrix *graph,
     candidates[vertex] = -1;
 }
 
-int dijkstra_select_vertex(int *candidates, int num_vertexes)
+static int dijkstra_select_vertex(int *candidates, int num_vertexes)
 {
     int weight = -1;
     int vertex = -1;

@@ -8,9 +8,18 @@ Some of the code inspired (copied) by Simon Howard's [c-algorithms](https://gith
 
 RETHINK-C aims to build a reuseable codebase for C Programming Language. 
 
-## How to build and test
+## How to build & test
 
-* build:
+### Requirements:
+
+* Editor/IDE: VS Code is recommended.
+* GCC on Mac, Linux or Windows. (Recommend msys2 + MingW on Windows.)
+* CMake. 
+* Clang-Format.
+
+### build & test:
+
+* build 
 
 ```
 cd build
@@ -28,38 +37,38 @@ make
 
 ### Basic Data Structures
 
-- [x] ArrayList, Stack [arraylist.h](src/arraylist.h)
-- [x] LinkedList [list.h](src/list.h)
-- [x] Queue [queue.h](src/queue.h)
-- [x] BitMap [bitmap.h](src/bitmap.h)
-- [x] Muti-dimensional Matrix [matrix.h](src/matrix.h)
+- [x] ArrayList, Stack [arraylist.h](src/arraylist.h) [arraylist.c](src/arraylist.c)
+- [x] LinkedList [list.h](src/list.h) [list.c](src/list.c)
+- [x] Queue [queue.h](src/queue.h) [queue.c](src/queue.c)
+- [x] BitMap [bitmap.h](src/bitmap.h) [bitmap.c](src/bitmap.c)
+- [x] Muti-dimensional Matrix [matrix.h](src/matrix.h) [matrix.c](src/matrix.c)
 - [ ] Hash Table
 
 ### Trees
-- [x] Binary Search Tree [bstree.h](src/bstree.h)
+- [x] Binary Search Tree [bstree.h](src/bstree.h) [bstree.c](src/bstree.c)
 - [ ] AVL Tree
 - [ ] Red Black Tree
 - [ ] Binary Heap
 - [ ] B+ Tree
 
 ### Graphs
-- [x] Adjacency Matrix [graph.h](src/graph.h)
+- [x] Adjacency Matrix [graph.h](src/graph.h) [graph.c](src/graph.c)
 - [ ] Union-Find
 - [ ] BFS & DFS
 - [ ] Floyd
-- [x] Dijkstra [dijkstra.h](src/dijkstra.h)
+- [x] Dijkstra [dijkstra.h](src/dijkstra.h) [dijkstra.c](src/dijkstra.c)
 - [ ] Prim
 - [ ] Kruskal
 
 ### String
-- [x] BigNum integer [bignum.h](src/bignum.h)
+- [x] BigNum integer [bignum.h](src/bignum.h) [bignum.c](src/bignum.c)
 - [ ] BigNum decimal
 - [ ] KMP
 - [ ] Trie Tree
 
 ### Sorting
-- [x] Quick Sort [arraylist.h](src/arraylist.h)
-- [x] Merge Sort [list.h](src/list.h)
+- [x] Quick Sort [arraylist.c##arraylist_sort()](src/arraylist.c)
+- [x] Merge Sort [list.c##list_sort()](src/list.c)
 
 ### Math
 - [ ] Matrix multiplication
