@@ -15,8 +15,23 @@ void test_hash_table_string()
     char *key = strdup("abc");
     char *value = strdup("efg");
     assert(hash_table_insert(hash_table, key, value) == 0);
-    assert(hash_table->length == 1);
-    assert(string_equal(hash_table_query(hash_table, key), value));
+    // assert(hash_table->length == 1);
+    assert(string_equal(hash_table_get(hash_table, key), value));
+
+    key = strdup("aaaa");
+    value = strdup("bbbb");
+    assert(hash_table_insert(hash_table, key, value) == 0);
+    // assert(hash_table->length == 2);
+    assert(string_equal(hash_table_get(hash_table, key), value));
+
+    value = strdup("new new");
+    assert(hash_table_set(hash_table, "abc", value) == 0);
+    // assert(hash_table->length == 2);
+    assert(string_equal(hash_table_get(hash_table, "abc"), value));
+
+    assert(hash_table_delete(hash_table, "abc") == 0);
+    // assert(hash_table->length == 1);
+    assert(hash_table_get(hash_table, "abc") == HASH_TABLE_VALUE_NULL);
 
     hash_table_free(hash_table);
 }
@@ -27,8 +42,8 @@ void test_hash_table_int()
     int *key = intdup(1);
     int *value = intdup(2);
     assert(hash_table_insert(hash_table, key, value) == 0);
-    assert(hash_table->length == 1);
-    assert(int_equal(hash_table_query(hash_table, key), value));
+    // assert(hash_table->length == 1);
+    assert(int_equal(hash_table_get(hash_table, key), value));
 
     hash_table_free(hash_table);
 }
@@ -53,11 +68,11 @@ void test_hash_table_enlarge()
     //        hash_table->length,
     //        hash_table->_allocated,
     //        hash_table->_collisions);
-    assert(hash_table->length == MAX_TABLE_SIZE);
+    // assert(hash_table->length == MAX_TABLE_SIZE);
 
     for (int i = 0; i < MAX_TABLE_SIZE; ++i) {
         sprintf(buf, "%i", i);
-        assert(string_equal(hash_table_query(hash_table, buf), buf));
+        assert(string_equal(hash_table_get(hash_table, buf), buf));
     }
 
     hash_table_free(hash_table);

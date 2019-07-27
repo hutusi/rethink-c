@@ -21,6 +21,25 @@
 #include "alloc-testing.h"
 #endif
 
+struct _HashTable {
+    /** data point to HashTableEntity array,
+     * A HashTableEntity will be allocated when insert an entity to HashTable.
+     */
+    HashTableEntity **data;
+    unsigned int length;
+
+    HashTableHashFunc hash_func;
+    HashTableEqualFunc equal_func;
+
+    HashTableFreeKeyFunc free_key_func;
+    HashTableFreeKeyFunc free_value_func;
+
+    /** private: _allocated length of data. */
+    unsigned int _allocated;
+    /** private: count collision times. */
+    unsigned int _collisions;
+};
+
 HashTable *hash_table_new(HashTableHashFunc hash_func,
                           HashTableEqualFunc equal_func,
                           HashTableFreeKeyFunc free_key_func,
@@ -48,10 +67,10 @@ HashTable *hash_table_new(HashTableHashFunc hash_func,
 static void hash_table_free_entity(HashTable *hash_table,
                                    HashTableEntity *entity)
 {
-    if (hash_table->free_key_func != NULL && entity->key) {
+    if (hash_table->free_key_func && entity->key) {
         hash_table->free_key_func(entity->key);
     }
-    if (hash_table->free_value_func != NULL && entity->value) {
+    if (hash_table->free_value_func && entity->value) {
         hash_table->free_value_func(entity->value);
     }
     free(entity);
@@ -167,25 +186,52 @@ int hash_table_insert(HashTable *hash_table,
     return 0;
 }
 
-HashTableValue hash_table_query(HashTable *hash_table, HashTableKey key)
+static HashTableEntity *hash_table_get_entity(HashTable *hash_table,
+                                              HashTableKey key)
 {
     int index = hash_table_hashing_key(hash_table, key);
     if (hash_table->data[index] == NULL) {
-        return HASH_TABLE_VALUE_NULL;
+        return NULL;
     } else {
         HashTableEntity *entity = hash_table->data[index];
         while (entity != NULL) {
             if (hash_table->equal_func(entity->key, key)) {
-                return entity->value; /** find it */
+                return entity; /** find it */
             } else {
                 entity = entity->next;
             }
         }
 
         /** not found */
-        return HASH_TABLE_VALUE_NULL;
+        return NULL;
     }
 }
+
+HashTableValue hash_table_get(HashTable *hash_table, HashTableKey key)
+{
+    HashTableEntity *entity = hash_table_get_entity(hash_table, key);
+    if (entity)
+        return entity->value;
+    else
+        return HASH_TABLE_VALUE_NULL;
+}
+
+int hash_table_set(HashTable *hash_table,
+                   HashTableKey key,
+                   HashTableValue value)
+{
+    HashTableEntity *entity = hash_table_get_entity(hash_table, key);
+    if (entity) {
+        if (hash_table->free_value_func && entity->value) {
+            hash_table->free_value_func(entity->value);
+        }
+        entity->value = value;
+        return 0;
+    } else {
+        return hash_table_insert(hash_table, key, value);
+    }
+}
+
 int hash_table_delete(HashTable *hash_table, HashTableKey key)
 {
     int index = hash_table_hashing_key(hash_table, key);
@@ -201,6 +247,7 @@ int hash_table_delete(HashTable *hash_table, HashTableKey key)
                 } else {
                     prev->next = NULL;
                 }
+                --(hash_table->length);
                 hash_table_free_entity(hash_table, entity);
                 return 0; /** find and delete it */
             } else {
