@@ -44,6 +44,9 @@ typedef struct _HashTableEntity {
 typedef unsigned int (*HashTableHashFunc)(HashTableKey key);
 typedef int (*HashTableEqualFunc)(HashTableKey key1, HashTableKey key2);
 
+typedef void (*HashTableFreeKeyFunc)(HashTableKey key);
+typedef void (*HashTableFreeValueFunc)(HashTableValue value);
+
 /**
  * @brief Definition of a @ref HashTable.
  *
@@ -58,6 +61,9 @@ typedef struct _HashTable {
     HashTableHashFunc hash_func;
     HashTableEqualFunc equal_func;
 
+    HashTableFreeKeyFunc free_key_func;
+    HashTableFreeKeyFunc free_value_func;
+
     /** private: _allocated length of data. */
     unsigned int _allocated;
     /** private: count collision times. */
@@ -70,7 +76,9 @@ typedef struct _HashTable {
  * @return HashTable*    The new HashTable if success, otherwise NULL.
  */
 HashTable *hash_table_new(HashTableHashFunc hash_func,
-                          HashTableEqualFunc equal_func);
+                          HashTableEqualFunc equal_func,
+                          HashTableFreeKeyFunc free_key_func,
+                          HashTableFreeKeyFunc free_value_func);
 
 /**
  * @brief Delete a HashTable and free back memory.

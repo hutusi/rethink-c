@@ -42,7 +42,7 @@ make
 - [x] Queue [queue.h](src/queue.h) [queue.c](src/queue.c)
 - [x] BitMap [bitmap.h](src/bitmap.h) [bitmap.c](src/bitmap.c)
 - [x] Muti-dimensional Matrix [matrix.h](src/matrix.h) [matrix.c](src/matrix.c)
-- [ ] Hash Table
+- [x] Hash Table [hash_table.h](src/hash_table.h) [hash_table.c](src/hash_table.c) [hash.h](src/hash.h) [hash.c](src/hash.c)
 
 ### Trees
 - [x] Binary Search Tree [bstree.h](src/bstree.h) [bstree.c](src/bstree.c)

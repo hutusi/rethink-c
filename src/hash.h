@@ -17,10 +17,10 @@
 /**
  * @brief Calculate a integer's hash.
  * 
- * @param value             The integer.
+ * @param pointer           The integer address.
  * @return unsigned int     The hash.
  */
-unsigned int hash_int(int value);
+unsigned int hash_int(void *pointer);
 
 /**
  * @brief Calculate a pointer of object's hash.

@@ -29,6 +29,8 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef ALLOC_TESTING_H
 #define ALLOC_TESTING_H
 
+#include <stdlib.h>
+
 /* Don't redefine the functions in the alloc-testing.c, as we need the
  * standard malloc/free functions. */
 
