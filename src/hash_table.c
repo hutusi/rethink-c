@@ -101,7 +101,7 @@ static HashTableEntity *hash_table_new_entity(HashTableKey key,
     return entity;
 }
 
-inline int hash_table_hashing_key(HashTable *hash_table, HashTableKey key)
+static inline int hash_table_hashing_key(HashTable *hash_table, HashTableKey key)
 {
     return hash_table->hash_func(key) % hash_table->_allocated;
 }
