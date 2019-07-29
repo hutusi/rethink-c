@@ -92,6 +92,26 @@ RBTree *rb_tree_new(RBTreeCompareFunc compare_func,
  */
 void rb_tree_free(RBTree *tree);
 
+void rb_tree_free_node(RBTree *tree, RBTreeNode *node);
+
+/**
+ * @brief Get the leftmost child node of a RBTreeNode.
+ *
+ * @param node              The RBTreeNode.
+ * @return RBTreeNode*      The leftmost RBTreeNode. If the RBTreeNode has
+ *                          no left child, return itself.
+ */
+RBTreeNode *rb_tree_leftmost_node(RBTreeNode *node);
+
+/**
+ * @brief Get the rightmost child node of a RBTreeNode.
+ *
+ * @param node              The RBTreeNode.
+ * @return RBTreeNode*      The rightmost RBTreeNode. If the RBTreeNode has
+ *                          no right child, return itself.
+ */
+RBTreeNode *rb_tree_rightmost_node(RBTreeNode *node);
+
 RBTreeNode *rb_tree_rotate(RBTree *tree, RBTreeNode *focus);
 
 /**
@@ -113,6 +133,8 @@ RBTreeNode *rb_tree_insert(RBTree *tree, RBTreeKey key, RBTreeValue value);
  *                      otherwise return NULL.
  */
 RBTreeNode *rb_tree_remove_node(RBTree *tree, RBTreeNode *node);
+
+RBTreeNode *rb_tree_find_node(RBTree *tree, RBTreeKey key);
 
 /**
  * @brief Find a RBTreeNode value in a RBTree.

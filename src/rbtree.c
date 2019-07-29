@@ -31,7 +31,7 @@ RBTree *rb_tree_new(RBTreeCompareFunc compare_func,
     return tree;
 }
 
-static void rb_tree_free_node(RBTree *tree, RBTreeNode *node)
+void rb_tree_free_node(RBTree *tree, RBTreeNode *node)
 {
     RBTreeEntity *data = node->data;
     while (data) {
@@ -46,7 +46,7 @@ static void rb_tree_free_node(RBTree *tree, RBTreeNode *node)
     if (tree->free_key_func && node->key) {
         tree->free_key_func(node->key);
     }
-    
+
     free(node);
 }
 
@@ -396,4 +396,182 @@ void rb_tree_postorder_traverse(RBTree *tree,
                                 void *cb_args)
 {
     rb_tree_postorder_internal(tree->root, callback, cb_args);
+}
+
+RBTreeNode *rb_tree_leftmost_node(RBTreeNode *node)
+{
+    RBTreeNode *rover = node;
+    while (rover->left != NULL) {
+        rover = rover->left;
+    }
+    return rover;
+}
+
+RBTreeNode *rb_tree_rightmost_node(RBTreeNode *node)
+{
+    RBTreeNode *rover = node;
+    while (rover->right != NULL) {
+        rover = rover->right;
+    }
+    return rover;
+}
+
+static RBTreeNode *
+rb_tree_replace_node(RBTree *tree, RBTreeNode *node, RBTreeNode *replace)
+{
+    RBTreeNode *parent = node->parent;
+    if (parent == NULL) { // root
+        tree->root = replace;
+    } else if (parent->left == node) {
+        parent->left = replace;
+    } else {
+        parent->right = replace;
+    }
+
+    if (replace != NULL) {
+        replace->parent = parent;
+    }
+
+    return node;
+}
+
+static RBTreeNode *rb_tree_delete_fixup_case1(RBTree *tree,
+                                              RBTreeNode *focus,
+                                              RBTreeNode *sibling,
+                                              RBTreeRotateFunc rotate_func)
+{
+    sibling->color = BLACK;
+    focus->parent->color = RED;
+    rotate_func(tree, focus->parent);
+    return rb_tree_sibling_node(focus);
+}
+
+static RBTreeNode *
+rb_tree_delete_fixup_case2(RBTree *tree, RBTreeNode *focus, RBTreeNode *sibling)
+{
+    sibling->color = RED;
+    return focus->parent;
+}
+
+static RBTreeNode *rb_tree_delete_fixup_case3(RBTree *tree,
+                                              RBTreeNode *focus,
+                                              RBTreeNode *sibling,
+                                              RBTreeNode *sibling_side,
+                                              RBTreeRotateFunc rotate_func)
+{
+    if (sibling_side)
+        sibling_side->color = BLACK;
+    sibling->color = RED;
+    rotate_func(tree, sibling);
+    return rb_tree_sibling_node(focus);
+}
+
+static RBTreeNode *rb_tree_delete_fixup_case4(RBTree *tree,
+                                              RBTreeNode *focus,
+                                              RBTreeNode *sibling,
+                                              RBTreeNode *sibling_side,
+                                              RBTreeRotateFunc rotate_func)
+{
+    sibling->color = focus->parent->color;
+    focus->parent->color = BLACK;
+    if (sibling_side)
+        sibling_side->color = BLACK;
+    rotate_func(tree, focus->parent);
+    return tree->root;
+}
+
+static void rb_tree_delete_fixup(RBTree *tree, RBTreeNode *focus)
+{
+    RBTreeNode *sibling;
+
+    while (focus && focus != tree->root && focus->color == BLACK) {
+        if (focus == focus->parent->left) {
+            sibling = focus->parent->right;
+            if (sibling && sibling->color == RED) {
+                sibling = rb_tree_delete_fixup_case1(
+                    tree, focus, sibling, rb_tree_left_rotate);
+            }
+
+            if (sibling && sibling->left && sibling->left->color == BLACK &&
+                sibling->right && sibling->right->color == BLACK) {
+                focus = rb_tree_delete_fixup_case2(tree, focus, sibling);
+            } else if (sibling && sibling->right &&
+                       sibling->right->color == BLACK) {
+                sibling = rb_tree_delete_fixup_case3(
+                    tree, focus, sibling, sibling->left, rb_tree_right_rotate);
+            }
+
+            focus = rb_tree_delete_fixup_case4(
+                tree, focus, sibling, sibling->right, rb_tree_left_rotate);
+        } else {
+            sibling = focus->parent->left;
+            if (sibling && sibling->color == RED) {
+                sibling = rb_tree_delete_fixup_case1(
+                    tree, focus, sibling, rb_tree_right_rotate);
+            }
+
+            if (sibling && sibling->right && sibling->right->color == BLACK &&
+                sibling->left && sibling->left->color == BLACK) {
+                focus = rb_tree_delete_fixup_case2(tree, focus, sibling);
+            } else if (sibling && sibling->left &&
+                       sibling->left->color == BLACK) {
+                sibling = rb_tree_delete_fixup_case3(
+                    tree, focus, sibling, sibling->right, rb_tree_left_rotate);
+            }
+
+            focus = rb_tree_delete_fixup_case4(
+                tree, focus, sibling, sibling->left, rb_tree_right_rotate);
+        }
+    }
+}
+
+RBTreeNode *rb_tree_remove_node(RBTree *tree, RBTreeNode *node)
+{
+    RBTreeNode *fixup = NULL;
+    RBTreeColor original_color = node->color;
+
+    if (node->left == NULL && node->right == NULL) {
+        rb_tree_replace_node(tree, node, NULL);
+    } else if (node->left == NULL) {
+        fixup = node->right;
+        rb_tree_replace_node(tree, node, node->right);
+    } else if (node->right == NULL) {
+        fixup = node->left;
+        rb_tree_replace_node(tree, node, node->left);
+    } else {
+        RBTreeNode *replace = rb_tree_leftmost_node(node->right);
+        original_color = replace->color;
+        fixup = replace->right;
+
+        if (replace != node->right) {
+            rb_tree_replace_node(tree, replace, replace->right);
+            replace->right = node->right;
+            node->right->parent = replace;
+        }
+        rb_tree_replace_node(tree, node, replace);
+        replace->left = node->left;
+        node->left->parent = replace;
+    }
+
+    if (original_color == BLACK)
+        rb_tree_delete_fixup(tree, fixup);
+
+    --(tree->num_nodes);
+    return node;
+}
+
+RBTreeNode *rb_tree_find_node(RBTree *tree, RBTreeKey key)
+{
+    RBTreeNode *rover = tree->root;
+    while (rover != NULL) {
+        int comp = (tree->compare_func)(key, rover->key);
+        if (comp < 0) {
+            rover = rover->left;
+        } else if (comp > 0) {
+            rover = rover->right;
+        } else /* (comp == 0) */ {
+            return rover;
+        }
+    }
+    return NULL;
 }

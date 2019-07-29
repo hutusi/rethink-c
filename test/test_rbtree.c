@@ -31,6 +31,27 @@ void test_rbtree_insert()
     rb_tree_free(tree);
 }
 
+void test_rbtree_delete()
+{
+    RBTree *tree = create_rb_tree(10);
+
+    int *key = intdup(7);
+    RBTreeNode *node = rb_tree_find_node(tree, key);
+    assert(int_equal(node->key, key));
+
+    RBTreeNode *removed = rb_tree_remove_node(tree, node); 
+    assert(removed == node);
+    assert(tree->num_nodes == 9);
+
+    printf("root => [%d]\n", *((int *)tree->root->key));
+    unsigned int height = rb_tree_subtree_height(tree->root);
+    rb_tree_subtree_print(tree->root, height);
+
+    free(key);
+    rb_tree_free_node(tree, removed);
+    rb_tree_free(tree);  
+}
+
 void test_rb_tree_rotate()
 {
     RBTree *tree = create_rb_tree(3);
@@ -53,4 +74,5 @@ void test_rbtree()
 {
     // test_rb_tree_rotate();
     test_rbtree_insert();
+    test_rbtree_delete();
 }
