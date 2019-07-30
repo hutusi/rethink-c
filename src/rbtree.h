@@ -26,6 +26,10 @@ typedef void *RBTreeKey;
  */
 typedef void *RBTreeValue;
 
+/**
+ * @brief Definition of RBTree Colors.
+ * 
+ */
 typedef enum _RBTreeColor { RED = 0, BLACK = 1 } RBTreeColor;
 
 /**
@@ -78,8 +82,10 @@ typedef struct _RBTree {
 /**
  * @brief Allcate a new RBTree.
  *
- * @param compare_func  Compare two node value when do searching in RBTree.
- * @return RBTree*      The new RBTree if success, otherwise return NULL.
+ * @param compare_func      Compare two node value when do searching in RBTree.
+ * @param free_key_func     Free key callback function.
+ * @param free_value_func   Free value callback function.
+ * @return RBTree*          The new RBTree if success, otherwise return NULL.
  */
 RBTree *rb_tree_new(RBTreeCompareFunc compare_func,
                     RBTreeFreeKeyFunc free_key_func,
@@ -92,6 +98,12 @@ RBTree *rb_tree_new(RBTreeCompareFunc compare_func,
  */
 void rb_tree_free(RBTree *tree);
 
+/**
+ * @brief Free a node in a RBTree.
+ * 
+ * @param tree  The RBTree
+ * @param node  The node.
+ */
 void rb_tree_free_node(RBTree *tree, RBTreeNode *node);
 
 /**
@@ -111,8 +123,6 @@ RBTreeNode *rb_tree_leftmost_node(RBTreeNode *node);
  *                          no right child, return itself.
  */
 RBTreeNode *rb_tree_rightmost_node(RBTreeNode *node);
-
-RBTreeNode *rb_tree_rotate(RBTree *tree, RBTreeNode *focus);
 
 /**
  * @brief Insert a RBTreeValue to a RBTree.
@@ -134,18 +144,19 @@ RBTreeNode *rb_tree_insert(RBTree *tree, RBTreeKey key, RBTreeValue value);
  */
 RBTreeNode *rb_tree_remove_node(RBTree *tree, RBTreeNode *node);
 
+/**
+ * @brief Find a RBTreeNode value in a RBTree.
+ * 
+ * @param tree          The RBTree.
+ * @param key           The RBTreeNode value to lookup.
+ * @return RBTreeNode*  The matched RBTreeNode if success, otherwise NULL.
+ */
 RBTreeNode *rb_tree_find_node(RBTree *tree, RBTreeKey key);
 
 /**
- * @brief Find a RBTreeNode value in a RBTree.
- *
- * @param tree          The RBTree.
- * @param data          The RBTreeNode value to lookup.
- * @return RBTreeNode*  The matched RBTreeNode if success,
- *                      otherwise return NULL.
+ * @brief Traverse RBTree callback function.
+ * 
  */
-RBTreeNode *rb_tree_lookup_data(RBTree *tree, RBTreeValue data);
-
 typedef void (*RBTreeTraverseFunc)(RBTreeNode *node, void *args);
 
 /**
@@ -181,8 +192,20 @@ void rb_tree_postorder_traverse(RBTree *tree,
                                 RBTreeTraverseFunc callback,
                                 void *cb_args);
 
+/**
+ * @brief A subtree's height in a RBTree.
+ * 
+ * @param node            The subtree's root node.
+ * @return unsigned int   The height.
+ */
 unsigned int rb_tree_subtree_height(RBTreeNode *node);
 
-unsigned int rb_tree_subtree_print(RBTreeNode *node, int depth);
+/**
+ * @brief Print a subtree.
+ * 
+ * @param node      The subtree's root node.
+ * @param depth     The subtree's depth.
+ */
+void rb_tree_subtree_print(RBTreeNode *node, int depth);
 
 #endif /* #ifndef RETHINK_C_RB_TREE_H */

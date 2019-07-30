@@ -47,7 +47,7 @@ make
 ### Trees
 - [x] Binary Search Tree [bstree.h](src/bstree.h) [bstree.c](src/bstree.c)
 - [ ] AVL Tree
-- [ ] Red Black Tree
+- [x] Red Black Tree [rbtree.h](src/rbtree.h) [rbtree.c](src/rbtree.c)
 - [ ] Binary Heap
 - [ ] B+ Tree
 

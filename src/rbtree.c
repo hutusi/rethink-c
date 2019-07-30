@@ -11,6 +11,7 @@
 #include "rbtree.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #ifdef ALLOC_TESTING
 #include "alloc-testing.h"
@@ -94,21 +95,16 @@ static RBTreeEntity *rb_tree_node_append_value(RBTreeNode *node,
     return entity;
 }
 
-// inline RBTreeNode *rb_tree_grandparent_node(RBTreeNode *node)
+// static inline RBTreeNode *rb_tree_uncle_node(RBTreeNode *node)
 // {
 //     RBTreeNode *parent = node->parent;
+//     if (!parent)
+//         return NULL;
+//     RBTreeNode *grandparent = parent->parent;
+//     if (!grandparent)
+//         return NULL;
+//     return grandparent->left == parent ? grandparent->right : grandparent->left;
 // }
-
-static inline RBTreeNode *rb_tree_uncle_node(RBTreeNode *node)
-{
-    RBTreeNode *parent = node->parent;
-    if (!parent)
-        return NULL;
-    RBTreeNode *grandparent = parent->parent;
-    if (!grandparent)
-        return NULL;
-    return grandparent->left == parent ? grandparent->right : grandparent->left;
-}
 
 static inline RBTreeNode *rb_tree_sibling_node(RBTreeNode *node)
 {
@@ -174,18 +170,6 @@ static RBTreeNode *rb_tree_right_rotate(RBTree *tree, RBTreeNode *focus)
     }
 
     return new_focus;
-}
-
-RBTreeNode *rb_tree_rotate(RBTree *tree, RBTreeNode *focus)
-{
-    if (focus->parent == NULL)
-        return focus;
-
-    if (focus == focus->parent->left) {
-        return rb_tree_right_rotate(tree, focus);
-    } else {
-        return rb_tree_left_rotate(tree, focus);
-    }
 }
 
 static RBTreeNode *
@@ -282,6 +266,9 @@ RBTreeNode *rb_tree_insert(RBTree *tree, RBTreeKey key, RBTreeValue value)
             rover = rover->right;
         } else {
             // equal, no need to insert a node.
+            // free the key. shared key with prev node.
+            if (tree->free_key_func)
+                tree->free_key_func(key);
             rb_tree_node_append_value(rover, value);
             return rover;
         }
@@ -298,104 +285,14 @@ RBTreeNode *rb_tree_insert(RBTree *tree, RBTreeKey key, RBTreeValue value)
     } else if (comp > 0) {
         insert->right = new_node;
     } else {
+        // impossible
+        assert(0);
     }
 
     if (new_node)
         rb_tree_insert_fixup(tree, new_node);
 
     return new_node;
-}
-
-unsigned int rb_tree_subtree_height(RBTreeNode *node)
-{
-    if (node == NULL) {
-        return 0;
-    }
-
-    unsigned int left_height = rb_tree_subtree_height(node->left);
-    unsigned int right_height = rb_tree_subtree_height(node->left);
-
-    if (left_height < right_height) {
-        return left_height + 1;
-    } else {
-        return right_height + 1;
-    }
-}
-
-unsigned int rb_tree_subtree_print(RBTreeNode *node, int depth)
-{
-    if (node == NULL) {
-        return 0;
-    }
-
-    rb_tree_subtree_print(node->left, depth + 1);
-
-    for (int i = 0; i < depth * 6; ++i) {
-        printf(" ");
-    }
-
-    printf("%d[%c]\n", *(int *)node->key, node->color == RED ? 'R' : 'B');
-
-    rb_tree_subtree_print(node->right, depth + 1);
-
-    return 0;
-}
-
-static void rb_tree_preorder_internal(RBTreeNode *node,
-                                      RBTreeTraverseFunc callback,
-                                      void *cb_args)
-{
-    if (node != NULL) {
-        if (callback != NULL) {
-            callback(node, cb_args);
-        }
-        rb_tree_preorder_internal(node->left, callback, cb_args);
-        rb_tree_preorder_internal(node->right, callback, cb_args);
-    }
-}
-void rb_tree_preorder_traverse(RBTree *tree,
-                               RBTreeTraverseFunc callback,
-                               void *cb_args)
-{
-    rb_tree_preorder_internal(tree->root, callback, cb_args);
-}
-
-static void rb_tree_inorder_internal(RBTreeNode *node,
-                                     RBTreeTraverseFunc callback,
-                                     void *cb_args)
-{
-    if (node != NULL) {
-        rb_tree_inorder_internal(node->left, callback, cb_args);
-        if (callback != NULL) {
-            callback(node, cb_args);
-        }
-        rb_tree_inorder_internal(node->right, callback, cb_args);
-    }
-}
-void rb_tree_inorder_traverse(RBTree *tree,
-                              RBTreeTraverseFunc callback,
-                              void *cb_args)
-{
-    rb_tree_inorder_internal(tree->root, callback, cb_args);
-}
-
-static void rb_tree_postorder_internal(RBTreeNode *node,
-                                       RBTreeTraverseFunc callback,
-                                       void *cb_args)
-{
-    if (node != NULL) {
-        rb_tree_postorder_internal(node->left, callback, cb_args);
-        rb_tree_postorder_internal(node->right, callback, cb_args);
-        if (callback != NULL) {
-            callback(node, cb_args);
-        }
-    }
-}
-void rb_tree_postorder_traverse(RBTree *tree,
-                                RBTreeTraverseFunc callback,
-                                void *cb_args)
-{
-    rb_tree_postorder_internal(tree->root, callback, cb_args);
 }
 
 RBTreeNode *rb_tree_leftmost_node(RBTreeNode *node)
@@ -574,4 +471,97 @@ RBTreeNode *rb_tree_find_node(RBTree *tree, RBTreeKey key)
         }
     }
     return NULL;
+}
+
+unsigned int rb_tree_subtree_height(RBTreeNode *node)
+{
+    if (node == NULL) {
+        return 0;
+    }
+
+    unsigned int left_height = rb_tree_subtree_height(node->left);
+    unsigned int right_height = rb_tree_subtree_height(node->left);
+
+    if (left_height < right_height) {
+        return left_height + 1;
+    } else {
+        return right_height + 1;
+    }
+}
+
+void rb_tree_subtree_print(RBTreeNode *node, int depth)
+{
+    if (node == NULL) {
+        return;
+    }
+
+    rb_tree_subtree_print(node->left, depth + 1);
+
+    for (int i = 0; i < depth * 6; ++i) {
+        printf(" ");
+    }
+
+    printf("%d[%c]\n", *(int *)node->key, node->color == RED ? 'R' : 'B');
+
+    rb_tree_subtree_print(node->right, depth + 1);
+}
+
+static void rb_tree_preorder_internal(RBTreeNode *node,
+                                      RBTreeTraverseFunc callback,
+                                      void *cb_args)
+{
+    if (node != NULL) {
+        if (callback != NULL) {
+            callback(node, cb_args);
+        }
+        rb_tree_preorder_internal(node->left, callback, cb_args);
+        rb_tree_preorder_internal(node->right, callback, cb_args);
+    }
+}
+
+void rb_tree_preorder_traverse(RBTree *tree,
+                               RBTreeTraverseFunc callback,
+                               void *cb_args)
+{
+    rb_tree_preorder_internal(tree->root, callback, cb_args);
+}
+
+static void rb_tree_inorder_internal(RBTreeNode *node,
+                                     RBTreeTraverseFunc callback,
+                                     void *cb_args)
+{
+    if (node != NULL) {
+        rb_tree_inorder_internal(node->left, callback, cb_args);
+        if (callback != NULL) {
+            callback(node, cb_args);
+        }
+        rb_tree_inorder_internal(node->right, callback, cb_args);
+    }
+}
+
+void rb_tree_inorder_traverse(RBTree *tree,
+                              RBTreeTraverseFunc callback,
+                              void *cb_args)
+{
+    rb_tree_inorder_internal(tree->root, callback, cb_args);
+}
+
+static void rb_tree_postorder_internal(RBTreeNode *node,
+                                       RBTreeTraverseFunc callback,
+                                       void *cb_args)
+{
+    if (node != NULL) {
+        rb_tree_postorder_internal(node->left, callback, cb_args);
+        rb_tree_postorder_internal(node->right, callback, cb_args);
+        if (callback != NULL) {
+            callback(node, cb_args);
+        }
+    }
+}
+
+void rb_tree_postorder_traverse(RBTree *tree,
+                                RBTreeTraverseFunc callback,
+                                void *cb_args)
+{
+    rb_tree_postorder_internal(tree->root, callback, cb_args);
 }

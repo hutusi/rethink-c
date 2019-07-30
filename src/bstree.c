@@ -11,6 +11,7 @@
 #include "bstree.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #ifdef ALLOC_TESTING
 #include "alloc-testing.h"
@@ -49,34 +50,16 @@ static BSTreeNode *bs_tree_node_new(BSTreeValue data)
 
 BSTreeNode *bs_tree_insert(BSTree *tree, BSTreeValue data)
 {
-    BSTreeNode *new_node;
-    if (tree->root == NULL) {
-        new_node = bs_tree_node_new(data);
-        tree->root = new_node;
-        ++(tree->num_nodes);
-        return new_node;
-    }
-
     BSTreeNode *rover = tree->root;
+    BSTreeNode *insert = NULL;
+    int comp = 0;
     while (rover != NULL) {
-        int comp = (tree->compare_func)(data, rover->data);
+        comp = (tree->compare_func)(data, rover->data);
+        insert = rover;
+
         if (comp < 0) {
-            if (rover->left == NULL) {
-                new_node = bs_tree_node_new(data);
-                rover->left = new_node;
-                new_node->parent = rover;
-                ++(tree->num_nodes);
-                return new_node;
-            }
             rover = rover->left;
         } else if (comp > 0) {
-            if (rover->right == NULL) {
-                new_node = bs_tree_node_new(data);
-                rover->right = new_node;
-                new_node->parent = rover;
-                ++(tree->num_nodes);
-                return new_node;
-            }
             rover = rover->right;
         } else {
             // equal, do not insert.
@@ -84,7 +67,22 @@ BSTreeNode *bs_tree_insert(BSTree *tree, BSTreeValue data)
         }
     }
 
-    return NULL;
+    BSTreeNode *new_node = bs_tree_node_new(data);
+    new_node->parent = insert;
+    ++(tree->num_nodes);
+
+    if (insert == NULL) {
+        tree->root = new_node;
+    } else if (comp < 0) {
+        insert->left = new_node;
+    } else if (comp > 0) {
+        insert->right = new_node;
+    } else {
+        // impossible
+        assert(0);
+    }
+
+    return new_node;
 }
 
 BSTreeNode *bs_tree_leftmost_node(BSTreeNode *node)
@@ -111,60 +109,41 @@ bs_tree_replace_node(BSTree *tree, BSTreeNode *node, BSTreeNode *replace)
     BSTreeNode *parent = node->parent;
     if (parent == NULL) { // root
         tree->root = replace;
+    } else if (parent->left == node) {
+        parent->left = replace;
     } else {
-        if (parent->left == node) {
-            parent->left = replace;
-        } else if (parent->right == node) {
-            parent->right = replace;
-        } else {
-            // something wrong
-            return NULL;
-        }
+        parent->right = replace;
     }
 
     if (replace != NULL) {
         replace->parent = parent;
     }
 
-    --(tree->num_nodes);
     return node;
 }
 
 BSTreeNode *bs_tree_remove_node(BSTree *tree, BSTreeNode *node)
 {
-    // BSTreeNode *parent = node->parent;
-    BSTreeNode *left = node->left;
-    BSTreeNode *right = node->right;
-    BSTreeNode *removed = NULL;
-
-    if (left == NULL && right == NULL) {
-        removed = bs_tree_replace_node(tree, node, NULL);
-    } else if (left == NULL) {
-        removed = bs_tree_replace_node(tree, node, right);
-    } else if (right == NULL) {
-        removed = bs_tree_replace_node(tree, node, left);
+    if (node->left == NULL && node->right == NULL) {
+        bs_tree_replace_node(tree, node, NULL);
+    } else if (node->left == NULL) {
+        bs_tree_replace_node(tree, node, node->right);
+    } else if (node->right == NULL) {
+        bs_tree_replace_node(tree, node, node->left);
     } else {
-        if (right->left == NULL) {
-            removed = bs_tree_replace_node(tree, node, right);
+        BSTreeNode *replace = bs_tree_leftmost_node(node->right);
 
-            right->left = left;
-            left->parent = right;
-        } else {
-            BSTreeNode *leftmost = bs_tree_leftmost_node(right);
-            BSTreeNode *old_parent = leftmost->parent;
-            removed = bs_tree_replace_node(tree, node, leftmost);
-            if (removed != NULL) {
-                old_parent->left = NULL;
-
-                leftmost->left = left;
-                leftmost->right = right;
-
-                left->parent = leftmost;
-                right->parent = leftmost;
-            }
+        if (replace != node->right) {
+            bs_tree_replace_node(tree, replace, replace->right);
+            replace->right = node->right;
+            node->right->parent = replace;
         }
+        bs_tree_replace_node(tree, node, replace);
+        replace->left = node->left;
+        node->left->parent = replace;
     }
 
+    --(tree->num_nodes);
     return node;
 }
 
