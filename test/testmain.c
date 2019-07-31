@@ -14,6 +14,7 @@ extern void test_matrix();
 extern void test_matrix_2_dimensions();
 extern void test_bstree();
 extern void test_bstree_remove();
+extern void test_avltree();
 extern void test_rbtree();
 extern void test_bignum();
 extern void test_bignum_int_addition();
@@ -38,6 +39,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_matrix_2_dimensions,
                                    test_bstree,
                                    test_bstree_remove,
+                                   test_avltree,
                                    test_rbtree,
                                    test_bignum,
                                    test_bignum_int_addition,
