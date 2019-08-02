@@ -9,9 +9,9 @@
  */
 
 #include "rbtree.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #ifdef ALLOC_TESTING
 #include "alloc-testing.h"
@@ -103,7 +103,8 @@ static RBTreeEntity *rb_tree_node_append_value(RBTreeNode *node,
 //     RBTreeNode *grandparent = parent->parent;
 //     if (!grandparent)
 //         return NULL;
-//     return grandparent->left == parent ? grandparent->right : grandparent->left;
+//     return grandparent->left == parent ? grandparent->right :
+//     grandparent->left;
 // }
 
 static inline RBTreeNode *rb_tree_sibling_node(RBTreeNode *node)
@@ -172,6 +173,31 @@ static RBTreeNode *rb_tree_right_rotate(RBTree *tree, RBTreeNode *focus)
     return new_focus;
 }
 
+/**
+ * @brief Red black tree insert fixup: case1
+ *
+ * if (focus parent is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle
+ *
+ * case1 : focus node's uncle is RED
+ *
+ *               g[B]                 g[R]  <- focus
+ *              /    \               /    \
+ *             p[R]   u[R]    =>   p[B]   u[B]
+ *            /                    /
+ *  focus-> c[R]                 c[R]
+ *
+ * then goto case2.
+ *
+ * else (focus parent is right child): do the same as 'if' with 'left' and
+ *                                     'right' exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param uncle
+ * @return RBTreeNode*
+ */
 static RBTreeNode *
 rb_tree_insert_case1(RBTree *tree, RBTreeNode *focus, RBTreeNode *uncle)
 {
@@ -187,6 +213,35 @@ rb_tree_insert_case1(RBTree *tree, RBTreeNode *focus, RBTreeNode *uncle)
 
 typedef RBTreeNode *(*RBTreeRotateFunc)(RBTree *tree, RBTreeNode *focus);
 
+/**
+ * @brief Red black tree insert fixup: case2
+ *
+ * if (focus parent is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle
+ *
+ * case2 : focus node's uncle is BLACK and focus node is a right child
+ *
+ *               g[B]                             g[B]
+ *              /                                 /
+ *            p[R]        left rotate(c)         c[R]
+ *           /   \        -------------->       /   \
+ *         e[B]  c[R]  <-focus        focus->  p[R]  b[B]
+ *              /    \                        /   \
+ *             a[B]   b[B]                 e[B]  a[B]
+ *            /                                   /
+ *          d[R]                               d[R]
+ *
+ * goto case3.
+ *
+ * else (focus parent is right child): do the same as 'if' with 'left' and
+ *                                     'right' exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param rotate_func
+ * @return RBTreeNode*
+ */
 static RBTreeNode *rb_tree_insert_case2(RBTree *tree,
                                         RBTreeNode *focus,
                                         RBTreeRotateFunc rotate_func)
@@ -197,6 +252,33 @@ static RBTreeNode *rb_tree_insert_case2(RBTree *tree,
     return focus;
 }
 
+/**
+ * @brief Red black tree insert fixup: case3
+ *
+ * if (focus parent is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle
+ *
+ * case 3: focus node's uncle is BLACK and focus node is a left child
+ *
+ *               g[B]    right rotate(c)           p[B]
+ *              /        -------------->         /      \
+ *            p[R]                     focus-> c[R]     g[R]
+ *           /   \                            /   \      /
+ * focus-> c[R]  b[B]                       e[R]  a[B]  b[B]
+ *        /    \                                  /
+ *      e[B]   a[B]                             d[R]
+ *            /
+ *          d[R]
+ *
+ * else (focus parent is right child): do the same as 'if' with 'left' and
+ *                                     'right' exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param rotate_func
+ * @return RBTreeNode*
+ */
 static RBTreeNode *rb_tree_insert_case3(RBTree *tree,
                                         RBTreeNode *focus,
                                         RBTreeRotateFunc rotate_func)
@@ -232,6 +314,10 @@ static void rb_tree_insert_fixup(RBTree *tree, RBTreeNode *focus)
 
             rb_tree_insert_case3(tree, focus, rb_tree_right_rotate);
         } else {
+            /**
+             * else : focus parent is right child, do the
+             *        same as 'if' with 'left' and 'right' exchanged.
+             */
             RBTreeNode *uncle = grandparent->left;
 
             if (uncle && uncle->color == RED) {
@@ -332,6 +418,33 @@ rb_tree_replace_node(RBTree *tree, RBTreeNode *node, RBTreeNode *replace)
     return node;
 }
 
+/**
+ * @brief Red black tree delete fixup: case1
+ *
+ * if (focus is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle, s: sibling
+ *
+ * case1: focus node's sibling is RED.
+ *
+ *
+ *            p[B]       left rotate(p)       s[B]
+ *           /    \     -------------->      /    \
+ * focus-> c[B]    s[R]                    p[R]     b[B]
+ *                /   \                   /    \
+ *              a[B]  b[B]              c[B]   a[B] <-new sibling (return)
+ *
+ * goto case2.
+ *
+ * else (focus is right child): do the same as 'if' with 'left' and 'right'
+ *                              exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param sibling
+ * @param rotate_func
+ * @return RBTreeNode*
+ */
 static RBTreeNode *rb_tree_delete_fixup_case1(RBTree *tree,
                                               RBTreeNode *focus,
                                               RBTreeNode *sibling,
@@ -343,6 +456,33 @@ static RBTreeNode *rb_tree_delete_fixup_case1(RBTree *tree,
     return rb_tree_sibling_node(focus);
 }
 
+/**
+ * @brief Red black tree delete fixup: case2
+ *
+ * if (focus is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle, s: sibling
+ *
+ * case2: focus node's sibling is BLACK, and both of sibling's children are
+ *        BLACK.
+ *
+ *
+ *            p[R]                            p[B] <-focus
+ *           /    \     -------------->      /    \
+ * focus-> c[B]    s[B]                    c[B]   s[R]
+ *                /   \                          /    \
+ *              a[B]  b[B]                     a[B]   b[B]
+ *
+ * goto case3.
+ *
+ * else (focus is right child): do the same as 'if' with 'left' and 'right'
+ *                              exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param sibling
+ * @return RBTreeNode*
+ */
 static RBTreeNode *
 rb_tree_delete_fixup_case2(RBTree *tree, RBTreeNode *focus, RBTreeNode *sibling)
 {
@@ -350,6 +490,36 @@ rb_tree_delete_fixup_case2(RBTree *tree, RBTreeNode *focus, RBTreeNode *sibling)
     return focus->parent;
 }
 
+/**
+ * @brief Red black tree delete fixup: case3
+ *
+ * if (focus is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle, s: sibling
+ *
+ * case3: focus node's sibling is BLACK, sibling's left child is RED, and
+ *        sibling's right child is BLACK.
+ *
+ *            p[R]      right rotate(s)     p[B]
+ *           /    \     -------------->    /    \
+ * focus-> c[B]    s[B]                  c[B]   a[B] <-new sibling (return)
+ *                /   \                            \
+ *              a[R]  b[B]                          s[R]
+ *                                                    \
+ *                                                     b[B]
+ *
+ * goto case4.
+ *
+ * else (focus is right child): do the same as 'if' with 'left' and 'right'
+ *                              exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param sibling
+ * @param sibling_side
+ * @param rotate_func
+ * @return RBTreeNode*
+ */
 static RBTreeNode *rb_tree_delete_fixup_case3(RBTree *tree,
                                               RBTreeNode *focus,
                                               RBTreeNode *sibling,
@@ -363,6 +533,33 @@ static RBTreeNode *rb_tree_delete_fixup_case3(RBTree *tree,
     return rb_tree_sibling_node(focus);
 }
 
+/**
+ * @brief Red black tree delete fixup: case4
+ *
+ * if (focus is left child) example:
+ *
+ * c: focus, p:parent, g: grandparent, u: uncle, s: sibling
+ *
+ * case4: focus node's sibling is BLACK, and focus node's right child is RED.
+ *
+ *            p[R]      left rotate(p)      s[R]
+ *           /    \     -------------->    /    \
+ * focus-> c[B]    s[B]                  p[B]   b[B]
+ *                /   \                  /  \
+ *              a[R]  b[R]            c[B]  a[R]
+ *
+ * break loop.
+ *
+ * else (focus is right child): do the same as 'if' with 'left' and 'right'
+ *                              exchanged.
+ *
+ * @param tree
+ * @param focus
+ * @param sibling
+ * @param sibling_side
+ * @param rotate_func
+ * @return RBTreeNode*
+ */
 static RBTreeNode *rb_tree_delete_fixup_case4(RBTree *tree,
                                               RBTreeNode *focus,
                                               RBTreeNode *sibling,
@@ -401,6 +598,10 @@ static void rb_tree_delete_fixup(RBTree *tree, RBTreeNode *focus)
             focus = rb_tree_delete_fixup_case4(
                 tree, focus, sibling, sibling->right, rb_tree_left_rotate);
         } else {
+            /**
+             * else (focus is right child): do the same as 'if' with 'left' and
+             *                              'right' exchanged.
+             */
             sibling = focus->parent->left;
             if (sibling && sibling->color == RED) {
                 sibling = rb_tree_delete_fixup_case1(

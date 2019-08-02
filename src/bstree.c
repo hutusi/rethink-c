@@ -9,9 +9,9 @@
  */
 
 #include "bstree.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #ifdef ALLOC_TESTING
 #include "alloc-testing.h"
@@ -163,6 +163,18 @@ BSTreeNode *bs_tree_lookup_data(BSTree *tree, BSTreeValue data)
     return NULL;
 }
 
+/**
+ * @brief Preorder traverse.
+ *
+ *  order: self -> left child -> right child
+ *
+ *         a
+ *        / \
+ *       b   c
+ *
+ *     a -> b -> c
+ *
+ */
 static void bs_tree_preorder_internal(BSTreeNode *node,
                                       BSTreeTraverseFunc callback,
                                       void *cb_args)
@@ -175,6 +187,7 @@ static void bs_tree_preorder_internal(BSTreeNode *node,
         bs_tree_preorder_internal(node->right, callback, cb_args);
     }
 }
+
 void bs_tree_preorder_traverse(BSTree *tree,
                                BSTreeTraverseFunc callback,
                                void *cb_args)
@@ -182,6 +195,18 @@ void bs_tree_preorder_traverse(BSTree *tree,
     bs_tree_preorder_internal(tree->root, callback, cb_args);
 }
 
+/**
+ * @brief Inorder traverse.
+ *
+ *  order: left child -> self -> right child
+ *
+ *         a
+ *        / \
+ *       b   c
+ *
+ *     b -> a -> c
+ *
+ */
 static void bs_tree_inorder_internal(BSTreeNode *node,
                                      BSTreeTraverseFunc callback,
                                      void *cb_args)
@@ -194,6 +219,7 @@ static void bs_tree_inorder_internal(BSTreeNode *node,
         bs_tree_inorder_internal(node->right, callback, cb_args);
     }
 }
+
 void bs_tree_inorder_traverse(BSTree *tree,
                               BSTreeTraverseFunc callback,
                               void *cb_args)
@@ -201,6 +227,18 @@ void bs_tree_inorder_traverse(BSTree *tree,
     bs_tree_inorder_internal(tree->root, callback, cb_args);
 }
 
+/**
+ * @brief Postorder traverse.
+ *
+ *  order: left child -> right child -> self
+ *
+ *         a
+ *        / \
+ *       b   c
+ *
+ *     b -> c -> a
+ *
+ */
 static void bs_tree_postorder_internal(BSTreeNode *node,
                                        BSTreeTraverseFunc callback,
                                        void *cb_args)

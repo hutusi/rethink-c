@@ -72,5 +72,5 @@ make
 
 ### Math
 - [ ] Matrix multiplication
-- [x] Eratosthenes sieve (prime numbers) [prime.h](src/prime.h)
+- [x] Eratosthenes sieve (prime numbers) [prime.h](src/prime.h) [prime.c](src/prime.c)
 - [ ] Carmichael Numbers (prime number)

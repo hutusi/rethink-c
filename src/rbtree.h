@@ -128,7 +128,8 @@ RBTreeNode *rb_tree_rightmost_node(RBTreeNode *node);
  * @brief Insert a RBTreeValue to a RBTree.
  *
  * @param tree          The RBTree.
- * @param data          The value to insert.
+ * @param key           The key to insert.
+ * @param value         The value to insert.
  * @return RBTreeNode*  The new inserted RBTreeNode if success,
  *                      otherwise return NULL.
  */

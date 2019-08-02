@@ -199,7 +199,48 @@ static AVLTreeNode *avl_tree_right_rotate(AVLTree *tree, AVLTreeNode *focus)
 
     return new_focus;
 }
-
+/**
+ * @brief Balance subtree in a AVL Tree.
+ *
+ * There are four types rotations to balance tree:
+ *
+ * 1. RR (Right rotation):
+ *
+ *           a      Right rotate(a)       b
+ *          /      ------------->        / \
+ *         b                            c   a
+ *        /
+ *       c
+ *
+ * 2. LR (Left-Right double rotation):
+ *
+ *           a                          a    Right rotate(a)     c
+ *          /                          /     ------------->     / \
+ *         b      Left rotate (b)     c                        b   a
+ *          \     ----------->       /
+ *           c                      b
+ *
+ *
+ * 3. LL (Left rotation):
+ *
+ *       a            Left rotate(a)         b
+ *        \           ------------->        / \
+ *         b                               a   c
+ *          \
+ *           c
+ *
+ * 4. RL (Right-Left double rotation):
+ *
+ *       a                           a        Left rotate(a)     c
+ *        \                           \      ------------->     / \
+ *         b      Right rotate (b)     c                       a   b
+ *        /       ----------->          \
+ *       c                               b
+ *
+ * @param tree
+ * @param subroot
+ * @return AVLTreeNode*
+ */
 static AVLTreeNode *avl_tree_balance_subtree(AVLTree *tree,
                                              AVLTreeNode *subroot)
 {
@@ -228,7 +269,6 @@ static AVLTreeNode *avl_tree_balance_subtree(AVLTree *tree,
     }
 
     avl_tree_update_node_height(subroot);
-
     return subroot;
 }
 

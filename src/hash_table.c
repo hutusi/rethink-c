@@ -177,7 +177,7 @@ int hash_table_insert(HashTable *hash_table,
     } else {
         HashTableEntity *prev = hash_table_find_insert_place(
             hash_table, hash_table->data[index], key);
-        /** hash collision, append */
+        /** hash collision, append value to entity list. */
         prev->next = hash_table_new_entity(key, value);
         ++(hash_table->_collisions);
     }
