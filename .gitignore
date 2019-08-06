@@ -1,3 +1,6 @@
 build/
 !build/.keep
 clang-format.original
+
+/doc/html/
+/doc/latex/
