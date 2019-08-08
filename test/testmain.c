@@ -25,6 +25,7 @@ extern void test_bignum_int_division();
 extern void test_dijkstra();
 extern void test_prime();
 extern void test_hash_table();
+extern void test_kmp();
 
 typedef void (*TestcaseFunc)(void);
 
@@ -51,6 +52,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_dijkstra,
                                    test_prime,
                                    test_hash_table,
+                                   test_kmp,
                                    NULL};
 
 static void run_test(TestcaseFunc test)
