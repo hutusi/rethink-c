@@ -12,29 +12,35 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void kmp_calculate_next(const char *string, int len, int *next)
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
+int *kmp_calculate_next(const char *string, int len)
 {
+    int *next = (int *)calloc(len, sizeof(int));
     next[0] = 0;
     int k = 0;
     for (int i = 1; i < len; ++i) {
-        while (k > 0 && next[k] != next[i]) {
+        while (k > 0 && string[k] != string[i]) {
             k = next[k];
-        } 
-        
-        if (next[k + 1] != next[i]) {
+        }
+
+        if (string[k] == string[i]) {
             ++k;
         }
 
         next[i] = k;
     }
+
+    return next;
 }
 
 int kmp_string_match(const char *text, const char *pattern)
 {
     int text_len = strlen(text);
     int pat_len = strlen(pattern);
-    int *next = (int *)calloc(pat_len, sizeof(int));
-    kmp_calculate_next(pattern, pat_len, next);
+    int *next = kmp_calculate_next(pattern, pat_len);
 
     int index = -1;
     int j = 0;
@@ -42,8 +48,11 @@ int kmp_string_match(const char *text, const char *pattern)
         if (text[i] == pattern[j]) {
             ++j;
         } else {
-            j = next[j];
-            --i;
+            if (j > 0) {
+                /** C allowed n[-1] ?? */
+                j = next[j - 1];
+                --i;
+            }
         }
 
         if (j >= pat_len) {

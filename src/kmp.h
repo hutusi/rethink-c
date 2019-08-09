@@ -18,7 +18,7 @@
 
 /**
  * @brief KMP algorithm to find the match substring.
- * 
+ *
  * @param text      The text string.
  * @param pattern   The pattern string.
  * @return int      The first match index.

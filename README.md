@@ -63,7 +63,7 @@ make
 ### String
 - [x] BigNum integer [bignum.h](src/bignum.h) [bignum.c](src/bignum.c)
 - [ ] BigNum decimal
-- [ ] KMP
+- [x] KMP string match algorithm [kmp.h](src/kmp.h) [kmp.c](src/kmp.c)
 - [ ] Trie Tree
 
 ### Sorting
