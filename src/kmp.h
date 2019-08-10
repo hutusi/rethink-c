@@ -14,8 +14,6 @@
 #ifndef RETHINK_C_KMP_H
 #define RETHINK_C_KMP_H
 
-#include "graph.h"
-
 /**
  * @brief KMP algorithm to find the match substring.
  *
