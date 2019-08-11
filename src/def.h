@@ -16,7 +16,7 @@
 
 #ifdef TESTING
 #define STATIC
-#elif
+#else
 #define STATIC static
 #endif
 

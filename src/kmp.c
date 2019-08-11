@@ -13,6 +13,33 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief Calculate next array
+ *
+ * calucate the max matched suffix substring' length.
+ *
+ * string: abcdabd
+ *
+ * a        0
+ * ab       0
+ * abc      0
+ * abcd     0
+ * abcda    1
+ * abcdab   2
+ * abcdabd  0
+ *
+ * string: ababa
+ *
+ * a        0
+ * ab       0
+ * aba      1
+ * abab     2
+ * ababa    3
+ *
+ * @param string
+ * @param len
+ * @return STATIC* kmp_calculate_next
+ */
 STATIC int *kmp_calculate_next(const char *string, int len)
 {
     int *next = (int *)calloc(len, sizeof(int));
@@ -33,6 +60,52 @@ STATIC int *kmp_calculate_next(const char *string, int len)
     return next;
 }
 
+/**
+ * @brief KMP algorithm
+ *
+ * text: bbcabcdababcdabcdabde
+ * pattern: abcdabd
+ *
+ * !
+ * bbcabcdababcdabcdabde
+ * abcdabd
+ *
+ * step 1 ->
+ *  !
+ * bbcabcdababcdabcdabde
+ *  abcdabd
+ *
+ * step 1 ->
+ *   !
+ * bbcabcdababcdabcdabde
+ *   abcdabd
+ *
+ * step 1 ->
+ *    !
+ * bbcabcdababcdabcdabde
+ *    abcdabd
+ *
+ * step 1 -> ... until find failure charactor 'a'-'d'
+ *    !     *
+ * bbcabcdababcdabcdabde
+ *    abcdabd
+ *
+ * step next[5] = 4, then step 1... until find failure charactor 'a'-'c'
+ *        ! *
+ * bbcabcdababcdabcdabde
+ *        abcdabd
+ *
+ * step next[3] = 2 ...
+ *          !
+ * bbcabcdababcdabcdabde
+ *          abcdabd
+ *
+ * ......
+ *
+ * @param text
+ * @param pattern
+ * @return int
+ */
 int kmp_string_match(const char *text, const char *pattern)
 {
     int text_len = strlen(text);
@@ -46,7 +119,7 @@ int kmp_string_match(const char *text, const char *pattern)
             ++j;
         } else {
             if (j > 0) {
-                /** C allowed n[-1] ?? */
+                /** C allowed n[-1] */
                 j = next[j - 1];
                 --i;
             }

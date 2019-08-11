@@ -75,6 +75,9 @@ void test_bm_string_match()
 
     ASSERT_INT_EQ(bm_string_match("aaaaaaaaaaaaaaaa", "baaa"), -1);
     ASSERT_INT_EQ(bm_string_match("abcacabcbcbacabc", "cbacabc"), 9);
+
+    ASSERT_INT_EQ(bm_string_match("ababcabcabcabc", "abcabcabc"), 2);
+    ASSERT_INT_EQ(bm_string_match("aaaabaaaaaaaaa", "baaaaaaaaa"), 4);
 }
 
 void test_bm()

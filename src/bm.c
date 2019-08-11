@@ -14,6 +14,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief Calculate bad charactors.
+ *
+ * @param pattern
+ * @param len
+ * @param bad_chars
+ * @return STATIC bm_calculate_bad_chars
+ */
 STATIC void bm_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
 {
     for (int i = 0; i < 256; ++i) {
@@ -28,9 +36,16 @@ STATIC void bm_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
     }
 }
 
-STATIC void bm_calculate_good_suffixes(const char *pattern,
-                                int len,
-                                int *good_suffixes)
+/**
+ * @brief Calculate good suffixes
+ *
+ * @param pattern
+ * @param len
+ * @param good_suffixes
+ * @return STATIC bm_calculate_good_suffixes
+ */
+STATIC void
+bm_calculate_good_suffixes(const char *pattern, int len, int *good_suffixes)
 {
     for (int i = 0; i <= len; ++i) {
         good_suffixes[i] = -1;
@@ -58,6 +73,53 @@ STATIC int bm_move_by_good_suffixes(int *good_suffixes, int len, int good_len)
 
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 
+/**
+ * @brief BM algorithm function
+ *
+ * There are two rules in BM algorithm.
+ *
+ * rule 1: bad charactor.
+ *
+ * compare begin with last charactor:
+ *    !
+ * abceaebabcde
+ * abcd
+ *
+ * 'e' is a bad charactor, 'e' is not in 'abcd', move length 4('abcd'):
+ *        !
+ * abceaebabcde
+ *     abcd
+ *
+ * now 'a' is a bad charactor, 'a' in 'abcd', move to make 'a' align with 'a':
+ *
+ *           !
+ * abceaebabcde
+ *        abcd
+ *
+ *
+ * rule 2: good suffix.
+ *
+ * compare begin with last charactor:
+ *       !
+ * abceaabccabef
+ * aabccab
+ *
+ * step to left: 'ab' is good suffix, 'a', 'c' not match:
+ *     *!!
+ * abceaabccabef
+ * aabccab
+ *
+ * move length 4 to make 'ab' align with 'ab':
+ *
+ *          !!
+ * abceaabccabef
+ *     aabccab
+ *
+ *
+ * @param text
+ * @param pattern
+ * @return int
+ */
 int bm_string_match(const char *text, const char *pattern)
 {
     int text_len = strlen(text);
@@ -78,8 +140,8 @@ int bm_string_match(const char *text, const char *pattern)
             if (text[cursor + pat_len - 1 - i] == pattern[pat_len - 1 - i]) {
 
             } else {
-                int bad =
-                    pat_len - bad_chars[(int)text[cursor + pat_len - 1 - i]] - 1;
+                int bad = pat_len - i - 1 -
+                          bad_chars[(int)text[cursor + pat_len - 1 - i]];
                 int good = bm_move_by_good_suffixes(good_suffixes, pat_len, i);
                 cursor += MAX(bad, good);
                 break;
