@@ -256,3 +256,68 @@ int hash_table_delete(HashTable *hash_table, HashTableKey key)
         return -1;
     }
 }
+
+unsigned int hash_table_size(HashTable *hash_table)
+{
+    return hash_table->length;
+}
+
+static HashTableEntity *hash_table_next_entity_from_index(HashTable *hash_table, int index)
+{
+    HashTableEntity *next = NULL;
+    for (int i = index; i < hash_table->length; ++i) {
+        if (hash_table->data[i] != NULL) {
+            next = hash_table->data[i];
+            break;
+        }
+    }
+    return next;
+}
+
+HashTableEntity *hash_table_first_entity(HashTable *hash_table)
+{
+    return hash_table_next_entity_from_index(hash_table, 0);
+}
+
+static HashTableEntity *hash_table_last_entity_before_index(HashTable *hash_table, int index)
+{
+    HashTableEntity *last = NULL;
+    for (int i = index - 1; i >= 0; --i) {
+        if (hash_table->data[i] != NULL) {
+            last = hash_table->data[i];
+            while (last->next != NULL) {
+                last = last->next;
+            }
+            break;
+        }
+    }
+    return last;
+}
+
+HashTableEntity *hash_table_last_entity(HashTable *hash_table)
+{
+    return hash_table_last_entity_before_index(hash_table, hash_table->length);
+}
+
+HashTableEntity *hash_table_next_entity(HashTable *hash_table, HashTableEntity *entity)
+{
+    HashTableEntity *next = entity->next;
+    if (next != NULL) return next;
+
+    int index = hash_table_hashing_key(hash_table, entity->key);
+    return hash_table_next_entity_from_index(hash_table, index + 1);
+}
+
+HashTableEntity *hash_table_prev_entity(HashTable *hash_table, HashTableEntity *entity)
+{
+    int index = hash_table_hashing_key(hash_table, entity->key);
+    HashTableEntity *rover = hash_table->data[index];
+    if (rover != entity) {
+        while (rover->next != entity) {
+            rover = rover->next;
+        }
+        return rover;
+    }
+
+    return hash_table_last_entity_before_index(hash_table, index);
+}

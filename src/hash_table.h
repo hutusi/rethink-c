@@ -116,4 +116,11 @@ int hash_table_set(HashTable *hash_table,
  */
 int hash_table_delete(HashTable *hash_table, HashTableKey key);
 
+unsigned int hash_table_size(HashTable *hash_table);
+
+HashTableEntity *hash_table_first_entity(HashTable *hash_table);
+HashTableEntity *hash_table_last_entity(HashTable *hash_table);
+HashTableEntity *hash_table_next_entity(HashTable *hash_table, HashTableEntity *entity);
+HashTableEntity *hash_table_prev_entity(HashTable *hash_table, HashTableEntity *entity);
+
 #endif /* #ifndef RETHINK_C_HASH_TABLE_H */
