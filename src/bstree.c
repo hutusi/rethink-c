@@ -9,13 +9,10 @@
  */
 
 #include "bstree.h"
+#include "def.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 BSTree *bs_tree_new(BSTreeCompareFunc compare_func)
 {

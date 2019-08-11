@@ -9,10 +9,7 @@
  */
 
 #include "hash.h"
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
+#include "def.h"
 
 unsigned int hash_int(void *pointer) { return *(unsigned int *)pointer; }
 

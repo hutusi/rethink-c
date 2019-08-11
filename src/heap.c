@@ -9,13 +9,10 @@
  */
 
 #include "heap.h"
+#include "def.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 Heap *heap_new(HeapType type,
                HeapCompareFunc compare_func,

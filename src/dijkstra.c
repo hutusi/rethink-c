@@ -9,6 +9,7 @@
  */
 
 #include "dijkstra.h"
+#include "def.h"
 #include <stdlib.h>
 
 static void dijkstra_init_distances(int *distances, int num_vertexes)

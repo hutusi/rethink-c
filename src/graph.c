@@ -9,6 +9,7 @@
  */
 
 #include "graph.h"
+#include "def.h"
 #include <stdlib.h>
 
 AdjacencyMatrix *adjacency_matrix_new(int num_vertexes)

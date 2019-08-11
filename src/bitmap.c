@@ -9,11 +9,8 @@
  */
 
 #include "bitmap.h"
+#include "def.h"
 #include <string.h>
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 inline void set_bit(word_t *words, unsigned int n)
 {

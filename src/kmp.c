@@ -9,14 +9,11 @@
  */
 
 #include "kmp.h"
+#include "def.h"
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
-
-int *kmp_calculate_next(const char *string, int len)
+STATIC int *kmp_calculate_next(const char *string, int len)
 {
     int *next = (int *)calloc(len, sizeof(int));
     next[0] = 0;

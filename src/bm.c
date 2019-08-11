@@ -9,15 +9,12 @@
  */
 
 #include "bm.h"
+#include "def.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
-
-void bm_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
+STATIC void bm_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
 {
     for (int i = 0; i < 256; ++i) {
         bad_chars[i] = -1;
@@ -31,7 +28,7 @@ void bm_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
     }
 }
 
-void bm_calculate_good_suffixes(const char *pattern,
+STATIC void bm_calculate_good_suffixes(const char *pattern,
                                 int len,
                                 int *good_suffixes)
 {
@@ -50,7 +47,7 @@ void bm_calculate_good_suffixes(const char *pattern,
     }
 }
 
-int bm_move_by_good_suffixes(int *good_suffixes, int len, int good_len)
+STATIC int bm_move_by_good_suffixes(int *good_suffixes, int len, int good_len)
 {
     if (good_len == 0) {
         return 1;
@@ -82,7 +79,7 @@ int bm_string_match(const char *text, const char *pattern)
 
             } else {
                 int bad =
-                    pat_len - bad_chars[text[cursor + pat_len - 1 - i]] - 1;
+                    pat_len - bad_chars[(int)text[cursor + pat_len - 1 - i]] - 1;
                 int good = bm_move_by_good_suffixes(good_suffixes, pat_len, i);
                 cursor += MAX(bad, good);
                 break;

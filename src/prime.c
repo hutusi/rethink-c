@@ -9,6 +9,7 @@
  */
 
 #include "prime.h"
+#include "def.h"
 #include <math.h>
 
 static inline unsigned int bit_map_index_to_number(unsigned int n)

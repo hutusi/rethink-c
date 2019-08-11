@@ -14,12 +14,9 @@
  */
 
 #include "hash_table.h"
+#include "def.h"
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 struct _HashTable {
     /** data point to HashTableEntity array,

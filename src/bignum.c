@@ -9,14 +9,11 @@
  */
 
 #include "bignum.h"
+#include "def.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 #define char_to_int(ch) (ch - '0')
 #define int_to_char(ch) (ch + '0')

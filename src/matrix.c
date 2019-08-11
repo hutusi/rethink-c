@@ -9,13 +9,10 @@
  */
 
 #include "matrix.h"
+#include "def.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef ALLOC_TESTING
-#include "alloc-testing.h"
-#endif
 
 Matrix *matrix_new(unsigned int num_dimensions, ...)
 {
