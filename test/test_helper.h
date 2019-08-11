@@ -1,6 +1,12 @@
 #ifndef RETHINK_C_TEST_HELPER_H
 #define RETHINK_C_TEST_HELPER_H
 
+#define ASSERT_INT_EQ(a, b)                                           \
+    if ((a) != (b)) {                                                 \
+        printf("\nassert: Left [%d] not equal to Right[%d]\n", a, b); \
+        assert(a == b);                                               \
+    }
+
 int int_equal(void *vlocation1, void *vlocation2);
 int int_compare(void *vlocation1, void *vlocation2);
 

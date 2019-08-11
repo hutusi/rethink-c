@@ -9,9 +9,9 @@
  */
 
 #include "bm.h"
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 #ifdef ALLOC_TESTING
 #include "alloc-testing.h"
@@ -31,35 +31,45 @@ void bm_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
     }
 }
 
-void bm_calculate_good_suffixes(const char *pattern, int len, int *good_suffixes)
+void bm_calculate_good_suffixes(const char *pattern,
+                                int len,
+                                int *good_suffixes)
 {
-    for (int i = 0; i < len; ++i) {
+    for (int i = 0; i <= len; ++i) {
         good_suffixes[i] = -1;
     }
 
     for (int i = 0; i < len - 1; ++i) {
         int j = i;
         int k = 0;
-        while (j >= 0 && pattern[j] == pattern[len - 1 + j - i])
-        {
+        while (j >= 0 && pattern[j] == pattern[len - 1 + j - i]) {
+            ++k;
             good_suffixes[k] = j;
             --j;
-            ++k;
         }
     }
 }
 
-#define MAX(a, b) ((a)<(b)?(b):(a))
+int bm_move_by_good_suffixes(int *good_suffixes, int len, int good_len)
+{
+    if (good_len == 0) {
+        return 1;
+    } else {
+        return len - good_suffixes[good_len] - good_len;
+    }
+}
+
+#define MAX(a, b) ((a) < (b) ? (b) : (a))
 
 int bm_string_match(const char *text, const char *pattern)
 {
     int text_len = strlen(text);
     int pat_len = strlen(pattern);
-    
+
     int bad_chars[256];
     bm_calculate_bad_chars(pattern, pat_len, bad_chars);
 
-    int *good_suffixes = (int *)malloc(pat_len * sizeof(int));
+    int *good_suffixes = (int *)malloc((pat_len + 1) * sizeof(int));
     bool *prefixes = (bool *)malloc(pat_len * sizeof(bool));
     bm_calculate_good_suffixes(pattern, pat_len, good_suffixes);
 
@@ -69,10 +79,11 @@ int bm_string_match(const char *text, const char *pattern)
         int i = 0;
         for (; i < pat_len; ++i) {
             if (text[cursor + pat_len - 1 - i] == pattern[pat_len - 1 - i]) {
-                
+
             } else {
-                int bad = pat_len - bad_chars[text[cursor + pat_len - 1 - i]] - 1;
-                int good = good_suffixes[i];
+                int bad =
+                    pat_len - bad_chars[text[cursor + pat_len - 1 - i]] - 1;
+                int good = bm_move_by_good_suffixes(good_suffixes, pat_len, i);
                 cursor += MAX(bad, good);
                 break;
             }
