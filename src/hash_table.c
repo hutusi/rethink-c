@@ -29,7 +29,7 @@ struct _HashTable {
     HashTableEqualFunc equal_func;
 
     HashTableFreeKeyFunc free_key_func;
-    HashTableFreeKeyFunc free_value_func;
+    HashTableFreeValueFunc free_value_func;
 
     /** private: _allocated length of data. */
     unsigned int _allocated;
@@ -40,7 +40,7 @@ struct _HashTable {
 HashTable *hash_table_new(HashTableHashFunc hash_func,
                           HashTableEqualFunc equal_func,
                           HashTableFreeKeyFunc free_key_func,
-                          HashTableFreeKeyFunc free_value_func)
+                          HashTableFreeValueFunc free_value_func)
 {
     HashTable *hash_table = (HashTable *)malloc(sizeof(HashTable));
     hash_table->hash_func = hash_func;
@@ -265,7 +265,7 @@ unsigned int hash_table_size(HashTable *hash_table)
 static HashTableEntity *hash_table_next_entity_from_index(HashTable *hash_table, int index)
 {
     HashTableEntity *next = NULL;
-    for (int i = index; i < hash_table->length; ++i) {
+    for (int i = index; i < hash_table->_allocated; ++i) {
         if (hash_table->data[i] != NULL) {
             next = hash_table->data[i];
             break;
@@ -296,7 +296,7 @@ static HashTableEntity *hash_table_last_entity_before_index(HashTable *hash_tabl
 
 HashTableEntity *hash_table_last_entity(HashTable *hash_table)
 {
-    return hash_table_last_entity_before_index(hash_table, hash_table->length);
+    return hash_table_last_entity_before_index(hash_table, hash_table->_allocated);
 }
 
 HashTableEntity *hash_table_next_entity(HashTable *hash_table, HashTableEntity *entity)

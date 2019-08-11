@@ -78,6 +78,50 @@ void test_hash_table_enlarge()
     hash_table_free(hash_table);
 }
 
+void test_hash_table_first_last()
+{
+    HashTable *hash_table = hash_table_new(hash_int, int_equal, free, free);
+
+    assert(hash_table_insert(hash_table, intdup(1), intdup(2)) == 0);
+    assert(hash_table_insert(hash_table, intdup(3), intdup(4)) == 0);
+    assert(hash_table_insert(hash_table, intdup(5), intdup(6)) == 0);
+    ASSERT_INT_EQ(hash_table_size(hash_table), 3);
+
+    int count = 0;
+    for (HashTableEntity *iterator = hash_table_first_entity(hash_table);
+         iterator != NULL;
+         iterator = hash_table_next_entity(hash_table, iterator)) {
+        ++count;
+    }
+    ASSERT_INT_EQ(count, 3);
+
+    count = 0;
+    for (HashTableEntity *iterator = hash_table_last_entity(hash_table);
+         iterator != NULL;
+         iterator = hash_table_prev_entity(hash_table, iterator)) {
+        ++count;
+    }
+    ASSERT_INT_EQ(count, 3);
+
+    /** this is forbidden!!! */
+    // for (HashTableEntity *iterator = hash_table_last_entity(hash_table);
+    //      iterator != NULL;
+    //      iterator = hash_table_prev_entity(hash_table, iterator)) {
+    //     hash_table_delete(hash_table, iterator->key);
+    // }
+    // ASSERT_INT_EQ(hash_table_size(hash_table), 0);
+
+    HashTableEntity *iterator = hash_table_last_entity(hash_table);
+    while (iterator != NULL) {
+        HashTableEntity *prev = iterator;
+        iterator = hash_table_prev_entity(hash_table, prev);
+        hash_table_delete(hash_table, prev->key);
+    }
+    ASSERT_INT_EQ(hash_table_size(hash_table), 0);
+
+    hash_table_free(hash_table);
+}
+
 void test_hash_table_iterate()
 {
     char buf[10];
@@ -100,12 +144,22 @@ void test_hash_table_iterate()
     }
     ASSERT_INT_EQ(count, MAX_TABLE_SIZE);
 
+    count = 0;
     for (HashTableEntity *iterator = hash_table_last_entity(hash_table);
          iterator != NULL;
          iterator = hash_table_prev_entity(hash_table, iterator)) {
-        hash_table_delete(hash_table, iterator->key);
+        ++count;
     }
-    ASSERT_INT_EQ(hash_table_size(hash_table), 0);
+    ASSERT_INT_EQ(count, MAX_TABLE_SIZE);
+
+    // HashTableEntity *iterator = hash_table_last_entity(hash_table);
+    // while (iterator != NULL)
+    // {
+    //     HashTableEntity *prev = iterator;
+    //     iterator = hash_table_prev_entity(hash_table, prev);
+    //     hash_table_delete(hash_table, prev->key);
+    // }
+    // ASSERT_INT_EQ(hash_table_size(hash_table), 0);
 
     hash_table_free(hash_table);
 }
@@ -115,4 +169,6 @@ void test_hash_table()
     test_hash_table_string();
     test_hash_table_int();
     test_hash_table_enlarge();
+    test_hash_table_first_last();
+    test_hash_table_iterate();
 }
