@@ -2,11 +2,11 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "test_helper.h"
-#include "alloc-testing.h"
 
-void test_matrix()
-{}
+#include "alloc-testing.h"
+#include "test_helper.h"
+
+void test_matrix() {}
 
 void test_matrix_2_dimensions()
 {

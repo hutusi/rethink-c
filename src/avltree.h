@@ -6,8 +6,8 @@
  * @brief AVL Tree.
  *
  * AVL tree is a self balancing binary search tree, where difference of right
- * subtree and left subtree height to a node is at most 1. 
- * 
+ * subtree and left subtree height to a node is at most 1.
+ *
  * Georgy Adelson-Velsky and Evgenii Landis introduced it in 1962.
  *
  * @date 2019-07-30

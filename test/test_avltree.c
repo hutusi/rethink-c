@@ -38,7 +38,7 @@ void test_avltree_delete()
     AVLTreeNode *node = avl_tree_find_node(tree, key);
     assert(int_equal(node->key, key));
 
-    AVLTreeNode *removed = avl_tree_remove_node(tree, node); 
+    AVLTreeNode *removed = avl_tree_remove_node(tree, node);
     assert(removed == node);
     assert(tree->num_nodes == 9);
 
@@ -49,7 +49,7 @@ void test_avltree_delete()
 
     free(key);
     avl_tree_free_node(tree, removed);
-    avl_tree_free(tree);  
+    avl_tree_free(tree);
 }
 
 void test_avltree_print()

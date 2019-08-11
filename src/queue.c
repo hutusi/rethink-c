@@ -148,4 +148,7 @@ QueueValue queue_peek_tail(Queue *queue)
     }
 }
 
-int queue_is_empty(Queue *queue) { return queue->length == 0; }
+int queue_is_empty(Queue *queue)
+{
+    return queue->length == 0;
+}

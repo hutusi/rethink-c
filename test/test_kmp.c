@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "test_helper.h"
 #include "alloc-testing.h"
+#include "test_helper.h"
 
 extern int *kmp_calculate_next(const char *string, int len);
 

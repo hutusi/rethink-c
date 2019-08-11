@@ -6,3 +6,4 @@ PointerAlignment: Right
 BinPackArguments: false
 BinPackParameters: false
 AlignEscapedNewlines: Left
+AllowShortFunctionsOnASingleLine: Empty

@@ -98,7 +98,8 @@ static HashTableEntity *hash_table_new_entity(HashTableKey key,
     return entity;
 }
 
-static inline int hash_table_hashing_key(HashTable *hash_table, HashTableKey key)
+static inline int hash_table_hashing_key(HashTable *hash_table,
+                                         HashTableKey key)
 {
     return hash_table->hash_func(key) % hash_table->_allocated;
 }
@@ -262,7 +263,8 @@ unsigned int hash_table_size(HashTable *hash_table)
     return hash_table->length;
 }
 
-static HashTableEntity *hash_table_next_entity_from_index(HashTable *hash_table, int index)
+static HashTableEntity *hash_table_next_entity_from_index(HashTable *hash_table,
+                                                          int index)
 {
     HashTableEntity *next = NULL;
     for (int i = index; i < hash_table->_allocated; ++i) {
@@ -279,7 +281,8 @@ HashTableEntity *hash_table_first_entity(HashTable *hash_table)
     return hash_table_next_entity_from_index(hash_table, 0);
 }
 
-static HashTableEntity *hash_table_last_entity_before_index(HashTable *hash_table, int index)
+static HashTableEntity *
+hash_table_last_entity_before_index(HashTable *hash_table, int index)
 {
     HashTableEntity *last = NULL;
     for (int i = index - 1; i >= 0; --i) {
@@ -296,19 +299,23 @@ static HashTableEntity *hash_table_last_entity_before_index(HashTable *hash_tabl
 
 HashTableEntity *hash_table_last_entity(HashTable *hash_table)
 {
-    return hash_table_last_entity_before_index(hash_table, hash_table->_allocated);
+    return hash_table_last_entity_before_index(hash_table,
+                                               hash_table->_allocated);
 }
 
-HashTableEntity *hash_table_next_entity(HashTable *hash_table, HashTableEntity *entity)
+HashTableEntity *hash_table_next_entity(HashTable *hash_table,
+                                        HashTableEntity *entity)
 {
     HashTableEntity *next = entity->next;
-    if (next != NULL) return next;
+    if (next != NULL)
+        return next;
 
     int index = hash_table_hashing_key(hash_table, entity->key);
     return hash_table_next_entity_from_index(hash_table, index + 1);
 }
 
-HashTableEntity *hash_table_prev_entity(HashTable *hash_table, HashTableEntity *entity)
+HashTableEntity *hash_table_prev_entity(HashTable *hash_table,
+                                        HashTableEntity *entity)
 {
     int index = hash_table_hashing_key(hash_table, entity->key);
     HashTableEntity *rover = hash_table->data[index];

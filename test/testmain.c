@@ -1,5 +1,6 @@
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
+
 #include "alloc-testing.h"
 
 extern void test_arraylist();

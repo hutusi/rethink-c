@@ -84,21 +84,21 @@ void bitmap_clear_all(BitMap *bitmap)
 
 void bitmap_or(BitMap *bitmap, const BitMap *other)
 {
-    for (int i = 0; i< bitmap->num_words; ++i) {
+    for (int i = 0; i < bitmap->num_words; ++i) {
         bitmap->words[i] |= other->words[i];
     }
 }
 
 void bitmap_and(BitMap *bitmap, const BitMap *other)
 {
-    for (int i = 0; i< bitmap->num_words; ++i) {
+    for (int i = 0; i < bitmap->num_words; ++i) {
         bitmap->words[i] &= other->words[i];
     }
 }
 
 void bitmap_xor(BitMap *bitmap, const BitMap *other)
 {
-    for (int i = 0; i< bitmap->num_words; ++i) {
+    for (int i = 0; i < bitmap->num_words; ++i) {
         bitmap->words[i] ^= other->words[i];
     }
 }
@@ -107,7 +107,8 @@ unsigned int bitmap_count(const BitMap *bitmap)
 {
     unsigned int count = 0;
     for (unsigned int i = 0; i < bitmap->num_bits; ++i) {
-        if (bitmap_get(bitmap, i)) ++count;
+        if (bitmap_get(bitmap, i))
+            ++count;
     }
     return count;
 }

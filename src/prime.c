@@ -75,4 +75,7 @@ unsigned int prime_number_sieve_count(const BitMap *sieve)
     return bitmap_count(sieve) + 1; /** plus prime 2 */
 }
 
-void prime_number_sieve_free(BitMap *sieve) { bitmap_free(sieve); }
+void prime_number_sieve_free(BitMap *sieve)
+{
+    bitmap_free(sieve);
+}

@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "test_helper.h"
 #include "alloc-testing.h"
+#include "test_helper.h"
 
 void test_prime_1()
 {

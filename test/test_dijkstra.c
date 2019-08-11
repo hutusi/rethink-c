@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "test_helper.h"
 #include "alloc-testing.h"
+#include "test_helper.h"
 
 static int max_in_array(int *distances, int num)
 {

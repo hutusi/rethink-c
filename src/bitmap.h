@@ -70,13 +70,13 @@ void clear_bitmap(word_t *words, unsigned int num_words);
 
 /**
  * @brief Definition of a @ref BitMap.
- * 
+ *
  */
 typedef struct _BitMap {
     word_t *words;
     /** The num count of all bits. */
     unsigned int num_bits;
-    /** 
+    /**
      * The num count of all words.
      * num_words may > num_bits / BITS_PER_WORD
      */
@@ -85,7 +85,7 @@ typedef struct _BitMap {
 
 /**
  * @brief Allcate a new BitMap.
- * 
+ *
  * @param num_bits  The num of bits.
  * @return BitMap*  The new BitMap if success, otherwise NULL.
  */
@@ -93,14 +93,14 @@ BitMap *bitmap_new(unsigned int num_bits);
 
 /**
  * @brief Delete a BitMap and free back memory.
- * 
+ *
  * @param bitmap    The BitMap to delete.
  */
 void bitmap_free(BitMap *bitmap);
 
 /**
  * @brief Set a bit to 1 in a BitMap by given the bit's index.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param n         The bit's index.
  */
@@ -108,7 +108,7 @@ void bitmap_set(BitMap *bitmap, unsigned int n);
 
 /**
  * @brief Clear a bit to 0 in a BitMap by given the bit's index.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param n         The bit's index.
  */
@@ -116,30 +116,30 @@ void bitmap_clear(BitMap *bitmap, unsigned int n);
 
 /**
  * @brief get a bit's value in a BitMap by given the bit's index.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param n         The bit's index.
  * @return int      The bit's value, 0 or 1.
  */
-int bitmap_get(const BitMap *bitmap, unsigned int n); 
+int bitmap_get(const BitMap *bitmap, unsigned int n);
 
 /**
  * @brief Set all bits to 1 in a BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  */
 void bitmap_set_all(BitMap *bitmap);
 
 /**
  * @brief Clear all bits to 0 in a BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  */
 void bitmap_clear_all(BitMap *bitmap);
 
 /**
  * @brief Do or operation on a BitMap with other BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param other     The other BitMap.
  */
@@ -147,7 +147,7 @@ void bitmap_or(BitMap *bitmap, const BitMap *other);
 
 /**
  * @brief Do and operation on a BitMap with other BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param other     The other BitMap.
  */
@@ -155,7 +155,7 @@ void bitmap_and(BitMap *bitmap, const BitMap *other);
 
 /**
  * @brief Do xor operation on a BitMap with other BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param other     The other BitMap.
  */
@@ -163,7 +163,7 @@ void bitmap_xor(BitMap *bitmap, const BitMap *other);
 
 /**
  * @brief Count the sum of 1 value bits of a BitMap.
- * 
+ *
  * @param bitmap            The BitMap.
  * @return unsigned int     The sum.
  */

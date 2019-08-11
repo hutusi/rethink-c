@@ -18,7 +18,7 @@
 
 /**
  * @brief Dijkstra algorithm.
- * 
+ *
  * @param graph         AdjacencyMatrix graph.
  * @param vertex        The start vertex.
  * @param distances     The distances array. (output)

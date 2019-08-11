@@ -1,12 +1,12 @@
 /**
  * @file arraylist.c
- * 
+ *
  * @author hutusi (hutusi@outlook.com)
- * 
- * @brief Automatically resizing array(stack) 
- * 
+ *
+ * @brief Automatically resizing array(stack)
+ *
  * @copyright Copyright (c) 2019, hutusi.com
- * 
+ *
  */
 
 #include "arraylist.h"
@@ -131,7 +131,10 @@ int arraylist_remove(ArrayList *arraylist, unsigned int index)
     return arraylist_remove_range(arraylist, index, 1);
 }
 
-void arraylist_clear(ArrayList *arraylist) { arraylist->length = 0; }
+void arraylist_clear(ArrayList *arraylist)
+{
+    arraylist->length = 0;
+}
 
 int arraylist_index_of(ArrayList *arraylist,
                        ArrayListValueCompareFunc callback,
@@ -161,13 +164,13 @@ int arraylist_index_of(ArrayList *arraylist,
 
 /**
  * @brief Sort internal function.
- * 
+ *
  * Use quick sort.
- * 
- * @param list_data 
- * @param list_length 
- * @param compare_func 
- * @return int 
+ *
+ * @param list_data
+ * @param list_length
+ * @param compare_func
+ * @return int
  */
 static int arraylist_sort_internal(ArrayListValue *list_data,
                                    unsigned int list_length,

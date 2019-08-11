@@ -3,21 +3,21 @@
  * @author hutusi (hutusi@outlook.com)
  * @brief Refer to bignum.h
  * @date 2019-07-20
- * 
+ *
  * @copyright Copyright (c) 2019, hutusi.com
- * 
+ *
  */
 
 #include "bignum.h"
 #include "def.h"
 #include <assert.h>
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define char_to_int(ch) (ch - '0')
 #define int_to_char(ch) (ch + '0')
-#define char_is_blank(ch) (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n' )
+#define char_is_blank(ch) (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n')
 #define char_is_zero(ch) (ch == '0')
 #define char_is_digit(ch) (ch >= '0' && ch <= '9')
 #define char_is_positive_sign(ch) (ch == '+')
@@ -77,11 +77,12 @@ static size_t bignum_int_trim_head(char *num, size_t len)
     if (blank > 0) {
         memmove(num, &num[blank], new_len + 1);
     }
-    
+
     return new_len;
 }
 
-static inline size_t bignum_int_delete_head(char *num, size_t len, size_t delete)
+static inline size_t
+bignum_int_delete_head(char *num, size_t len, size_t delete)
 {
     size_t new_len = len - delete;
     if (delete > 0) {
@@ -126,7 +127,7 @@ static bool string_is_all_digits(const char *num, size_t len)
 
 /**
  * @brief Sanitize number.
- * 
+ *
  * examples:
  *      "0000000" => "0" ret Positive
  *      "0000123400" => "123400" ret Positive
@@ -135,16 +136,16 @@ static bool string_is_all_digits(const char *num, size_t len)
  *      "-0000123400" => "123400" ret Negative
  *      "  -0000123400  " => "123400" ret Negative
  *      "  A-0000123400  " => "0" ret NaN
- * 
- * @param num 
- * @return Sign 
+ *
+ * @param num
+ * @return Sign
  */
 Sign bignum_int_sanitize(char *num)
 {
     Sign sign = Positive;
     size_t len = strlen(num);
     len = bignum_int_trim_tail(num, len);
-    len = bignum_int_trim_head(num,len);
+    len = bignum_int_trim_head(num, len);
 
     if (char_is_negative_sign(num[0])) {
         sign = Negative;
@@ -153,7 +154,6 @@ Sign bignum_int_sanitize(char *num)
         sign = Positive;
         len = bignum_int_delete_head(num, len, 1);
     } else {
-
     }
 
     len = bignum_int_trim_head_zero(num, len);
@@ -168,15 +168,15 @@ Sign bignum_int_sanitize(char *num)
 
 /**
  * @brief Addition internal function.
- * 
+ *
  * addend length always >= aug length.
- * 
- * @param addend 
- * @param addend_len 
- * @param aug 
- * @param aug_len 
- * @param sum 
- * @return size_t 
+ *
+ * @param addend
+ * @param addend_len
+ * @param aug
+ * @param aug_len
+ * @param sum
+ * @return size_t
  */
 size_t static bignum_int_addition_internal(const char *addend,
                                            size_t addend_len,
@@ -233,13 +233,13 @@ Sign bignum_int_addition(const char *addend, const char *aug, char *sum)
 
 /**
  * @brief Subtraction internal function.
- * 
+ *
  * minuend length always >= subtractor length.
- * 
- * @param minuend 
- * @param subtractor 
- * @param difference 
- * @return size_t 
+ *
+ * @param minuend
+ * @param subtractor
+ * @param difference
+ * @return size_t
  */
 static size_t bignum_int_subtraction_internal(const char *minuend,
                                               const char *subtractor,
@@ -314,15 +314,15 @@ static size_t bignum_int_multiplication_move(char *num, size_t len, size_t move)
 
 /**
  * @brief Multiplication internal function.
- * 
+ *
  * multiplicand length always >= multiplier length.
- * 
- * @param multiplicand 
- * @param multiplicand_len 
- * @param multiplier 
- * @param multiplier_len 
- * @param product 
- * @return size_t 
+ *
+ * @param multiplicand
+ * @param multiplicand_len
+ * @param multiplier
+ * @param multiplier_len
+ * @param product
+ * @return size_t
  */
 static size_t bignum_int_multiplication_internal(const char *multiplicand,
                                                  size_t multiplicand_len,
@@ -342,7 +342,8 @@ static size_t bignum_int_multiplication_internal(const char *multiplicand,
 
     /**
      * 123 * 10 = 1230, 123 * 100 = 12300,
-     * If a number multiply by a multiple of ten, it will append the multiple of 0.
+     * If a number multiply by a multiple of ten, it will append the multiple of
+     * 0.
      */
     for (int i = multiplier_len - 1; i >= 0; --i, ++move) {
         strcpy(tmp_multip, multiplicand);
@@ -404,16 +405,15 @@ static size_t bignum_int_append_char(char *num, size_t len, char ch)
     return new_len;
 }
 
-
 /**
  * @brief Division internal function.
- * 
+ *
  * dividend length always >= divisor length.
- * 
- * @param dividend 
- * @param divisor 
- * @param quotient 
- * @param remainder 
+ *
+ * @param dividend
+ * @param divisor
+ * @param quotient
+ * @param remainder
  */
 static void bignum_int_division_internal(const char *dividend,
                                          const char *divisor,

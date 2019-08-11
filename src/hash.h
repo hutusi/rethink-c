@@ -16,7 +16,7 @@
 
 /**
  * @brief Calculate a char's hash.
- * 
+ *
  * @param pointer           The char address.
  * @return unsigned int     The hash.
  */
@@ -24,7 +24,7 @@ unsigned int hash_char(void *pointer);
 
 /**
  * @brief Calculate a integer's hash.
- * 
+ *
  * @param pointer           The integer address.
  * @return unsigned int     The hash.
  */
@@ -32,7 +32,7 @@ unsigned int hash_int(void *pointer);
 
 /**
  * @brief Calculate a pointer of object's hash.
- * 
+ *
  * @param object            The pointer of object.
  * @return unsigned int     The hash.
  */
@@ -40,7 +40,7 @@ unsigned int hash_object(void *object);
 
 /**
  * @brief Calculate a string's hash.
- * 
+ *
  * @param string            The string.
  * @return unsigned int     The hash.
  */

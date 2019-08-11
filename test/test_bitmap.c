@@ -1,9 +1,10 @@
 #include "bitmap.h"
-#include "test_helper.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "alloc-testing.h"
+#include "test_helper.h"
 
 void test_bitmap()
 {

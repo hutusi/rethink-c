@@ -38,7 +38,7 @@ void test_rbtree_delete()
     RBTreeNode *node = rb_tree_find_node(tree, key);
     assert(int_equal(node->key, key));
 
-    RBTreeNode *removed = rb_tree_remove_node(tree, node); 
+    RBTreeNode *removed = rb_tree_remove_node(tree, node);
     assert(removed == node);
     assert(tree->num_nodes == 9);
 
@@ -49,7 +49,7 @@ void test_rbtree_delete()
 
     free(key);
     rb_tree_free_node(tree, removed);
-    rb_tree_free(tree);  
+    rb_tree_free(tree);
 }
 
 void test_rbtree_print()
@@ -77,7 +77,7 @@ void test_rbtree_print()
 //     printf("new => [%d]\n", *((int *)new_node->key));
 
 //     rb_tree_subtree_print(tree->root, height);
-    
+
 //     rb_tree_free(tree);
 // }
 

@@ -30,8 +30,7 @@ typedef struct _TrieNode {
  * @brief Definition of a @ref Trie.
  *
  */
-typedef struct _Trie
-{
+typedef struct _Trie {
     TrieNode *root;
 } Trie;
 

@@ -28,7 +28,7 @@ typedef void *RBTreeValue;
 
 /**
  * @brief Definition of RBTree Colors.
- * 
+ *
  */
 typedef enum _RBTreeColor { RED = 0, BLACK = 1 } RBTreeColor;
 
@@ -100,7 +100,7 @@ void rb_tree_free(RBTree *tree);
 
 /**
  * @brief Free a node in a RBTree.
- * 
+ *
  * @param tree  The RBTree
  * @param node  The node.
  */
@@ -147,7 +147,7 @@ RBTreeNode *rb_tree_remove_node(RBTree *tree, RBTreeNode *node);
 
 /**
  * @brief Find a RBTreeNode value in a RBTree.
- * 
+ *
  * @param tree          The RBTree.
  * @param key           The RBTreeNode value to lookup.
  * @return RBTreeNode*  The matched RBTreeNode if success, otherwise NULL.
@@ -156,7 +156,7 @@ RBTreeNode *rb_tree_find_node(RBTree *tree, RBTreeKey key);
 
 /**
  * @brief Traverse RBTree callback function.
- * 
+ *
  */
 typedef void (*RBTreeTraverseFunc)(RBTreeNode *node, void *args);
 
@@ -195,7 +195,7 @@ void rb_tree_postorder_traverse(RBTree *tree,
 
 /**
  * @brief A subtree's height in a RBTree.
- * 
+ *
  * @param node            The subtree's root node.
  * @return unsigned int   The height.
  */
@@ -203,7 +203,7 @@ unsigned int rb_tree_subtree_height(RBTreeNode *node);
 
 /**
  * @brief Print a subtree.
- * 
+ *
  * @param node      The subtree's root node.
  * @param depth     The subtree's depth.
  */

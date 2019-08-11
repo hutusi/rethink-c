@@ -8,7 +8,8 @@
 
 void test_heap()
 {
-    int arr[] = { 19, 13, 5, 6, 14, 15, 20, 3, 2, 8, 1, 16, 17, 4, 10, 18, 9, 7, 11, 12};
+    int arr[] = {19, 13, 5,  6, 14, 15, 20, 3, 2,  8,
+                 1,  16, 17, 4, 10, 18, 9,  7, 11, 12};
     Heap *heap = heap_new(MAX_HEAP, int_compare, NULL);
 
     int size = sizeof(arr) / sizeof(int);
@@ -18,10 +19,10 @@ void test_heap()
 
     // HeapValue top = heap_pop(heap);
     // assert(*(int *)top == 20);
-    // assert(heap->num_data == 19); 
+    // assert(heap->num_data == 19);
 
-    for (int i = 20; i >=1; --i) {
-        assert(heap->num_data == i); 
+    for (int i = 20; i >= 1; --i) {
+        assert(heap->num_data == i);
         assert(*(int *)heap_pop(heap) == i);
     }
 

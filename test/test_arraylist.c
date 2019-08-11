@@ -1,8 +1,9 @@
 #include "arraylist.h"
-#include "test_helper.h"
 #include <assert.h>
 #include <stdio.h>
+
 #include "alloc-testing.h"
+#include "test_helper.h"
 
 void test_arraylist()
 {
