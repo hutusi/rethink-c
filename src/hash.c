@@ -11,6 +11,8 @@
 #include "hash.h"
 #include "def.h"
 
+unsigned int hash_char(void *pointer) { return *(unsigned int *)pointer; }
+
 unsigned int hash_int(void *pointer) { return *(unsigned int *)pointer; }
 
 unsigned int hash_object(void *object) { return (unsigned int)object; }

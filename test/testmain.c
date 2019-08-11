@@ -27,6 +27,7 @@ extern void test_prime();
 extern void test_hash_table();
 extern void test_kmp();
 extern void test_bm();
+extern void test_trie();
 
 typedef void (*TestcaseFunc)(void);
 
@@ -55,6 +56,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_hash_table,
                                    test_kmp,
                                    test_bm,
+                                   test_trie,
                                    NULL};
 
 static void run_test(TestcaseFunc test)

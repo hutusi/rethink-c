@@ -15,6 +15,14 @@
 #define RETHINK_C_HASH_H
 
 /**
+ * @brief Calculate a char's hash.
+ * 
+ * @param pointer           The char address.
+ * @return unsigned int     The hash.
+ */
+unsigned int hash_char(void *pointer);
+
+/**
  * @brief Calculate a integer's hash.
  * 
  * @param pointer           The integer address.

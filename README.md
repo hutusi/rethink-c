@@ -64,8 +64,8 @@ make
 - [x] BigNum integer [bignum.h](src/bignum.h) [bignum.c](src/bignum.c)
 - [ ] BigNum decimal
 - [x] KMP string search algorithm [kmp.h](src/kmp.h) [kmp.c](src/kmp.c)
-- [x] BM string search algorithm
-- [ ] Trie Tree
+- [x] BM string search algorithm [bm.h](src/bm.h) [bm.c](src/bm.c)
+- [x] Trie Tree [trie.h](src/trie.h) [trie.c](src/trie.c)
 
 ### Sorting
 - [x] Quick Sort [arraylist.c##arraylist_sort()](src/arraylist.c)

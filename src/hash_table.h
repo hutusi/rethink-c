@@ -96,8 +96,9 @@ int hash_table_insert(HashTable *hash_table,
 HashTableValue hash_table_get(HashTable *hash_table, HashTableKey key);
 
 /**
- * @brief Set a value by a key to a HashTable, insert a key/value pair if key not exists in HashTable.
- * 
+ * @brief Set a value by a key to a HashTable, insert a key/value pair if key
+ * not exists in HashTable.
+ *
  * @param hash_table    The HashTable.
  * @param key           The key.
  * @param value         The value.
@@ -120,7 +121,9 @@ unsigned int hash_table_size(HashTable *hash_table);
 
 HashTableEntity *hash_table_first_entity(HashTable *hash_table);
 HashTableEntity *hash_table_last_entity(HashTable *hash_table);
-HashTableEntity *hash_table_next_entity(HashTable *hash_table, HashTableEntity *entity);
-HashTableEntity *hash_table_prev_entity(HashTable *hash_table, HashTableEntity *entity);
+HashTableEntity *hash_table_next_entity(HashTable *hash_table,
+                                        HashTableEntity *entity);
+HashTableEntity *hash_table_prev_entity(HashTable *hash_table,
+                                        HashTableEntity *entity);
 
 #endif /* #ifndef RETHINK_C_HASH_TABLE_H */

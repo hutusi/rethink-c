@@ -1,9 +1,10 @@
 #include "list.h"
-#include "test_helper.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "alloc-testing.h"
+#include "test_helper.h"
 
 void check_list_integrity(List *list)
 {
