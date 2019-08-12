@@ -18,6 +18,7 @@ static TrieNode *trie_new_node(char ch)
 {
     TrieNode *node = (TrieNode *)malloc(sizeof(TrieNode));
     node->data = ch;
+    node->ending = false;
     node->children = hash_table_new(
         hash_char,
         char_equal,
@@ -76,10 +77,12 @@ int trie_insert(Trie *trie, const char *str, unsigned int len)
         }
         rover = node;
     }
+
+    rover->ending = true;
     return 0;
 }
 
-TrieNode *trie_find(Trie *trie, const char *str, unsigned int len)
+TrieNode *trie_last_node(Trie *trie, const char *str, unsigned int len)
 {
     TrieNode *rover = trie->root;
     for (int i = 0; i < len; ++i) {
@@ -90,4 +93,21 @@ TrieNode *trie_find(Trie *trie, const char *str, unsigned int len)
         rover = node;
     }
     return rover;
+}
+
+int trie_delete(Trie *trie, const char *str, unsigned int len)
+{
+    TrieNode *last = trie_last_node(trie, str, len);
+    if (last != NULL) {
+        last->ending = false;
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
+bool trie_include(Trie *trie, const char *str, unsigned int len)
+{
+    TrieNode *last = trie_last_node(trie, str, len);
+    return last != NULL && last->ending == true;
 }

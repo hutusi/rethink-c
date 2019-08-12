@@ -14,7 +14,17 @@ static int trie_insert_str(Trie *trie, const char *str)
 
 static TrieNode *trie_find_str(Trie *trie, const char *str)
 {
-    return trie_find(trie, str, strlen(str));
+    return trie_last_node(trie, str, strlen(str));
+}
+
+static int trie_delete_str(Trie *trie, const char *str)
+{
+    return trie_delete(trie, str, strlen(str));
+}
+
+static bool trie_include_str(Trie *trie, const char *str)
+{
+    return trie_include(trie, str, strlen(str));
 }
 
 void test_trie_free()
@@ -45,6 +55,10 @@ void test_trie_insert()
     ASSERT_CHAR_EQ(node->data, 'e');
     children = node->children;
     ASSERT_INT_EQ(hash_table_size(children), 2);
+
+    assert(trie_include_str(trie, "legend"));
+    assert(trie_delete_str(trie, "legend") == 0);
+    assert(!trie_include_str(trie, "legend"));
 
     trie_free(trie);
 }
