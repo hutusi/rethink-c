@@ -11,6 +11,11 @@ set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src
 add_subdirectory(src)
 add_subdirectory(test)
 
-add_executable(testmain test/testmain.c)
-target_link_libraries(testmain test algorithm)
-target_compile_options(testmain PRIVATE ${COMPILE_OPTIONS})
+# CTest
+enable_testing()
+
+add_executable(unit_tests test/testmain.c)
+target_link_libraries(unit_tests testcases algorithm)
+target_compile_options(unit_tests PRIVATE ${COMPILE_OPTIONS})
+
+add_test(test_all unit_tests)

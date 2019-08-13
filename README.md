@@ -30,7 +30,7 @@ make
 * test:
 
 ```
-./testmain
+make test
 ```
 
 ## Goals / Achievements
