@@ -1,4 +1,4 @@
-add_library(algorithm compare.c
+add_library(algorithm compare.c text.c
                       arraylist.c queue.c list.c bitmap.c matrix.c 
                       bstree.c avltree.c rbtree.c heap.c
                       bignum.c graph.c dijkstra.c prime.c hash.c hash_table.c

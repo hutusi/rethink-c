@@ -30,6 +30,7 @@ extern void test_kmp();
 extern void test_bm();
 extern void test_trie();
 extern void test_ac();
+extern void test_text();
 
 typedef void (*TestcaseFunc)(void);
 
@@ -60,6 +61,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_bm,
                                    test_trie,
                                    test_ac,
+                                   test_text,
                                    NULL};
 
 static void run_test(TestcaseFunc test)

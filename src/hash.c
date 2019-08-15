@@ -10,6 +10,7 @@
 
 #include "hash.h"
 #include "def.h"
+#include "text.h"
 
 unsigned int hash_char(void *pointer)
 {
@@ -43,6 +44,22 @@ unsigned int hash_string(void *string)
         /** factor 131 also could be 31、131、1313、13131、131313 ... */
         hash = hash * 131 + (*p);
         ++p;
+    }
+    return hash;
+}
+
+/**
+ * @brief Same as string hash.
+ * 
+ * @param text              Input text.
+ * @return unsigned int     Return hash.
+ */
+unsigned int hash_text(void *text)
+{
+    unsigned int hash = 0;
+    for (unsigned int i =0; i < text_length(text); ++i)  {
+        /** factor 131 also could be 31、131、1313、13131、131313 ... */
+        hash = hash * 131 + text_char_at(text, i);
     }
     return hash;
 }

@@ -61,6 +61,7 @@ make test
 - [ ] Kruskal
 
 ### String
+- [x] Text (similar to string in C++). [text.h](src/text.h) [text.c](src/text.c)
 - [x] BigNum integer [bignum.h](src/bignum.h) [bignum.c](src/bignum.c)
 - [ ] BigNum decimal
 - [x] KMP (Knuth-Morris-Pratt) algorithm [kmp.h](src/kmp.h) [kmp.c](src/kmp.c)

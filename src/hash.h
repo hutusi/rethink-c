@@ -46,4 +46,12 @@ unsigned int hash_object(void *object);
  */
 unsigned int hash_string(void *string);
 
+/**
+ * @brief Calculate a text's hash.
+ * 
+ * @param text              The text.
+ * @return unsigned int     The hash.
+ */
+unsigned int hash_text(void *text);
+
 #endif /* #ifndef RETHINK_C_HASH_H */
