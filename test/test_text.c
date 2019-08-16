@@ -17,7 +17,7 @@ static void test_text_new()
 
 static void test_text_clone()
 {
-    Text *text = text_new_from("hello,world", 5);
+    Text *text = text_n_from("hello,world", 5);
     ASSERT_INT_EQ(text_length(text), 5);
     ASSERT_CHAR_EQ(text_char_at(text, 0), 'h');
     ASSERT_CHAR_EQ(text_char_at(text, 4), 'o');
@@ -35,8 +35,24 @@ static void test_text_clone()
     text_free(clone);
 }
 
+void test_text_compare()
+{
+    Text *text1 = text_from("hello, world");
+    Text *text2 = text_from("hello, world, my world.");
+    assert(!text_equal(text1, text2));
+    ASSERT_INT_EQ(text_compare(text1, text2), -1);
+
+    Text *text3 = text_n_from("hello, world, my world.", 12);
+    assert(text_equal(text1, text3));
+
+    text_free(text1);
+    text_free(text2);
+    text_free(text3);
+}
+
 void test_text()
 {
     test_text_new();
     test_text_clone();
+    test_text_compare();
 }
