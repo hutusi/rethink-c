@@ -36,6 +36,12 @@
 typedef void *ArrayListValue;
 
 /**
+ * @brief Array List free value callback function.
+ *
+ */
+typedef void (*ArrayListFreeValueFunc)(ArrayListValue value);
+
+/**
  * @brief Definition of an @ref ArrayList.
  */
 typedef struct _ArrayList {
@@ -46,15 +52,19 @@ typedef struct _ArrayList {
     /** Allocated length of the array.
      * (Private data and should not be accessed) */
     unsigned int _allocated;
+    /** Free value call back function. */
+    ArrayListFreeValueFunc _free_value_func;
 } ArrayList, Stack;
 
 /**
  * @brief Allocated a new ArrayList for use.
  *
+ * @param free_value_func   Free value callback function.
  * @param length            The initiate length of ArrayList.
  * @return ArrayList*
  */
-ArrayList *arraylist_new(unsigned int length);
+ArrayList *arraylist_new(ArrayListFreeValueFunc free_value_func,
+                         unsigned int length);
 
 /**
  * @brief Destroy an ArrayList and free back the memory.

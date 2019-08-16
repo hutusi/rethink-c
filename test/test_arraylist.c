@@ -10,7 +10,7 @@ void test_arraylist()
     ArrayList *arraylist;
     int values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
 
-    arraylist = arraylist_new(3);
+    arraylist = arraylist_new(NULL, 3);
     arraylist_append(arraylist, &values[0]);
     arraylist_append(arraylist, &values[1]);
 
@@ -51,7 +51,7 @@ void test_arraylist_index_of(void)
 {
     int entries[] = {89, 4, 23, 42, 16, 15, 8, 99, 50, 30};
     int num_entries = sizeof(entries) / sizeof(int);
-    ArrayList *arraylist = arraylist_new(num_entries);
+    ArrayList *arraylist = arraylist_new(NULL, num_entries);
 
     for (int i = 0; i < num_entries; ++i) {
         arraylist_append(arraylist, &entries[i]);
@@ -70,7 +70,7 @@ void test_arraylist_sort(void)
     int sorted[] = {4, 4, 4, 4, 8, 15, 16, 23, 30, 42, 50, 89, 99};
     unsigned int num_entries = sizeof(entries) / sizeof(int);
 
-    ArrayList *arraylist = arraylist_new(num_entries);
+    ArrayList *arraylist = arraylist_new(NULL, num_entries);
 
     for (int i = 0; i < num_entries; ++i) {
         arraylist_prepend(arraylist, &entries[i]);

@@ -14,7 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-ArrayList *arraylist_new(unsigned int length)
+ArrayList *arraylist_new(ArrayListFreeValueFunc free_value_func,
+                unsigned int length)
 {
     ArrayList *new_arraylist;
     if (length <= 0) {
@@ -27,6 +28,7 @@ ArrayList *arraylist_new(unsigned int length)
 
     new_arraylist->_allocated = length;
     new_arraylist->length = 0;
+    new_arraylist->_free_value_func = free_value_func;
 
     new_arraylist->data = malloc(length * sizeof(ArrayListValue));
     if (new_arraylist->data == NULL) {
@@ -39,10 +41,13 @@ ArrayList *arraylist_new(unsigned int length)
 
 void arraylist_free(ArrayList *arraylist)
 {
-    if (arraylist != NULL) {
-        free(arraylist->data);
-        free(arraylist);
+    if (arraylist->_free_value_func != NULL) {
+        for (unsigned int i = 0; i < arraylist->length; ++i) {
+            arraylist->_free_value_func(arraylist->data[i]);
+        }
     }
+    free(arraylist->data);
+    free(arraylist);
 }
 
 static int arraylist_enlarge(ArrayList *arraylist)
