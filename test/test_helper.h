@@ -2,6 +2,7 @@
 #define RETHINK_C_TEST_HELPER_H
 
 #include "compare.h"
+#include "dup.h"
 
 #define ASSERT_INT_EQ(a, b)                                           \
     if ((a) != (b)) {                                                 \
@@ -15,6 +16,9 @@
         assert(a == b);                                               \
     }
 
+#define ASSERT_INT_POINTER_EQ(pointer, value) \
+    ASSERT_INT_EQ(*((int *)(pointer)), value)
+
 // inline int *intdup(int value)
 // {
 //     int *dup = (int *)malloc(sizeof(int));
@@ -27,7 +31,6 @@
 //     return strcmp((char *)str1, (char *)str2) == 0;
 // }
 
-int *intdup(int value);
 int string_equal(void *str1, void *str2);
 
 #endif /* RETHINK_C_TEST_HELPER_H */
