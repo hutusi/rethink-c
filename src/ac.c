@@ -9,10 +9,13 @@
  */
 
 #include "ac.h"
+#include "arraylist.h"
 #include "compare.h"
 #include "def.h"
+#include "dup.h"
 #include "hash.h"
 #include "queue.h"
+#include "text.h"
 #include <stdlib.h>
 
 static ACTrieNode *ac_trie_new_node(char ch)
@@ -148,10 +151,10 @@ static void ac_trie_push_to_queue(Queue *queue, ACTrieNode *node)
     }
 }
 
-void ac_trie_setout(ACTrie *trie)
+void ac_trie_set_failure(ACTrie *trie)
 {
     Queue *queue = queue_new();
-    ac_trie_push_to_queue(queue, trie->root);
+    queue_push_tail(queue, trie->root);
     trie->root->failure = trie->root;
 
     while (!queue_is_empty(queue)) {
@@ -179,11 +182,12 @@ void ac_trie_setout(ACTrie *trie)
                     }
                 }
 
+                /**  failure == trie->root */
                 if (child->failure == NULL) {
                     ACTrieNode *next = (ACTrieNode *)hash_table_get(
                         failure->children, &(child->data));
                     if (next == NULL) {
-                        failure = trie->root;
+                        child->failure = trie->root;
                     } else {
                         child->failure = next;
                     }
@@ -191,29 +195,67 @@ void ac_trie_setout(ACTrie *trie)
             }
         }
     }
+
+    queue_free(queue);
 }
 
-int ac_trie_match(ACTrie *trie, const char *text, unsigned int len)
+static void ac_trie_insert_match_table(const char *text,
+                                       int index,
+                                       int length,
+                                       HashTable *match_table)
 {
-    int count = 0;
+    Text *key = text_n_from(&(text[index]), length);
+    ArrayList *value = (ArrayList *)hash_table_get(match_table, key);
+    if (value == HASH_TABLE_VALUE_NULL) {
+        value = arraylist_new(free, 0);
+        hash_table_insert(match_table, key, value);
+    } else {
+        text_free(key);
+    }
+    arraylist_append(value, intdup(index));
+}
+
+HashTable *ac_trie_match(ACTrie *trie, const char *text, unsigned int len)
+{
+    HashTable *match_table =
+        hash_table_new(hash_text, text_equal, text_free, arraylist_free);
 
     ACTrieNode *rover = trie->root;
     for (unsigned int i = 0; i < len; ++i) {
-        do {
-            ACTrieNode *next =
-                (ACTrieNode *)hash_table_get(rover->children, (void *)&(text[i]));
+        while (true) {
+            ACTrieNode *next = (ACTrieNode *)hash_table_get(rover->children,
+                                                            (void *)&(text[i]));
             if (next == NULL) {
                 rover = rover->failure;
             } else {
                 rover = next;
 
                 if (rover->ending) {
-                    ++count;
+                    ac_trie_insert_match_table(text,
+                                               i + 1 - rover->height,
+                                               rover->height,
+                                               match_table);
                 }
                 break;
             }
-        } while (rover != trie->root);
+
+            if (rover == trie->root) {
+                next = (ACTrieNode *)hash_table_get(rover->children,
+                                                    (void *)&(text[i]));
+                if (next != NULL) {
+                    rover = next;
+
+                    if (rover->ending) {
+                        ac_trie_insert_match_table(text,
+                                                   i + 1 - rover->height,
+                                                   rover->height,
+                                                   match_table);
+                    }
+                }
+                break;
+            }
+        }
     }
 
-    return count;
+    return match_table;
 }

@@ -62,7 +62,7 @@ void ac_trie_free(ACTrie *ac_trie);
 /**
  * @brief Insert a string into a Trie.
  *
- * @param trie  The Trie.
+ * @param trie  The ACTrie.
  * @param str   The string.
  * @param len   The length of the string.
  * @return int  0 if success.
@@ -74,15 +74,29 @@ int ac_trie_insert(ACTrie *trie, const char *str, unsigned int len);
  *
  * Just mark the ending as 'false'.
  *
- * @param ac_trie  The Trie.
+ * @param trie  The ACTrie.
  * @param str   The string.
  * @param len   The length of the string.
  * @return int  0 if success.
  */
 int ac_trie_delete(ACTrie *trie, const char *str, unsigned int len);
 
-void ac_trie_setout(ACTrie *trie);
+/**
+ * @brief Calculate all failure pointers of a ACTrie.
+ *
+ * @param trie  The ACTrie.
+ */
+void ac_trie_set_failure(ACTrie *trie);
 
-int ac_trie_match(ACTrie *trie, const char *text, unsigned int len);
+/**
+ * @brief Find all matched pattern strings in a text.
+ *
+ * @param trie          The ACTrie to store pattern strings.
+ * @param text          The text.
+ * @param len           The length of text.
+ * @return HashTable*   The hashtable: key is pattern string (Text), value is
+ *                      ArrayList of the matched indexes.
+ */
+HashTable *ac_trie_match(ACTrie *trie, const char *text, unsigned int len);
 
 #endif /* #ifndef RETHINK_C_AC_H */
