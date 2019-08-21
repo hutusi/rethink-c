@@ -106,14 +106,15 @@ STATIC int *kmp_calculate_next(const char *string, int len)
  * @param pattern
  * @return int
  */
-int kmp_string_match(const char *text, const char *pattern)
+int kmp_text_match(const char *text,
+                   unsigned int text_len,
+                   const char *pattern,
+                   unsigned int pat_len)
 {
-    int text_len = strlen(text);
-    int pat_len = strlen(pattern);
     int *next = kmp_calculate_next(pattern, pat_len);
-
     int index = -1;
     int j = 0;
+
     for (int i = 0; i < text_len; ++i) {
         if (text[i] == pattern[j]) {
             ++j;
@@ -133,4 +134,9 @@ int kmp_string_match(const char *text, const char *pattern)
 
     free(next);
     return index;
+}
+
+int kmp_string_match(const char *text, const char *pattern)
+{
+    return kmp_text_match(text, strlen(text), pattern, strlen(pattern));
 }

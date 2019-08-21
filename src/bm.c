@@ -120,11 +120,11 @@ STATIC int bm_move_by_good_suffixes(int *good_suffixes, int len, int good_len)
  * @param pattern
  * @return int
  */
-int bm_string_match(const char *text, const char *pattern)
+int bm_text_match(const char *text,
+                  unsigned int text_len,
+                  const char *pattern,
+                  unsigned int pat_len)
 {
-    int text_len = strlen(text);
-    int pat_len = strlen(pattern);
-
     int bad_chars[256];
     bm_calculate_bad_chars(pattern, pat_len, bad_chars);
 
@@ -157,4 +157,9 @@ int bm_string_match(const char *text, const char *pattern)
     free(good_suffixes);
     free(prefixes);
     return index;
+}
+
+int bm_string_match(const char *text, const char *pattern)
+{
+    return bm_text_match(text, strlen(text), pattern, strlen(pattern));
 }

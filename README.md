@@ -55,6 +55,7 @@ make test
 - [x] Adjacency Matrix [graph.h](src/graph.h) [graph.c](src/graph.c)
 - [ ] Union-Find
 - [ ] BFS & DFS
+- [ ] Topological sorting
 - [ ] Floyd
 - [x] Dijkstra [dijkstra.h](src/dijkstra.h) [dijkstra.c](src/dijkstra.c)
 - [ ] Prim
@@ -66,7 +67,7 @@ make test
 - [ ] BigNum decimal
 - [x] KMP (Knuth-Morris-Pratt) algorithm [kmp.h](src/kmp.h) [kmp.c](src/kmp.c)
 - [x] BM (Boyer-Moore) algorithm [bm.h](src/bm.h) [bm.c](src/bm.c)
-- [ ] Sunday algorithm
+- [x] Sunday algorithm [sunday.h](src/sunday.h) [sunday.c](src/sunday.c)
 - [x] Trie Tree [trie.h](src/trie.h) [trie.c](src/trie.c)
 - [x] Aho–Corasick algorithm [ac.h](src/ac.h) [ac.c](src/ac.c)
 - [ ] DAT (Double-Array Trie)

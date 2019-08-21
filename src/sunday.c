@@ -12,7 +12,8 @@
 #include "def.h"
 #include <string.h>
 
-STATIC void sunday_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
+STATIC void
+sunday_calculate_bad_chars(const char *pattern, int len, int *bad_chars)
 {
     for (int i = 0; i < 256; ++i) {
         bad_chars[i] = -1;
@@ -26,11 +27,11 @@ STATIC void sunday_calculate_bad_chars(const char *pattern, int len, int *bad_ch
     }
 }
 
-int sunday_string_match(const char *text, const char *pattern)
+int sunday_text_match(const char *text,
+                      unsigned int text_len,
+                      const char *pattern,
+                      unsigned int pat_len)
 {
-    int text_len = strlen(text);
-    int pat_len = strlen(pattern);
-
     int bad_chars[256];
     sunday_calculate_bad_chars(pattern, pat_len, bad_chars);
 
@@ -52,4 +53,9 @@ int sunday_string_match(const char *text, const char *pattern)
     }
 
     return -1;
+}
+
+int sunday_string_match(const char *text, const char *pattern)
+{
+    return sunday_text_match(text, strlen(text), pattern, strlen(pattern));
 }
