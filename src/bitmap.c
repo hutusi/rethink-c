@@ -42,13 +42,23 @@ BitMap *bitmap_new(unsigned int num_bits)
 {
     BitMap *bitmap = (BitMap *)malloc(sizeof(BitMap));
     bitmap->num_bits = num_bits;
-    if (num_bits % BITS_PER_WORD == 0) {
+    if (num_bits != 0 && (num_bits % BITS_PER_WORD) == 0) {
         bitmap->num_words = num_bits / BITS_PER_WORD;
     } else {
         bitmap->num_words = num_bits / BITS_PER_WORD + 1;
     }
     bitmap->words = (word_t *)malloc(sizeof(word_t) * bitmap->num_words);
     return bitmap;
+}
+
+BitMap *bitmap_clone(const BitMap *bitmap)
+{
+    BitMap *clone = (BitMap *)malloc(sizeof(BitMap));
+    clone->num_bits = bitmap->num_bits;
+    clone->num_words = bitmap->num_words;
+    clone->words = (word_t *)malloc(sizeof(word_t) * bitmap->num_words);
+    memcpy(clone->words, bitmap->words, sizeof(word_t) * bitmap->num_words);
+    return clone;
 }
 
 void bitmap_free(BitMap *bitmap)
@@ -111,4 +121,37 @@ unsigned int bitmap_count(const BitMap *bitmap)
             ++count;
     }
     return count;
+}
+
+BitMap *bitmap_append(BitMap *bitmap, int flag)
+{
+    if (bitmap->num_words * BITS_PER_WORD <= bitmap->num_bits) {
+        ++(bitmap->num_words);
+        bitmap->words =
+            (word_t *)realloc(bitmap, sizeof(word_t) * bitmap->num_words);
+    }
+
+    if (flag) {
+        set_bit(bitmap->words, bitmap->num_bits);
+    } else {
+        clear_bit(bitmap->words, bitmap->num_bits);
+    }
+
+    ++(bitmap->num_bits);
+    return bitmap;
+}
+
+// BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other) {
+//     return bitmap;
+// }
+
+char *bitmap_to_string(BitMap *bitmap)
+{
+    char *string = (char *)malloc(sizeof(char) * (bitmap->num_bits + 1));
+    for (unsigned int i = 0; i < bitmap->num_bits; ++i) {
+        int flag = bitmap_get(bitmap, i);
+        string[i] = '0' + flag;
+    }
+    string[bitmap->num_bits] = '\0';
+    return string;
 }

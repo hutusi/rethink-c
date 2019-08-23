@@ -110,4 +110,13 @@ int text_compare(const Text *text1, const Text *text2);
  */
 int text_equal(const Text *text1, const Text *text2);
 
+/**
+ * @brief Append a charactor to a Text.
+ * 
+ * @param text      The Text.
+ * @param ch        The charactor.
+ * @return Text*    The appended Text.
+ */
+Text *text_append(Text *text, char ch);
+
 #endif /* #ifndef RETHINK_C_TEXT_H */

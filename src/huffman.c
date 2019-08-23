@@ -9,12 +9,14 @@
  */
 
 #include "huffman.h"
+#include "compare.h"
 #include "def.h"
+#include "hash.h"
+#include "hash_table.h"
 
-static inline int huffman_node_compare(HuffmanNode *node1,
-                                        HuffmanNode *node2)
+static inline int huffman_node_compare(HuffmanNode *node1, HuffmanNode *node2)
 {
-    if (node1->weight > node2->weight) {
+    if (node1->weight < node2->weight) {
         return -1;
     } else if (node1->weight > node2->weight) {
         return 1;
@@ -57,7 +59,7 @@ static inline HuffmanNode *huffman_heap_pop(Heap *heap)
 HuffmanTree *huffman_tree_new(Heap *heap)
 {
     HuffmanTree *tree = (HuffmanTree *)malloc(sizeof(HuffmanTree));
-    
+
     HuffmanNode *node1 = NULL;
     HuffmanNode *node2 = NULL;
 
@@ -71,6 +73,7 @@ HuffmanTree *huffman_tree_new(Heap *heap)
 
         unsigned int weight = node1->weight + node2->weight;
         HuffmanNode *node = huffman_node_new('\0', weight);
+        heap_insert(heap, node);
 
         if (node1->weight < node2->weight) {
             node->left = node1;
@@ -101,4 +104,88 @@ void huffman_tree_free(HuffmanTree *tree)
 {
     huffman_tree_postorder_free(tree->root);
     free(tree);
+}
+
+static inline huffman_node_is_leave(HuffmanNode *node)
+{
+    return node->left == NULL && node->right == NULL;
+}
+
+static void huffman_tree_postorder_to_hash_table(HuffmanNode *node,
+                                                 HashTable *hash_table,
+                                                 BitMap *bitmap)
+{
+    if (node == NULL) {
+        return;
+    }
+
+    if (node->left != NULL) {
+        BitMap *left_bitmap = bitmap_clone(bitmap);
+        bitmap_append(left_bitmap, 0);
+        huffman_tree_postorder_to_hash_table(
+            node->left, hash_table, left_bitmap);
+    }
+
+    if (node->right != NULL) {
+        BitMap *right_bitmap = bitmap_clone(bitmap);
+        bitmap_append(right_bitmap, 1);
+        huffman_tree_postorder_to_hash_table(
+            node->right, hash_table, right_bitmap);
+    }
+
+    if (huffman_node_is_leave(node)) {
+        // todo: char_dup is not valid here.!!!
+        char *ch = (char *)malloc(sizeof(char));
+        *ch = node->value;
+        hash_table_insert(hash_table, ch, bitmap);
+    } else {
+        bitmap_free(bitmap);
+    }
+}
+
+static HashTable *huffman_tree_to_hash_table(HuffmanTree *tree)
+{
+    /** key: char, value: bitmap */
+    HashTable *hash_table =
+        hash_table_new(hash_char, char_equal, free, bitmap_free);
+    HuffmanNode *node = tree->root;
+    BitMap *bitmap = bitmap_new(0);
+    huffman_tree_postorder_to_hash_table(tree->root, hash_table, bitmap);
+    return hash_table;
+}
+
+BitMap *huffman_encode(HuffmanTree *tree, Text *text)
+{
+    /** key: char, value: bitmap */
+    HashTable *hash_table = huffman_tree_to_hash_table(tree);
+    BitMap *bitmap = bitmap_new(0);
+
+    for (unsigned int i = 0; i < text_length(text); ++i) {
+        char ch = text_char_at(text, i);
+        BitMap *bits = (BitMap *)hash_table_get(hash_table, &ch);
+        for (unsigned int j = 0; j < bits->num_bits; ++j) {
+            bitmap_append(bitmap, bitmap_get(bits, j));
+        }
+    }
+    hash_table_free(hash_table);
+    return bitmap;
+}
+
+Text *huffman_decode(HuffmanTree *tree, BitMap *code)
+{
+    Text *text = text_new();
+    HuffmanNode *node = tree->root;
+    for (unsigned int i = 0; i < code->num_bits; ++i) {
+        if (bitmap_get(code, i)) {
+            node = node->right;
+        } else {
+            node = node->left;
+        }
+
+        if (huffman_node_is_leave(node)) {
+            text_append(text, node->value);
+            node = tree->root;
+        }
+    }
+    return text;
 }

@@ -15,7 +15,7 @@
 
 /**
  * @brief All ways append '\0' to text, for dapat c string.
- * 
+ *
  */
 
 /**
@@ -30,7 +30,7 @@ struct _Text {
 
 static inline Text *text_new_with_size(unsigned int size)
 {
-    Text *text= (Text *)malloc(sizeof(Text));
+    Text *text = (Text *)malloc(sizeof(Text));
     text->_allocated = size;
     text->length = 0;
     text->data = (char *)malloc(text->_allocated * sizeof(char));
@@ -117,4 +117,17 @@ int text_compare(const Text *text1, const Text *text2)
 int text_equal(const Text *text1, const Text *text2)
 {
     return text_compare(text1, text2) == 0;
+}
+
+Text *text_append(Text *text, char ch)
+{
+    if ((text->length + 1) >= text->_allocated) {
+        text->_allocated += 16;
+        text->data = (char *)realloc(text->data, text->_allocated);
+    }
+
+    text->data[text->length] = ch;
+    ++(text->length);
+    text->data[text->length] = '\0';
+    return text;
 }

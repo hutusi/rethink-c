@@ -92,6 +92,14 @@ typedef struct _BitMap {
 BitMap *bitmap_new(unsigned int num_bits);
 
 /**
+ * @brief Clone a BitMap and return it's clone.
+ * 
+ * @param bitmap    The BitMap.
+ * @return BitMap*  The clone.
+ */
+BitMap *bitmap_clone(const BitMap *bitmap);
+
+/**
  * @brief Delete a BitMap and free back memory.
  *
  * @param bitmap    The BitMap to delete.
@@ -168,5 +176,31 @@ void bitmap_xor(BitMap *bitmap, const BitMap *other);
  * @return unsigned int     The sum.
  */
 unsigned int bitmap_count(const BitMap *bitmap);
+
+/**
+ * @brief Append a bit (0 or 1) to a BitMap.
+ * 
+ * @param bitmap    The BitMap.
+ * @param flag      Bit flag 0 or 1 append to the BitMap.
+ * @return BitMap*  The BitMap.
+ */
+BitMap *bitmap_append(BitMap *bitmap, int flag);
+
+/**
+ * @brief Concat another BitMap to a BitMap.
+ * 
+ * @param bitmap    The BitMap.
+ * @param other     The BitMap.
+ * @return BitMap*  The concated BitMap.
+ */
+BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other);
+
+/**
+ * @brief Convert a BitMap to a printable string.
+ * 
+ * @param bitmap    The BitMap.
+ * @return char*    The char string. (Need free by caller.)
+ */
+char *bitmap_to_string(BitMap *bitmap);
 
 #endif /* #ifndef RETHINK_C_BITMAP_H */

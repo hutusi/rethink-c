@@ -18,6 +18,8 @@
 #define RETHINK_C_HUFFMAN_H
 
 #include "heap.h"
+#include "bitmap.h"
+#include "text.h"
 
 /**
  * @brief Definition of a @ref HuffmanNode.
@@ -79,5 +81,8 @@ HuffmanTree *huffman_tree_new(Heap *heap);
  * @param tree      The Huffman Tree.
  */
 void huffman_tree_free(HuffmanTree *tree);
+
+BitMap *huffman_encode(HuffmanTree *tree, Text *text);
+Text *huffman_decode(HuffmanTree *tree, BitMap *code);
 
 #endif /* #ifndef RETHINK_C_HUFFMAN_H */

@@ -24,4 +24,12 @@
  */
 int *intdup(int value);
 
+/**
+ * @brief Duplicate a char and return it's pointer.
+ * 
+ * @param value     The original value.
+ * @return int*     The pointer.
+ */
+char *char_dup(char value);
+
 #endif /* #ifndef RETHINK_C_DUP_H */

@@ -9,12 +9,19 @@
  */
 
 #include "dup.h"
-#include "def.h"
 #include <stdlib.h>
+#include "def.h"
 
 int *intdup(int value)
 {
     int *dup = (int *)malloc(sizeof(int));
+    *dup = value;
+    return dup;
+}
+
+char *char_dup(char value)
+{
+    char *dup = (char *)malloc(sizeof(char));
     *dup = value;
     return dup;
 }

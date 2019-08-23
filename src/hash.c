@@ -14,7 +14,7 @@
 
 unsigned int hash_char(void *pointer)
 {
-    return *(unsigned int *)pointer;
+    return *(unsigned char *)pointer;
 }
 
 unsigned int hash_int(void *pointer)
