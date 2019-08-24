@@ -187,6 +187,18 @@ unsigned int bitmap_count(const BitMap *bitmap);
 BitMap *bitmap_append(BitMap *bitmap, int flag);
 
 /**
+ * @brief Convert a BitMap to a printable string.
+ * 
+ * @param bitmap    The BitMap.
+ * @return char*    The char string. (Need free by caller.)
+ */
+char *bitmap_to_string(BitMap *bitmap);
+
+BitMap *bitmap_from_string(const char *string);
+
+BitMap *bitmap_from_char(unsigned char ch);
+
+/**
  * @brief Concat another BitMap to a BitMap.
  * 
  * @param bitmap    The BitMap.
@@ -195,12 +207,6 @@ BitMap *bitmap_append(BitMap *bitmap, int flag);
  */
 BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other);
 
-/**
- * @brief Convert a BitMap to a printable string.
- * 
- * @param bitmap    The BitMap.
- * @return char*    The char string. (Need free by caller.)
- */
-char *bitmap_to_string(BitMap *bitmap);
+BitMap *bitmap_merge(BitMap *bitmap, BitMap *other);
 
 #endif /* #ifndef RETHINK_C_BITMAP_H */

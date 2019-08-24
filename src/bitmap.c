@@ -9,8 +9,10 @@
  */
 
 #include "bitmap.h"
-#include "def.h"
+#include <stdlib.h>
 #include <string.h>
+
+#include "def.h"
 
 inline void set_bit(word_t *words, unsigned int n)
 {
@@ -38,15 +40,22 @@ inline void clear_bitmap(word_t *words, unsigned int len)
     memset(words, 0x00, len * sizeof(word_t));
 }
 
+static inline unsigned int bitmap_num_words_need_by_bits(num_bits)
+{
+    if ((num_bits % BITS_PER_WORD) == 0) {
+        return num_bits / BITS_PER_WORD;
+    } else {
+        return num_bits / BITS_PER_WORD + 1;
+    }
+}
+
 BitMap *bitmap_new(unsigned int num_bits)
 {
     BitMap *bitmap = (BitMap *)malloc(sizeof(BitMap));
     bitmap->num_bits = num_bits;
-    if (num_bits != 0 && (num_bits % BITS_PER_WORD) == 0) {
-        bitmap->num_words = num_bits / BITS_PER_WORD;
-    } else {
-        bitmap->num_words = num_bits / BITS_PER_WORD + 1;
-    }
+    bitmap->num_words = bitmap_num_words_need_by_bits(num_bits);
+    if (bitmap->num_words == 0)
+        bitmap->num_words = 1;
     bitmap->words = (word_t *)malloc(sizeof(word_t) * bitmap->num_words);
     return bitmap;
 }
@@ -141,10 +150,6 @@ BitMap *bitmap_append(BitMap *bitmap, int flag)
     return bitmap;
 }
 
-// BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other) {
-//     return bitmap;
-// }
-
 char *bitmap_to_string(BitMap *bitmap)
 {
     char *string = (char *)malloc(sizeof(char) * (bitmap->num_bits + 1));
@@ -154,4 +159,68 @@ char *bitmap_to_string(BitMap *bitmap)
     }
     string[bitmap->num_bits] = '\0';
     return string;
+}
+
+BitMap *bitmap_from_string(const char *string)
+{
+    size_t len = strlen(string);
+    BitMap *bitmap = bitmap_new(len);
+    for (int i = 0; i < len; ++i) {
+        if (string[i] == '0') {
+            clear_bit(bitmap->words, i);
+        } else {
+            set_bit(bitmap->words, i);
+        }
+    }
+    return bitmap;
+}
+
+BitMap *bitmap_from_char(unsigned char ch)
+{
+    BitMap *bitmap = bitmap_new(CHAR_BIT);
+    memcpy(bitmap->words, &ch, 1);
+    return bitmap;
+}
+
+BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
+{
+    unsigned int total_bits = bitmap->num_bits + other->num_bits;
+    if (total_bits >= bitmap->num_words * BITS_PER_WORD) {
+        bitmap->num_words = bitmap_num_words_need_by_bits(total_bits);
+        bitmap->words =
+            (word_t *)realloc(bitmap, sizeof(word_t) * bitmap->num_words);
+    }
+
+    unsigned int remainder = bitmap->num_bits % BITS_PER_WORD;
+    unsigned int quotient = bitmap->num_bits / BITS_PER_WORD;
+    unsigned int other_num = bitmap_num_words_need_by_bits(other->num_bits);
+    if (remainder == 0) {
+        memcpy(bitmap->words[quotient - 1], other->words, other_num);
+    } else {
+        // -0: 1000 0000 0000 0000
+        bitmap->words[quotient - 1] &= (word_t)(((int)(-0)) >> (remainder - 1));
+        
+        unsigned int num = bitmap_num_words_need_by_bits(bitmap->num_bits);
+        if (bitmap->num_words > num) {
+            memset(&(bitmap->words[num]), 0, bitmap->num_words - num);
+        }
+
+        for (int i = 0; i < other_num; ++i) {
+            word_t front = other->words[i] >> remainder;
+            bitmap->words[quotient - 1 + i] |= front;
+
+            word_t back = other->words[i] << remainder;
+            bitmap->words[quotient + i] |= back;
+        }
+    }
+
+    bitmap->num_bits += other->num_bits;
+    return bitmap;
+}
+
+BitMap *bitmap_merge(BitMap *bitmap, BitMap *other)
+{
+    bitmap_concat(bitmap, other);
+    bitmap_free(other);
+    return bitmap;
 }

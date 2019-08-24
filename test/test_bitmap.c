@@ -6,7 +6,7 @@
 #include "alloc-testing.h"
 #include "test_helper.h"
 
-void test_bitmap()
+void test_bitmap_basic()
 {
     unsigned int bitsnum = 100;
     BitMap *bitmap = bitmap_new(bitsnum);
@@ -48,6 +48,66 @@ void test_bitmap()
 
     bitmap_free(bitmap);
     bitmap_free(other);
+}
+
+void test_bitmap_from()
+{
+    BitMap *bitmap;
+    char *string;
+    
+    bitmap = bitmap_from_char('a');
+    string = bitmap_to_string(bitmap);
+    // 'a' => 97 => 01100001 => 10000110
+    ASSERT_STRING_EQ(string, "10000110");
+    free(string);
+    bitmap_free(bitmap);
+
+    bitmap = bitmap_from_char('b');
+    string = bitmap_to_string(bitmap);
+    // 'b' => 98 => 01100010 => 01000110
+    ASSERT_STRING_EQ(string, "01000110");
+    free(string);
+    bitmap_free(bitmap);
+}
+
+void test_bitmap_from_string()
+{
+    BitMap *bitmap;
+    char *string;
+
+    char *str = "0101101110001110100010111110000111110100101010101010101";
+    bitmap = bitmap_from_string(str);
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, str);
+    free(string);
+    bitmap_free(bitmap);
+}
+
+void test_bitmap_merege()
+{
+    char *str1 = "0101101110001110100010111110000111110100101010101010101";
+    BitMap *bitmap = bitmap_from_string(str1);
+
+    char *str2 = "11001000111110101000011010100000111110001000";
+    BitMap *other = bitmap_from_string(str2);
+
+    bitmap_merge(bitmap, other);
+    char *string = bitmap_to_string(bitmap);
+
+    char new_str[100];
+    new_str[0] = '\0';
+    strcpy(new_str, str1);
+    strcat(new_str, str2);
+    ASSERT_STRING_EQ(string, new_str);
+
+    bitmap_free(bitmap);
+}
+
+void test_bitmap()
+{
+    test_bitmap_basic();
+    test_bitmap_from();
+    test_bitmap_from_string();
 }
 
 void test_bitmap_words()

@@ -4,6 +4,12 @@
 #include "compare.h"
 #include "dup.h"
 
+#include <string.h>
+
+#ifdef ALLOC_TESTING
+#include "alloc-testing.h"
+#endif
+
 #define ASSERT_INT_EQ(a, b)                                           \
     if ((a) != (b)) {                                                 \
         printf("\nassert: Left [%d] not equal to Right[%d]\n", a, b); \
@@ -14,6 +20,12 @@
     if ((a) != (b)) {                                                 \
         printf("\nassert: Left [%c] not equal to Right[%c]\n", a, b); \
         assert(a == b);                                               \
+    }
+
+#define ASSERT_STRING_EQ(a, b)                                          \
+    if (strcmp(a, b) != 0) {                                             \
+        printf("\nassert: Left [%s] not equal to Right[%s]\n", a, b); \
+        assert(0);                                               \
     }
 
 #define ASSERT_INT_POINTER_EQ(pointer, value) \
