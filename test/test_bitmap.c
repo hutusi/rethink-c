@@ -69,6 +69,12 @@ void test_bitmap_from_word()
     free(string);
     bitmap_free(bitmap);
 
+    bitmap = bitmap_from_word(0xFFFFFFFF >> 3);
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, "11111111111111111111111111111000");
+    free(string);
+    bitmap_free(bitmap);
+
     bitmap = bitmap_from_word((-1));
     string = bitmap_to_string(bitmap);
     ASSERT_STRING_EQ(string, "11111111111111111111111111111111");
@@ -121,18 +127,32 @@ void test_bitmap_from_string()
     bitmap_free(bitmap);
 }
 
-void test_bitmap_merege_short()
+void test_bitmap_merege_simple()
 {
-    char *str1 = "01";
-    BitMap *bitmap = bitmap_from_string(str1);
+    BitMap *bitmap;
+    BitMap *other;
+    char *string;
 
-    char *str2 = "11";
-    BitMap *other = bitmap_from_string(str2);
+    /* 1 */
+    bitmap = bitmap_from_string("01");
+    other = bitmap_from_string("11");
 
     bitmap_merge(bitmap, other);
-    char *string = bitmap_to_string(bitmap);
+    string = bitmap_to_string(bitmap);
 
     ASSERT_STRING_EQ(string, "0111");
+
+    free(string);
+    bitmap_free(bitmap);
+
+    /* 2 */
+    bitmap = bitmap_from_string("011");
+    other = bitmap_from_string("10100");
+
+    bitmap_merge(bitmap, other);
+    string = bitmap_to_string(bitmap);
+
+    ASSERT_STRING_EQ(string, "01110100");
 
     free(string);
     bitmap_free(bitmap);
@@ -155,6 +175,7 @@ void test_bitmap_merege()
     strcat(new_str, str2);
     ASSERT_STRING_EQ(string, new_str);
 
+    free(string);
     bitmap_free(bitmap);
 }
 
@@ -173,7 +194,7 @@ void test_bitmap()
     test_bitmap_from_word();
     test_bitmap_from_char();
     test_bitmap_from_string();
-    test_bitmap_merege_short();
+    test_bitmap_merege_simple();
     test_bitmap_merege();
     test_bitmap_extract();
 }

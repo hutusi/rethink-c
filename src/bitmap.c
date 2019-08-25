@@ -201,7 +201,7 @@ BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
     if (total_bits >= bitmap->num_words * BITS_PER_WORD) {
         bitmap->num_words = bitmap_num_words_need_by_bits(total_bits);
         bitmap->words =
-            (word_t *)realloc(bitmap, sizeof(word_t) * bitmap->num_words);
+            (word_t *)realloc(bitmap->words, sizeof(word_t) * bitmap->num_words);
     }
 
     unsigned int remainder = bitmap->num_bits % BITS_PER_WORD;
@@ -211,11 +211,11 @@ BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
         memcpy(bitmap->words[quotient - 1], other->words, other_num);
     } else {
         // -1: 1111 * 8 => 0001 111 ...
-        bitmap->words[quotient] ^= (((word_t)(-1)) << remainder);
+        bitmap->words[quotient] &= ~(((word_t)(-1)) << remainder);
 
         unsigned int num = bitmap_num_words_need_by_bits(bitmap->num_bits);
         if (bitmap->num_words > num) {
-            memset(&(bitmap->words[num]), 0, bitmap->num_words - num);
+            memset(&(bitmap->words[num]), 0x0, sizeof(word_t) * (bitmap->num_words - num));
         }
 
         for (int i = 0; i < other_num; ++i) {
@@ -223,7 +223,7 @@ BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
             bitmap->words[quotient + i] |= front;
 
             if (quotient + i + 1 < bitmap->num_words) {
-                word_t back = other->words[i] >> remainder;
+                word_t back = other->words[i] >> (BITS_PER_WORD - remainder);
                 bitmap->words[quotient + i + 1] |= back;
             }
         }
