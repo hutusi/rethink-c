@@ -61,7 +61,7 @@ make test
 - [ ] Prim
 - [ ] Kruskal
 
-### String, Text.
+### String & Text
 - [x] Text (similar to string in C++). [text.h](src/text.h) [text.c](src/text.c)
 - [x] BigNum integer [bignum.h](src/bignum.h) [bignum.c](src/bignum.c)
 - [ ] BigNum decimal
@@ -71,7 +71,7 @@ make test
 - [x] Trie Tree [trie.h](src/trie.h) [trie.c](src/trie.c)
 - [x] Aho–Corasick algorithm [ac.h](src/ac.h) [ac.c](src/ac.c)
 - [ ] DAT (Double-Array Trie)
-- [ ] Huffman coding
+- [x] Huffman coding [huffman.h](src/huffman.h) [huffman.c](src/huffman.c)
 
 ### Sorting
 - [x] Quick Sort [arraylist.c##arraylist_sort()](src/arraylist.c)

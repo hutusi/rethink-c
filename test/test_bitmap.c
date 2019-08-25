@@ -50,11 +50,49 @@ void test_bitmap_basic()
     bitmap_free(other);
 }
 
-void test_bitmap_from()
+void test_bitmap_from_word()
 {
     BitMap *bitmap;
     char *string;
-    
+
+    bitmap = bitmap_from_word(1);
+    ASSERT_INT_EQ(bitmap->num_bits, 32);
+    ASSERT_INT_EQ(bitmap->num_words, 1);
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, "10000000000000000000000000000000");
+    free(string);
+    bitmap_free(bitmap);
+
+    bitmap = bitmap_from_word(1 << 2);
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, "00100000000000000000000000000000");
+    free(string);
+    bitmap_free(bitmap);
+
+    bitmap = bitmap_from_word((-1));
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, "11111111111111111111111111111111");
+    free(string);
+    bitmap_free(bitmap);
+
+    bitmap = bitmap_from_word(((unsigned int)(-1)) >> 3);
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, "11111111111111111111111111111000");
+    free(string);
+    bitmap_free(bitmap);
+
+    bitmap = bitmap_from_word(((unsigned int)(-1)) << 3);
+    string = bitmap_to_string(bitmap);
+    ASSERT_STRING_EQ(string, "00011111111111111111111111111111");
+    free(string);
+    bitmap_free(bitmap);
+}
+
+void test_bitmap_from_char()
+{
+    BitMap *bitmap;
+    char *string;
+
     bitmap = bitmap_from_char('a');
     string = bitmap_to_string(bitmap);
     // 'a' => 97 => 01100001 => 10000110
@@ -83,6 +121,23 @@ void test_bitmap_from_string()
     bitmap_free(bitmap);
 }
 
+void test_bitmap_merege_short()
+{
+    char *str1 = "01";
+    BitMap *bitmap = bitmap_from_string(str1);
+
+    char *str2 = "11";
+    BitMap *other = bitmap_from_string(str2);
+
+    bitmap_merge(bitmap, other);
+    char *string = bitmap_to_string(bitmap);
+
+    ASSERT_STRING_EQ(string, "0111");
+
+    free(string);
+    bitmap_free(bitmap);
+}
+
 void test_bitmap_merege()
 {
     char *str1 = "0101101110001110100010111110000111110100101010101010101";
@@ -103,11 +158,24 @@ void test_bitmap_merege()
     bitmap_free(bitmap);
 }
 
+void test_bitmap_extract()
+{
+    BitMap *bitmap;
+    bitmap = bitmap_from_char('a');
+    char ch = bitmap_extract_char(bitmap, 0);
+    ASSERT_CHAR_EQ(ch, 'a');
+    bitmap_free(bitmap);
+}
+
 void test_bitmap()
 {
     test_bitmap_basic();
-    test_bitmap_from();
+    test_bitmap_from_word();
+    test_bitmap_from_char();
     test_bitmap_from_string();
+    test_bitmap_merege_short();
+    test_bitmap_merege();
+    test_bitmap_extract();
 }
 
 void test_bitmap_words()

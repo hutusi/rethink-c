@@ -175,11 +175,24 @@ BitMap *bitmap_from_string(const char *string)
     return bitmap;
 }
 
+BitMap *bitmap_from_word(word_t word)
+{
+    BitMap *bitmap = bitmap_new(BITS_PER_WORD);
+    bitmap->words[0] = word;
+    return bitmap;
+}
+
 BitMap *bitmap_from_char(unsigned char ch)
 {
     BitMap *bitmap = bitmap_new(CHAR_BIT);
     memcpy(bitmap->words, &ch, 1);
     return bitmap;
+}
+
+unsigned char bitmap_extract_char(BitMap *bitmap, unsigned int n)
+{
+    int word = bitmap->words[WORD_OFFSET(n)] << BIT_OFFSET(n);
+    return (unsigned char)word;
 }
 
 BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
@@ -197,20 +210,22 @@ BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
     if (remainder == 0) {
         memcpy(bitmap->words[quotient - 1], other->words, other_num);
     } else {
-        // -0: 1000 0000 0000 0000
-        bitmap->words[quotient - 1] &= (word_t)(((int)(-0)) >> (remainder - 1));
-        
+        // -1: 1111 * 8 => 0001 111 ...
+        bitmap->words[quotient] ^= (((word_t)(-1)) << remainder);
+
         unsigned int num = bitmap_num_words_need_by_bits(bitmap->num_bits);
         if (bitmap->num_words > num) {
             memset(&(bitmap->words[num]), 0, bitmap->num_words - num);
         }
 
         for (int i = 0; i < other_num; ++i) {
-            word_t front = other->words[i] >> remainder;
-            bitmap->words[quotient - 1 + i] |= front;
+            word_t front = other->words[i] << remainder;
+            bitmap->words[quotient + i] |= front;
 
-            word_t back = other->words[i] << remainder;
-            bitmap->words[quotient + i] |= back;
+            if (quotient + i + 1 < bitmap->num_words) {
+                word_t back = other->words[i] >> remainder;
+                bitmap->words[quotient + i + 1] |= back;
+            }
         }
     }
 
