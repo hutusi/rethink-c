@@ -150,6 +150,11 @@ BitMap *bitmap_append(BitMap *bitmap, int flag)
     return bitmap;
 }
 
+BitMap *bitmap_append_char(BitMap *bitmap, unsigned char ch)
+{
+    return bitmap_merge(bitmap, bitmap_from_char(ch));
+}
+
 char *bitmap_to_string(BitMap *bitmap)
 {
     char *string = (char *)malloc(sizeof(char) * (bitmap->num_bits + 1));
@@ -191,7 +196,22 @@ BitMap *bitmap_from_char(unsigned char ch)
 
 unsigned char bitmap_extract_char(BitMap *bitmap, unsigned int n)
 {
-    int word = bitmap->words[WORD_OFFSET(n)] << BIT_OFFSET(n);
+    unsigned int word_offset = WORD_OFFSET(n);
+    unsigned int bit_offset = BIT_OFFSET(n);
+    unsigned int word;
+    /** if char streach over two words ... */
+    if (bit_offset > BITS_PER_WORD - CHAR_BIT) {
+        unsigned int front_len = BITS_PER_WORD - bit_offset;
+        unsigned int back_len = CHAR_BIT - (BITS_PER_WORD - bit_offset);
+
+        unsigned int front = bitmap->words[word_offset] >> (BITS_PER_WORD - front_len);
+        unsigned int back = bitmap->words[word_offset + 1] << (BITS_PER_WORD - back_len);
+
+        word = front | (back >> (BITS_PER_WORD - back_len - front_len));
+    } else {
+        word = bitmap->words[word_offset] >> bit_offset;
+    }
+
     return (unsigned char)word;
 }
 
@@ -200,25 +220,27 @@ BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other)
     unsigned int total_bits = bitmap->num_bits + other->num_bits;
     if (total_bits >= bitmap->num_words * BITS_PER_WORD) {
         bitmap->num_words = bitmap_num_words_need_by_bits(total_bits);
-        bitmap->words =
-            (word_t *)realloc(bitmap->words, sizeof(word_t) * bitmap->num_words);
+        bitmap->words = (word_t *)realloc(bitmap->words,
+                                          sizeof(word_t) * bitmap->num_words);
     }
 
     unsigned int remainder = bitmap->num_bits % BITS_PER_WORD;
     unsigned int quotient = bitmap->num_bits / BITS_PER_WORD;
-    unsigned int other_num = bitmap_num_words_need_by_bits(other->num_bits);
+    // if target bits is 0, or full of words, just copy other words to the end.
     if (remainder == 0) {
-        memcpy(bitmap->words[quotient - 1], other->words, other_num);
+        memcpy(&(bitmap->words[quotient]), other->words, sizeof(word_t) * other->num_words);
     } else {
         // -1: 1111 * 8 => 0001 111 ...
         bitmap->words[quotient] &= ~(((word_t)(-1)) << remainder);
 
         unsigned int num = bitmap_num_words_need_by_bits(bitmap->num_bits);
         if (bitmap->num_words > num) {
-            memset(&(bitmap->words[num]), 0x0, sizeof(word_t) * (bitmap->num_words - num));
+            memset(&(bitmap->words[num]),
+                   0x0,
+                   sizeof(word_t) * (bitmap->num_words - num));
         }
 
-        for (int i = 0; i < other_num; ++i) {
+        for (int i = 0; i < other->num_words; ++i) {
             word_t front = other->words[i] << remainder;
             bitmap->words[quotient + i] |= front;
 
@@ -238,4 +260,23 @@ BitMap *bitmap_merge(BitMap *bitmap, BitMap *other)
     bitmap_concat(bitmap, other);
     bitmap_free(other);
     return bitmap;
+}
+
+int bitmap_equal(BitMap *bitmap1, BitMap *bitmap2)
+{
+    if (bitmap1->num_bits != bitmap2->num_bits)
+        return 0;
+
+    if (bitmap1->num_words > 1) {
+        if (memcmp(bitmap1->words,
+                   bitmap2->words,
+                   (bitmap1->num_words - 1) * sizeof(word_t)) != 0) {
+            return 0;
+        }
+    }
+
+    return (bitmap1->words[bitmap1->num_words - 1]
+            << (BITS_PER_WORD - BIT_OFFSET(bitmap1->num_bits))) ==
+           (bitmap2->words[bitmap2->num_words - 1]
+            << (BITS_PER_WORD - BIT_OFFSET(bitmap2->num_bits)));
 }

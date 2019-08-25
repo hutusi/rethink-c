@@ -93,7 +93,7 @@ BitMap *bitmap_new(unsigned int num_bits);
 
 /**
  * @brief Clone a BitMap and return it's clone.
- * 
+ *
  * @param bitmap    The BitMap.
  * @return BitMap*  The clone.
  */
@@ -179,7 +179,7 @@ unsigned int bitmap_count(const BitMap *bitmap);
 
 /**
  * @brief Append a bit (0 or 1) to a BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param flag      Bit flag 0 or 1 append to the BitMap.
  * @return BitMap*  The BitMap.
@@ -187,8 +187,17 @@ unsigned int bitmap_count(const BitMap *bitmap);
 BitMap *bitmap_append(BitMap *bitmap, int flag);
 
 /**
+ * @brief Append a char to a BitMap.
+ *
+ * @param bitmap    The BitMap.
+ * @param ch        The char.
+ * @return BitMap*  The BitMap.
+ */
+BitMap *bitmap_append_char(BitMap *bitmap, unsigned char ch);
+
+/**
  * @brief Convert a BitMap to a printable string.
- * 
+ *
  * @param bitmap    The BitMap.
  * @return char*    The char string. (Need free by caller.)
  */
@@ -196,7 +205,7 @@ char *bitmap_to_string(BitMap *bitmap);
 
 /**
  * @brief Generate a new BitMap from a string which contains only '0' or '1'.
- * 
+ *
  * @param string    The string. (e.g., "10011100")
  * @return BitMap*  The BitMap.
  */
@@ -204,7 +213,7 @@ BitMap *bitmap_from_string(const char *string);
 
 /**
  * @brief Generate a new BitMap from a word.
- * 
+ *
  * @param word      The word.
  * @return BitMap*  The BitMap.
  */
@@ -212,7 +221,7 @@ BitMap *bitmap_from_word(word_t word);
 
 /**
  * @brief Generate a new BitMap from a char.
- * 
+ *
  * @param ch        The char.
  * @return BitMap*  The BitMap.
  */
@@ -220,7 +229,7 @@ BitMap *bitmap_from_char(unsigned char ch);
 
 /**
  * @brief Extract a char from a BitMap by indicating an index.
- * 
+ *
  * @param bitmap            The BitMap.
  * @param n                 The start index.
  * @return unsigned char    The char.
@@ -229,7 +238,7 @@ unsigned char bitmap_extract_char(BitMap *bitmap, unsigned int n);
 
 /**
  * @brief Concat another BitMap to a BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param other     The other BitMap.
  * @return BitMap*  The concated BitMap.
@@ -238,14 +247,23 @@ BitMap *bitmap_concat(BitMap *bitmap, const BitMap *other);
 
 /**
  * @brief Merge another BitMap to a BitMap.
- * 
+ *
  * The difference between `bitmap_merge` and `bitmap_concat` is:
  *      `bitmap_merge` will free the other BitMap.
- * 
+ *
  * @param bitmap    The BitMap.
  * @param other     The other BitMap.
  * @return BitMap*  The mereged BitMap.
  */
 BitMap *bitmap_merge(BitMap *bitmap, BitMap *other);
+
+/**
+ * @brief Check if two BitMaps are equal.
+ *
+ * @param bitmap1   One BitMap.
+ * @param bitmap2   Another BitMap.
+ * @return int      1 if equal, 0 if not equal.
+ */
+int bitmap_equal(BitMap *bitmap1, BitMap *bitmap2);
 
 #endif /* #ifndef RETHINK_C_BITMAP_H */

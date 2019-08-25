@@ -127,6 +127,30 @@ void test_bitmap_from_string()
     bitmap_free(bitmap);
 }
 
+void test_bitmap_equal()
+{
+    BitMap *bitmap1;
+    BitMap *bitmap2;
+
+    char *str = "0101101110001110100010111110000111110100101010101010101";
+    bitmap1 = bitmap_from_string(str);
+    bitmap2 = bitmap_from_string(str);
+    ASSERT(bitmap_equal(bitmap1, bitmap2), "Same BitMaps not equal!");
+
+    bitmap_free(bitmap2);
+    char *str2 = "0101101110001110100010111110000111110100101010101010100";
+    bitmap2 = bitmap_from_string(str2);
+    ASSERT(!bitmap_equal(bitmap1, bitmap2), "Different BitMaps are equal!");
+
+    bitmap_free(bitmap2);
+    char *str3 = "010110111000111010001011111000011";
+    bitmap2 = bitmap_from_string(str3);
+    ASSERT(!bitmap_equal(bitmap1, bitmap2), "Different length BitMaps are equal!");
+
+    bitmap_free(bitmap1);
+    bitmap_free(bitmap2);
+}
+
 void test_bitmap_merege_simple()
 {
     BitMap *bitmap;
@@ -182,9 +206,56 @@ void test_bitmap_merege()
 void test_bitmap_extract()
 {
     BitMap *bitmap;
+    char ch;
+
     bitmap = bitmap_from_char('a');
-    char ch = bitmap_extract_char(bitmap, 0);
+    ch = bitmap_extract_char(bitmap, 0);
     ASSERT_CHAR_EQ(ch, 'a');
+    bitmap_free(bitmap);
+
+    bitmap = bitmap_new(0);
+    bitmap_append(bitmap, 0);
+    bitmap_append(bitmap, 0);
+    bitmap_append(bitmap, 1);
+    bitmap_append_char(bitmap, 'b');
+    ch = bitmap_extract_char(bitmap, 3);
+    ASSERT_CHAR_EQ(ch, 'b');
+    bitmap_free(bitmap);
+
+    // abcde
+    bitmap = bitmap_new(0);
+    bitmap_append_char(bitmap, 'a');
+    bitmap_append_char(bitmap, 'd');
+    bitmap_append_char(bitmap, 'c');
+    bitmap_append_char(bitmap, 'b');
+    bitmap_append_char(bitmap, 'e');
+
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 0), 'a');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 8), 'd');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 16), 'c');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 24), 'b');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 32), 'e');
+    bitmap_free(bitmap);
+
+    // if char streach over two words
+    // 01a001d1c1b
+    bitmap = bitmap_new(0);
+    bitmap_append(bitmap, 0);
+    bitmap_append(bitmap, 1);
+    bitmap_append_char(bitmap, 'a');
+    bitmap_append(bitmap, 0);
+    bitmap_append(bitmap, 0);
+    bitmap_append(bitmap, 1);
+    bitmap_append_char(bitmap, 'd');
+    bitmap_append(bitmap, 1);
+    bitmap_append_char(bitmap, 'c');
+    bitmap_append(bitmap, 1);
+    bitmap_append_char(bitmap, 'b');
+
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 2), 'a');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 13), 'd');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 22), 'c');
+    ASSERT_CHAR_EQ(bitmap_extract_char(bitmap, 31), 'b');
     bitmap_free(bitmap);
 }
 
@@ -194,6 +265,7 @@ void test_bitmap()
     test_bitmap_from_word();
     test_bitmap_from_char();
     test_bitmap_from_string();
+    test_bitmap_equal();
     test_bitmap_merege_simple();
     test_bitmap_merege();
     test_bitmap_extract();

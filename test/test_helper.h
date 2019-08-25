@@ -10,6 +10,12 @@
 #include "alloc-testing.h"
 #endif
 
+#define ASSERT(cond, msg) \
+    if (!(cond)) {        \
+        printf(msg);      \
+        assert(0);        \
+    }
+
 #define ASSERT_INT_EQ(a, b)                                           \
     if ((a) != (b)) {                                                 \
         printf("\nassert: Left [%d] not equal to Right[%d]\n", a, b); \
@@ -22,10 +28,10 @@
         assert(a == b);                                               \
     }
 
-#define ASSERT_STRING_EQ(a, b)                                          \
-    if (strcmp(a, b) != 0) {                                             \
+#define ASSERT_STRING_EQ(a, b)                                        \
+    if (strcmp(a, b) != 0) {                                          \
         printf("\nassert: Left [%s] not equal to Right[%s]\n", a, b); \
-        assert(0);                                               \
+        assert(0);                                                    \
     }
 
 #define ASSERT_INT_POINTER_EQ(pointer, value) \
