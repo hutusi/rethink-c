@@ -56,10 +56,14 @@ static inline HuffmanNode *huffman_heap_pop(Heap *heap)
     return (HuffmanNode *)heap_pop(heap);
 }
 
-HuffmanTree *huffman_tree_new(Heap *heap)
+HuffmanTree *huffman_tree_new()
 {
-    HuffmanTree *tree = (HuffmanTree *)malloc(sizeof(HuffmanTree));
+    return (HuffmanTree *)malloc(sizeof(HuffmanTree));
+}
 
+HuffmanTree *huffman_tree_from(Heap *heap)
+{
+    HuffmanTree *tree = huffman_tree_new();
     HuffmanNode *node1 = NULL;
     HuffmanNode *node2 = NULL;
 
@@ -188,4 +192,59 @@ Text *huffman_decode(HuffmanTree *tree, BitMap *code)
         }
     }
     return text;
+}
+
+static void huffman_tree_preorder_deflate(HuffmanNode *node, BitMap *bitmap)
+{
+    if (node == NULL) {
+        return;
+    }
+
+    if (huffman_node_is_leave(node)) {
+        bitmap_append(bitmap, 1);
+        bitmap_merge(bitmap, bitmap_from_char(node->value));
+    } else {
+        bitmap_append(bitmap, 0);
+    }
+
+    huffman_tree_preorder_deflate(node->left, bitmap);
+    huffman_tree_preorder_deflate(node->right, bitmap);
+}
+
+BitMap *huffman_tree_deflate(HuffmanTree *tree)
+{
+    BitMap *bitmap = bitmap_new(0);
+    huffman_tree_preorder_deflate(tree->root, bitmap);
+    return bitmap;
+}
+
+HuffmanNode *huffman_node_infalte_from_bitmap(BitMap *bitmap, int *index)
+{
+    HuffmanNode *node;
+    int flag = bitmap_get(bitmap, (*index));
+    if (flag) {
+        ++(*index);
+        char ch = bitmap_extract_char(bitmap, (*index));
+        (*index) += CHAR_BIT;
+        node = huffman_node_new(ch, 0);
+    } else {
+        ++(*index);
+        node = huffman_node_new('\0', 0);
+
+        // left child
+        node->left = huffman_node_infalte_from_bitmap(bitmap, index);
+
+        // right child
+        node->right = huffman_node_infalte_from_bitmap(bitmap, index);
+    }
+
+    return node;
+}
+
+HuffmanTree *huffman_tree_inflate(BitMap *bitmap)
+{
+    HuffmanTree *tree = huffman_tree_new();
+    int index = 0;
+    tree->root = huffman_node_infalte_from_bitmap(bitmap, &index);
+    return tree;
 }

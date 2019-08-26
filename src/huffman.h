@@ -68,12 +68,19 @@ void huffman_heap_free(Heap *heap);
 int huffman_heap_insert(Heap *heap, char value, unsigned int weight);
 
 /**
+ * @brief Allocate a new Huffman Tree.
+ * 
+ * @return HuffmanTree*     The new Huffman Tree.
+ */
+HuffmanTree *huffman_tree_new();
+
+/**
  * @brief Generate a new Huffman Tree by a Huffman Heap.
  * 
  * @param heap              The Huffman Heap.
  * @return HuffmanTree*     The Huffman Tree.
  */
-HuffmanTree *huffman_tree_new(Heap *heap);
+HuffmanTree *huffman_tree_from(Heap *heap);
 
 /**
  * @brief Delete a Huffman Tree and free back memory.
@@ -83,6 +90,11 @@ HuffmanTree *huffman_tree_new(Heap *heap);
 void huffman_tree_free(HuffmanTree *tree);
 
 BitMap *huffman_encode(HuffmanTree *tree, Text *text);
+
 Text *huffman_decode(HuffmanTree *tree, BitMap *code);
+
+BitMap *huffman_tree_deflate(HuffmanTree *tree);
+
+HuffmanTree *huffman_tree_inflate(BitMap *bitmap);
 
 #endif /* #ifndef RETHINK_C_HUFFMAN_H */
