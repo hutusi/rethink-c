@@ -7,6 +7,9 @@
       "label": "build",
       "type": "shell",
       "command": "make",
+      "args": [
+          "unit_tests"
+      ],
       "options": {
         "cwd": "${workspaceRoot}/build"
       }

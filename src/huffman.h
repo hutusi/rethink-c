@@ -47,6 +47,10 @@ typedef struct _HuffmanTree {
  */
 Heap *huffman_heap_new();
 
+Heap *huffman_heap_from(const Text *text);
+
+Heap *huffman_heap_from_string(const char *string, unsigned int size);
+
 /**
  * @brief Delete a Huffman Heap and free back memory.
  *
@@ -92,6 +96,8 @@ void huffman_tree_free(HuffmanTree *tree);
 BitMap *huffman_encode(HuffmanTree *tree, Text *text);
 
 Text *huffman_decode(HuffmanTree *tree, BitMap *code);
+
+BitMap *huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size);
 
 BitMap *huffman_tree_deflate(HuffmanTree *tree);
 
