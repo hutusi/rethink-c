@@ -137,7 +137,7 @@ BitMap *bitmap_append(BitMap *bitmap, int flag)
     if (bitmap->num_words * BITS_PER_WORD <= bitmap->num_bits) {
         ++(bitmap->num_words);
         bitmap->words =
-            (word_t *)realloc(bitmap, sizeof(word_t) * bitmap->num_words);
+            (word_t *)realloc(bitmap->words, sizeof(word_t) * bitmap->num_words);
     }
 
     if (flag) {

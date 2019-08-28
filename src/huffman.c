@@ -49,7 +49,7 @@ static inline HuffmanNode *huffman_node_new(char value, unsigned int weight)
 
 Heap *huffman_heap_from(const Text *text)
 {
-    return  huffman_heap_from_string(text_char_string(text), text_length(text));
+    return huffman_heap_from_string(text_char_string(text), text_length(text));
 }
 
 Heap *huffman_heap_from_string(const char *string, unsigned int size)
@@ -57,7 +57,8 @@ Heap *huffman_heap_from_string(const char *string, unsigned int size)
     HashTable *hash_table = hash_table_new(hash_char, char_equal, NULL, free);
 
     for (unsigned int i = 0; i < size; ++i) {
-        unsigned int *count = (unsigned int *)hash_table_get(hash_table, &(string[i]));
+        unsigned int *count =
+            (unsigned int *)hash_table_get(hash_table, &(string[i]));
         if (count == NULL) {
             // todo: cannot use intdup(1) here, why???
             count = (unsigned int *)malloc(sizeof(unsigned int));
@@ -74,7 +75,7 @@ Heap *huffman_heap_from_string(const char *string, unsigned int size)
          iterator = hash_table_next_entity(hash_table, iterator)) {
         char *key = (char *)iterator->key;
         int *weight = (int *)iterator->value;
-        
+
         huffman_heap_insert(heap, *key, *weight);
     }
 
@@ -195,7 +196,8 @@ STATIC HashTable *huffman_tree_to_hash_table(HuffmanTree *tree)
     return hash_table;
 }
 
-BitMap *huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size)
+BitMap *
+huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size)
 {
     /** key: char, value: bitmap */
     HashTable *hash_table = huffman_tree_to_hash_table(tree);
@@ -215,15 +217,16 @@ BitMap *huffman_encode_string(HuffmanTree *tree, const char *string, unsigned in
 
 BitMap *huffman_encode(HuffmanTree *tree, Text *text)
 {
-    return  huffman_encode_string(tree, text_char_string(text), text_length(text));
+    return huffman_encode_string(
+        tree, text_char_string(text), text_length(text));
 }
 
-Text *huffman_decode(HuffmanTree *tree, BitMap *code)
+Text *huffman_decode(HuffmanTree *tree, BitMap *bitmap)
 {
     Text *text = text_new();
     HuffmanNode *node = tree->root;
-    for (unsigned int i = 0; i < code->num_bits; ++i) {
-        if (bitmap_get(code, i)) {
+    for (unsigned int i = 0; i < bitmap->num_bits; ++i) {
+        if (bitmap_get(bitmap, i)) {
             node = node->right;
         } else {
             node = node->left;
@@ -290,4 +293,34 @@ HuffmanTree *huffman_tree_inflate(BitMap *bitmap)
     int index = 0;
     tree->root = huffman_node_infalte_from_bitmap(bitmap, &index);
     return tree;
+}
+
+static int huffman_tree_preorder_equal(HuffmanNode *node1, HuffmanNode *node2)
+{
+    if (node1 == NULL && node2 == NULL) {
+        return 1;
+    }
+
+    if (node1 == NULL || node2 == NULL) {
+        return 0;
+    }
+
+    if (node1->value != node2->value) {
+        return 0;
+    }
+
+    int result;
+    result = huffman_tree_preorder_equal(node1->left, node2->left);
+    if (!result)
+        return result;
+    result = huffman_tree_preorder_equal(node1->right, node2->right);
+    if (!result)
+        return result;
+
+    return 1;
+}
+
+int huffman_tree_equal(HuffmanTree *tree1, HuffmanTree *tree2)
+{
+    return huffman_tree_preorder_equal(tree1->root, tree2->root);
 }
