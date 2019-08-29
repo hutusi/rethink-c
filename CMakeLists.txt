@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(rethink)
 
 # set(COMPILE_OPTIONS -std=c99 -O2 -Wall -g -DALLOC_TESTING)
+# set(COMPILE_OPTIONS -std=c99 -Wall -g)
 set(COMPILE_OPTIONS -std=c99 -Wall -g -DTESTING -DALLOC_TESTING)
 set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src 
                         ${CMAKE_CURRENT_SOURCE_DIR}/test)
@@ -10,6 +11,7 @@ set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src
 
 add_subdirectory(src)
 add_subdirectory(test)
+add_subdirectory(app)
 
 # CTest
 enable_testing()
