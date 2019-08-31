@@ -4,6 +4,7 @@
 #include "compare.h"
 #include "dup.h"
 
+#include <math.h>
 #include <string.h>
 
 #ifdef ALLOC_TESTING
@@ -21,6 +22,20 @@
         printf("\nassert: Left [%d] not equal to Right[%d]\n", a, b); \
         assert(a == b);                                               \
     }
+
+static inline void assert_double_eq(double a, double b, double tolerance)
+{
+    if (fabs(a - b) > tolerance) {
+        printf("\nassert: Left [%f] not equal to Right[%f] with tolerance "
+               "[%f] \n",
+               a,
+               b,
+               tolerance);
+        assert(0);
+    }
+}
+
+#define ASSERT_DOUBLE_EQ assert_double_eq
 
 #define ASSERT_CHAR_EQ(a, b)                                          \
     if ((a) != (b)) {                                                 \

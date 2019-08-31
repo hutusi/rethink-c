@@ -49,22 +49,25 @@ make test
 - [x] AVL Tree [avltree.h](src/avltree.h) [avltree.c](src/avltree.c)
 - [x] Red Black Tree [rbtree.h](src/rbtree.h) [rbtree.c](src/rbtree.c)
 - [x] Binary Heap [heap.h](src/heap.h) [heap.c](src/heap.c)
+- [ ] Skip List
 - [ ] B+ Tree
 
 ### Graphs
 - [x] Adjacency Matrix [graph.h](src/graph.h) [graph.c](src/graph.c)
+- [ ] Adjacency List
 - [ ] Union-Find
 - [ ] BFS & DFS
-- [ ] Topological sorting
+- [ ] Topological sorting (Kahn)
 - [ ] Floyd
 - [x] Dijkstra [dijkstra.h](src/dijkstra.h) [dijkstra.c](src/dijkstra.c)
 - [ ] Prim
 - [ ] Kruskal
+- [ ] A-star
 
 ### String & Text
 - [x] Text (similar to string in C++). [text.h](src/text.h) [text.c](src/text.c)
 - [x] BigNum integer [bignum.h](src/bignum.h) [bignum.c](src/bignum.c)
-- [ ] BigNum decimal
+- [ ] BigNum decimal 
 - [x] KMP (Knuth-Morris-Pratt) algorithm [kmp.h](src/kmp.h) [kmp.c](src/kmp.c)
 - [x] BM (Boyer-Moore) algorithm [bm.h](src/bm.h) [bm.c](src/bm.c)
 - [x] Sunday algorithm [sunday.h](src/sunday.h) [sunday.c](src/sunday.c)
@@ -76,8 +79,16 @@ make test
 ### Sorting
 - [x] Quick Sort [arraylist.c##arraylist_sort()](src/arraylist.c)
 - [x] Merge Sort [list.c##list_sort()](src/list.c)
+- [x] Heap Sort [heap.h](src/heap.h) [heap.c](src/heap.c)
 
 ### Math
 - [ ] Matrix multiplication
 - [x] Eratosthenes sieve (prime numbers) [prime.h](src/prime.h) [prime.c](src/prime.c)
-- [ ] Carmichael Numbers (prime number)
+
+### Distance Measures
+- [x] Euclidean distance [distance.h##euclidiean_distance()](src/distance.h)
+- [ ] Manhattan distance 
+- [ ] Hamming distance
+
+### MISC
+- [ ] Bloom filter

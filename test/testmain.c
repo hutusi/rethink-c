@@ -32,6 +32,8 @@ extern void test_trie();
 extern void test_ac();
 extern void test_text();
 extern void test_huffman();
+extern void test_distance();
+extern void test_vector();
 
 typedef void (*TestcaseFunc)(void);
 
@@ -64,6 +66,8 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_ac,
                                    test_text,
                                    test_huffman,
+                                   test_distance,
+                                   test_vector,
                                    NULL};
 
 static void run_test(TestcaseFunc test)
