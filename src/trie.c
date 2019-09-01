@@ -82,7 +82,7 @@ int trie_insert(Trie *trie, const char *str, unsigned int len)
     return 0;
 }
 
-TrieNode *trie_last_node(Trie *trie, const char *str, unsigned int len)
+TrieNode *trie_last_node(const Trie *trie, const char *str, unsigned int len)
 {
     TrieNode *rover = trie->root;
     for (int i = 0; i < len; ++i) {
@@ -106,7 +106,7 @@ int trie_delete(Trie *trie, const char *str, unsigned int len)
     }
 }
 
-bool trie_include(Trie *trie, const char *str, unsigned int len)
+bool trie_include(const Trie *trie, const char *str, unsigned int len)
 {
     TrieNode *last = trie_last_node(trie, str, len);
     return last != NULL && last->ending == true;

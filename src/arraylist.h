@@ -168,7 +168,7 @@ typedef int (*ArrayListValueCompareFunc)(ArrayListValue left,
  * @param data         The value to search for.
  * @return int         The index of the value if found, or -1 if not found.
  */
-int arraylist_index_of(ArrayList *arraylist,
+int arraylist_index_of(const ArrayList *arraylist,
                        ArrayListValueCompareFunc callback,
                        ArrayListValue data);
 

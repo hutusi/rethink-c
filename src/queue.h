@@ -82,7 +82,7 @@ QueueValue queue_pop_head(Queue *queue);
  * @param queue         The Queue.
  * @return QueueValue   The peeked value.
  */
-QueueValue queue_peek_head(Queue *queue);
+QueueValue queue_peek_head(const Queue *queue);
 
 /**
  * @brief Push a value to the tail of a Queue.
@@ -111,7 +111,7 @@ QueueValue queue_pop_tail(Queue *queue);
  * @param queue         The Queue.
  * @return QueueValue   The peeked value.
  */
-QueueValue queue_peek_tail(Queue *queue);
+QueueValue queue_peek_tail(const Queue *queue);
 
 /**
  * @brief Check if a Queue is empty.
@@ -119,6 +119,6 @@ QueueValue queue_peek_tail(Queue *queue);
  * @param queue     The Queue.
  * @return int      0 if not empty, 1 if empty.
  */
-int queue_is_empty(Queue *queue);
+int queue_is_empty(const Queue *queue);
 
 #endif /* #ifndef RETHINK_C_QUEUE_H */

@@ -15,7 +15,7 @@
 #include <string.h>
 
 ArrayList *arraylist_new(ArrayListFreeValueFunc free_value_func,
-                unsigned int length)
+                         unsigned int length)
 {
     ArrayList *new_arraylist;
     if (length <= 0) {
@@ -141,7 +141,7 @@ void arraylist_clear(ArrayList *arraylist)
     arraylist->length = 0;
 }
 
-int arraylist_index_of(ArrayList *arraylist,
+int arraylist_index_of(const ArrayList *arraylist,
                        ArrayListValueCompareFunc callback,
                        ArrayListValue data)
 {

@@ -90,7 +90,7 @@ QueueValue queue_pop_head(Queue *queue)
     return value;
 }
 
-QueueValue queue_peek_head(Queue *queue)
+QueueValue queue_peek_head(const Queue *queue)
 {
     if (queue->length == 0) {
         return QUEUE_NULL;
@@ -139,7 +139,7 @@ QueueValue queue_pop_tail(Queue *queue)
     return value;
 }
 
-QueueValue queue_peek_tail(Queue *queue)
+QueueValue queue_peek_tail(const Queue *queue)
 {
     if (queue->length == 0) {
         return QUEUE_NULL;
@@ -148,7 +148,7 @@ QueueValue queue_peek_tail(Queue *queue)
     }
 }
 
-int queue_is_empty(Queue *queue)
+int queue_is_empty(const Queue *queue)
 {
     return queue->length == 0;
 }

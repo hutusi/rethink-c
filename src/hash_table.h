@@ -117,13 +117,48 @@ int hash_table_set(HashTable *hash_table,
  */
 int hash_table_delete(HashTable *hash_table, HashTableKey key);
 
-unsigned int hash_table_size(HashTable *hash_table);
+/**
+ * @brief Get the size of a HashTable.
+ *
+ * @param hash_table        The HashTable.
+ * @return unsigned int     The size of HashTable.
+ */
+unsigned int hash_table_size(const HashTable *hash_table);
 
-HashTableEntity *hash_table_first_entity(HashTable *hash_table);
-HashTableEntity *hash_table_last_entity(HashTable *hash_table);
-HashTableEntity *hash_table_next_entity(HashTable *hash_table,
+/**
+ * @brief Get the first entity of a HashTable.
+ *
+ * @param hash_table            The HashTable.
+ * @return HashTableEntity*     The first entity.
+ */
+HashTableEntity *hash_table_first_entity(const HashTable *hash_table);
+
+/**
+ * @brief Get the last entity of a HashTable.
+ *
+ * @param hash_table            The HashTable.
+ * @return HashTableEntity*     The last entity.
+ */
+HashTableEntity *hash_table_last_entity(const HashTable *hash_table);
+
+/**
+ * @brief Get the next entity of a HashTable by given entity.
+ *
+ * @param hash_table            The HashTable.
+ * @param entity                The given entity.
+ * @return HashTableEntity*     The next entity.
+ */
+HashTableEntity *hash_table_next_entity(const HashTable *hash_table,
                                         HashTableEntity *entity);
-HashTableEntity *hash_table_prev_entity(HashTable *hash_table,
+
+/**
+ * @brief Get the previous entity of a HashTable by given entity.
+ *
+ * @param hash_table            The HashTable.
+ * @param entity                The given entity.
+ * @return HashTableEntity*     The previous entity.
+ */
+HashTableEntity *hash_table_prev_entity(const HashTable *hash_table,
                                         HashTableEntity *entity);
 
 #endif /* #ifndef RETHINK_C_HASH_TABLE_H */

@@ -98,7 +98,7 @@ static HashTableEntity *hash_table_new_entity(HashTableKey key,
     return entity;
 }
 
-static inline int hash_table_hashing_key(HashTable *hash_table,
+static inline int hash_table_hashing_key(const HashTable *hash_table,
                                          HashTableKey key)
 {
     return hash_table->hash_func(key) % hash_table->_allocated;
@@ -258,13 +258,13 @@ int hash_table_delete(HashTable *hash_table, HashTableKey key)
     }
 }
 
-unsigned int hash_table_size(HashTable *hash_table)
+unsigned int hash_table_size(const HashTable *hash_table)
 {
     return hash_table->length;
 }
 
-static HashTableEntity *hash_table_next_entity_from_index(HashTable *hash_table,
-                                                          int index)
+static HashTableEntity *
+hash_table_next_entity_from_index(const HashTable *hash_table, int index)
 {
     HashTableEntity *next = NULL;
     for (int i = index; i < hash_table->_allocated; ++i) {
@@ -276,13 +276,13 @@ static HashTableEntity *hash_table_next_entity_from_index(HashTable *hash_table,
     return next;
 }
 
-HashTableEntity *hash_table_first_entity(HashTable *hash_table)
+HashTableEntity *hash_table_first_entity(const HashTable *hash_table)
 {
     return hash_table_next_entity_from_index(hash_table, 0);
 }
 
 static HashTableEntity *
-hash_table_last_entity_before_index(HashTable *hash_table, int index)
+hash_table_last_entity_before_index(const HashTable *hash_table, int index)
 {
     HashTableEntity *last = NULL;
     for (int i = index - 1; i >= 0; --i) {
@@ -297,13 +297,13 @@ hash_table_last_entity_before_index(HashTable *hash_table, int index)
     return last;
 }
 
-HashTableEntity *hash_table_last_entity(HashTable *hash_table)
+HashTableEntity *hash_table_last_entity(const HashTable *hash_table)
 {
     return hash_table_last_entity_before_index(hash_table,
                                                hash_table->_allocated);
 }
 
-HashTableEntity *hash_table_next_entity(HashTable *hash_table,
+HashTableEntity *hash_table_next_entity(const HashTable *hash_table,
                                         HashTableEntity *entity)
 {
     HashTableEntity *next = entity->next;
@@ -314,7 +314,7 @@ HashTableEntity *hash_table_next_entity(HashTable *hash_table,
     return hash_table_next_entity_from_index(hash_table, index + 1);
 }
 
-HashTableEntity *hash_table_prev_entity(HashTable *hash_table,
+HashTableEntity *hash_table_prev_entity(const HashTable *hash_table,
                                         HashTableEntity *entity)
 {
     int index = hash_table_hashing_key(hash_table, entity->key);

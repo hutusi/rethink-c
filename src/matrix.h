@@ -87,6 +87,6 @@ void matrix_set(Matrix *matrix,
  * @param ...               The index of each dimensions.
  * @return MatrixValue      The value if success.
  */
-MatrixValue matrix_get(Matrix *matrix, unsigned int num_dimensions, ...);
+MatrixValue matrix_get(const Matrix *matrix, unsigned int num_dimensions, ...);
 
 #endif /* #ifndef RETHINK_C_MATRIX_H */

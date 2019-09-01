@@ -6,9 +6,9 @@
  * @brief Huffman Tree.
  *
  * Use huffman_tree_from to generate a new Huffman Tree from a Minimum HEAP.
- *  
+ *
  * Use huffman_encode or huffman_decode to encode or decode Text.
- * 
+ *
  * Use huffman_tree_deflate or huffman_tree_inflate to store or restor itself.
  *
  * @date 2019-08-21
@@ -73,7 +73,7 @@ Heap *huffman_heap_from_string(const char *string, unsigned int size);
  * @brief Delete a Huffman Heap and free back memory.
  *
  * Mind: It's unnecessary to free heap manually, free_heap will be called in
- *       huffman_tree_new() function.
+ *       huffman_tree_from(heap) function.
  *
  * @param heap  The Huffman Heap.
  */
@@ -99,6 +99,8 @@ HuffmanTree *huffman_tree_new();
 /**
  * @brief Generate a new Huffman Tree by a Huffman Heap.
  *
+ * Mind: this function will free the input heap.
+ *
  * @param heap              The Huffman Heap.
  * @return HuffmanTree*     The Huffman Tree.
  */
@@ -118,7 +120,7 @@ void huffman_tree_free(HuffmanTree *tree);
  * @param text      The Text.
  * @return BitMap*  The BitMap.
  */
-BitMap *huffman_encode(HuffmanTree *tree, Text *text);
+BitMap *huffman_encode(const HuffmanTree *tree, const Text *text);
 
 /**
  * @brief Encode a string to a sequence of BitMap by a Huffman Tree coding.
@@ -128,8 +130,9 @@ BitMap *huffman_encode(HuffmanTree *tree, Text *text);
  * @param size      The size of the string.
  * @return BitMap*  The BitMap.
  */
-BitMap *
-huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size);
+BitMap *huffman_encode_string(const HuffmanTree *tree,
+                              const char *string,
+                              unsigned int size);
 
 /**
  * @brief Decode a sequence of BitMap to a Text by a Huffman Tree coding.
@@ -138,7 +141,7 @@ huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size);
  * @param bitmap    The BitMap.
  * @return Text*    The Text.
  */
-Text *huffman_decode(HuffmanTree *tree, BitMap *bitmap);
+Text *huffman_decode(const HuffmanTree *tree, const BitMap *bitmap);
 
 /**
  * @brief Deflate a Huffman Tree to a BitMap for storing with few storage.
@@ -146,7 +149,7 @@ Text *huffman_decode(HuffmanTree *tree, BitMap *bitmap);
  * @param tree      The Huffman Tree.
  * @return BitMap*  The BitMap.
  */
-BitMap *huffman_tree_deflate(HuffmanTree *tree);
+BitMap *huffman_tree_deflate(const HuffmanTree *tree);
 
 /**
  * @brief Inflate a BitMap to a Huffman Tree. (Restore.)
@@ -154,7 +157,7 @@ BitMap *huffman_tree_deflate(HuffmanTree *tree);
  * @param bitmap            The BitMap.
  * @return HuffmanTree*     The Huffman Tree.
  */
-HuffmanTree *huffman_tree_inflate(BitMap *bitmap);
+HuffmanTree *huffman_tree_inflate(const BitMap *bitmap);
 
 /**
  * @brief Judge two Huffman Tree's equality.
@@ -163,6 +166,6 @@ HuffmanTree *huffman_tree_inflate(BitMap *bitmap);
  * @param tree2     The other Huffman Tree.
  * @return int      1 if equal, 0 if not.
  */
-int huffman_tree_equal(HuffmanTree *tree1, HuffmanTree *tree2);
+int huffman_tree_equal(const HuffmanTree *tree1, const HuffmanTree *tree2);
 
 #endif /* #ifndef RETHINK_C_HUFFMAN_H */

@@ -49,6 +49,7 @@ make test
 - [x] AVL Tree [avltree.h](src/avltree.h) [avltree.c](src/avltree.c)
 - [x] Red Black Tree [rbtree.h](src/rbtree.h) [rbtree.c](src/rbtree.c)
 - [x] Binary Heap [heap.h](src/heap.h) [heap.c](src/heap.c)
+- [ ] Fibonacci Heap, Binomial Heap
 - [ ] Skip List
 - [ ] B+ Tree
 

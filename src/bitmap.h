@@ -50,7 +50,7 @@ void clear_bit(word_t *words, unsigned int n);
  * @param n         The nth bit to be get.
  * @return int      The value of the bit.
  */
-int get_bit(word_t *words, unsigned int n);
+int get_bit(const word_t *words, unsigned int n);
 
 /**
  * @brief Set all the bitmap's bits to 1.
@@ -234,7 +234,7 @@ BitMap *bitmap_from_char(unsigned char ch);
  * @param n                 The start index.
  * @return unsigned char    The char.
  */
-unsigned char bitmap_extract_char(BitMap *bitmap, unsigned int n);
+unsigned char bitmap_extract_char(const BitMap *bitmap, unsigned int n);
 
 /**
  * @brief Concat another BitMap to a BitMap.
@@ -264,6 +264,6 @@ BitMap *bitmap_merge(BitMap *bitmap, BitMap *other);
  * @param bitmap2   Another BitMap.
  * @return int      1 if equal, 0 if not equal.
  */
-int bitmap_equal(BitMap *bitmap1, BitMap *bitmap2);
+int bitmap_equal(const BitMap *bitmap1, const BitMap *bitmap2);
 
 #endif /* #ifndef RETHINK_C_BITMAP_H */

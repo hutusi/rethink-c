@@ -4,7 +4,9 @@
 #include "compare.h"
 #include "dup.h"
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 
 #ifdef ALLOC_TESTING

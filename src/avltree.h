@@ -202,7 +202,7 @@ void avl_tree_postorder_traverse(AVLTree *tree,
  * @param node            The subtree's root node.
  * @return unsigned int   The height.
  */
-unsigned int avl_tree_subtree_height(AVLTreeNode *node);
+unsigned int avl_tree_subtree_height(const AVLTreeNode *node);
 
 /**
  * @brief Print a subtree.
@@ -210,6 +210,6 @@ unsigned int avl_tree_subtree_height(AVLTreeNode *node);
  * @param node      The subtree's root node.
  * @param depth     The subtree's depth.
  */
-void avl_tree_subtree_print(AVLTreeNode *node, int depth);
+void avl_tree_subtree_print(const AVLTreeNode *node, int depth);
 
 #endif /* #ifndef RETHINK_C_AVL_TREE_H */

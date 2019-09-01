@@ -92,7 +92,7 @@ static AVLTreeEntity *avl_tree_node_append_value(AVLTreeNode *node,
     return entity;
 }
 
-unsigned int avl_tree_subtree_height(AVLTreeNode *node)
+unsigned int avl_tree_subtree_height(const AVLTreeNode *node)
 {
     if (node)
         return node->height;
@@ -408,7 +408,7 @@ AVLTreeNode *avl_tree_find_node(AVLTree *tree, AVLTreeKey key)
     return NULL;
 }
 
-void avl_tree_subtree_print(AVLTreeNode *node, int depth)
+void avl_tree_subtree_print(const AVLTreeNode *node, int depth)
 {
     if (node == NULL) {
         return;

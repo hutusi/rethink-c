@@ -84,7 +84,7 @@ void matrix_set(Matrix *matrix,
     matrix->data[offset] = value;
 }
 
-MatrixValue matrix_get(Matrix *matrix, unsigned int num_dimensions, ...)
+MatrixValue matrix_get(const Matrix *matrix, unsigned int num_dimensions, ...)
 {
     unsigned int offset = 0;
 

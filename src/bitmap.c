@@ -24,7 +24,7 @@ inline void clear_bit(word_t *words, unsigned int n)
     words[WORD_OFFSET(n)] &= ~((word_t)1 << BIT_OFFSET(n));
 }
 
-inline int get_bit(word_t *words, unsigned int n)
+inline int get_bit(const word_t *words, unsigned int n)
 {
     word_t bit = words[WORD_OFFSET(n)] & ((word_t)1 << BIT_OFFSET(n));
     return bit != 0;
@@ -194,7 +194,7 @@ BitMap *bitmap_from_char(unsigned char ch)
     return bitmap;
 }
 
-unsigned char bitmap_extract_char(BitMap *bitmap, unsigned int n)
+unsigned char bitmap_extract_char(const BitMap *bitmap, unsigned int n)
 {
     unsigned int word_offset = WORD_OFFSET(n);
     unsigned int bit_offset = BIT_OFFSET(n);
@@ -262,7 +262,7 @@ BitMap *bitmap_merge(BitMap *bitmap, BitMap *other)
     return bitmap;
 }
 
-int bitmap_equal(BitMap *bitmap1, BitMap *bitmap2)
+int bitmap_equal(const BitMap *bitmap1, const BitMap *bitmap2)
 {
     if (bitmap1->num_bits != bitmap2->num_bits)
         return 0;

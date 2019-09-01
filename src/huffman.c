@@ -148,12 +148,12 @@ void huffman_tree_free(HuffmanTree *tree)
     free(tree);
 }
 
-static inline huffman_node_is_leave(HuffmanNode *node)
+static inline int huffman_node_is_leave(const HuffmanNode *node)
 {
     return node->left == NULL && node->right == NULL;
 }
 
-static void huffman_tree_postorder_to_hash_table(HuffmanNode *node,
+static void huffman_tree_postorder_to_hash_table(const HuffmanNode *node,
                                                  HashTable *hash_table,
                                                  BitMap *bitmap)
 {
@@ -185,19 +185,20 @@ static void huffman_tree_postorder_to_hash_table(HuffmanNode *node,
     }
 }
 
-STATIC HashTable *huffman_tree_to_hash_table(HuffmanTree *tree)
+STATIC HashTable *huffman_tree_to_hash_table(const HuffmanTree *tree)
 {
     /** key: char, value: bitmap */
     HashTable *hash_table =
         hash_table_new(hash_char, char_equal, free, bitmap_free);
-    HuffmanNode *node = tree->root;
+
     BitMap *bitmap = bitmap_new(0);
     huffman_tree_postorder_to_hash_table(tree->root, hash_table, bitmap);
     return hash_table;
 }
 
-BitMap *
-huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size)
+BitMap *huffman_encode_string(const HuffmanTree *tree,
+                              const char *string,
+                              unsigned int size)
 {
     /** key: char, value: bitmap */
     HashTable *hash_table = huffman_tree_to_hash_table(tree);
@@ -215,13 +216,13 @@ huffman_encode_string(HuffmanTree *tree, const char *string, unsigned int size)
     return bitmap;
 }
 
-BitMap *huffman_encode(HuffmanTree *tree, Text *text)
+BitMap *huffman_encode(const HuffmanTree *tree, const Text *text)
 {
     return huffman_encode_string(
         tree, text_char_string(text), text_length(text));
 }
 
-Text *huffman_decode(HuffmanTree *tree, BitMap *bitmap)
+Text *huffman_decode(const HuffmanTree *tree, const BitMap *bitmap)
 {
     Text *text = text_new();
     HuffmanNode *node = tree->root;
@@ -240,7 +241,8 @@ Text *huffman_decode(HuffmanTree *tree, BitMap *bitmap)
     return text;
 }
 
-static void huffman_tree_preorder_deflate(HuffmanNode *node, BitMap *bitmap)
+static void huffman_tree_preorder_deflate(const HuffmanNode *node,
+                                          BitMap *bitmap)
 {
     if (node == NULL) {
         return;
@@ -257,14 +259,14 @@ static void huffman_tree_preorder_deflate(HuffmanNode *node, BitMap *bitmap)
     huffman_tree_preorder_deflate(node->right, bitmap);
 }
 
-BitMap *huffman_tree_deflate(HuffmanTree *tree)
+BitMap *huffman_tree_deflate(const HuffmanTree *tree)
 {
     BitMap *bitmap = bitmap_new(0);
     huffman_tree_preorder_deflate(tree->root, bitmap);
     return bitmap;
 }
 
-HuffmanNode *huffman_node_infalte_from_bitmap(BitMap *bitmap, int *index)
+HuffmanNode *huffman_node_infalte_from_bitmap(const BitMap *bitmap, int *index)
 {
     HuffmanNode *node;
     int flag = bitmap_get(bitmap, (*index));
@@ -287,7 +289,7 @@ HuffmanNode *huffman_node_infalte_from_bitmap(BitMap *bitmap, int *index)
     return node;
 }
 
-HuffmanTree *huffman_tree_inflate(BitMap *bitmap)
+HuffmanTree *huffman_tree_inflate(const BitMap *bitmap)
 {
     HuffmanTree *tree = huffman_tree_new();
     int index = 0;
@@ -295,7 +297,8 @@ HuffmanTree *huffman_tree_inflate(BitMap *bitmap)
     return tree;
 }
 
-static int huffman_tree_preorder_equal(HuffmanNode *node1, HuffmanNode *node2)
+static int huffman_tree_preorder_equal(const HuffmanNode *node1,
+                                       const HuffmanNode *node2)
 {
     if (node1 == NULL && node2 == NULL) {
         return 1;
@@ -320,7 +323,7 @@ static int huffman_tree_preorder_equal(HuffmanNode *node1, HuffmanNode *node2)
     return 1;
 }
 
-int huffman_tree_equal(HuffmanTree *tree1, HuffmanTree *tree2)
+int huffman_tree_equal(const HuffmanTree *tree1, const HuffmanTree *tree2)
 {
     return huffman_tree_preorder_equal(tree1->root, tree2->root);
 }

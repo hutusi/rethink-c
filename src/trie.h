@@ -81,7 +81,7 @@ int trie_delete(Trie *trie, const char *str, unsigned int len);
  * @return true     Include a full match.
  * @return false    Not include a full match.
  */
-bool trie_include(Trie *trie, const char *str, unsigned int len);
+bool trie_include(const Trie *trie, const char *str, unsigned int len);
 
 /**
  * @brief Get the last node of a Trie by a string.
@@ -91,6 +91,6 @@ bool trie_include(Trie *trie, const char *str, unsigned int len);
  * @param len           The length of the string.
  * @return TrieNode*    The last match node.
  */
-TrieNode *trie_last_node(Trie *trie, const char *str, unsigned int len);
+TrieNode *trie_last_node(const Trie *trie, const char *str, unsigned int len);
 
 #endif /* #ifndef RETHINK_C_TRIE_H */
