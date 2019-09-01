@@ -1,5 +1,7 @@
 # RETHINK C
 
+[![Build Status](https://travis-ci.org/hutusi/rethink-c.svg?branch=master)](https://travis-ci.org/hutusi/rethink-c)
+
 Relearn and rethink C Programming Language, including some of data structures and algorithms.
 
 The code is licensed under the MIT license, copyright by [hutusi.com](http://hutusi.com/).

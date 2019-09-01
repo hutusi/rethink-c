@@ -1,0 +1,8 @@
+language: c
+services:
+  - docker
+dist: bionic
+compiler:
+  - clang
+  - gcc
+script: cd build && cmake .. && make && make test

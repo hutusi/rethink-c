@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.12)
 project(rethink)
 
 # set(COMPILE_OPTIONS -std=c99 -O2 -Wall -g -DALLOC_TESTING)
@@ -17,7 +17,7 @@ add_subdirectory(app)
 enable_testing()
 
 add_executable(unit_tests test/testmain.c)
-target_link_libraries(unit_tests testcases algorithm)
+target_link_libraries(unit_tests testcases algorithm m)
 target_compile_options(unit_tests PRIVATE ${COMPILE_OPTIONS})
 
 add_test(test_all unit_tests)
