@@ -59,7 +59,7 @@ make test
 - [x] Adjacency Matrix [graph.h](src/graph.h) [graph.c](src/graph.c)
 - [ ] Adjacency List
 - [ ] Union-Find
-- [ ] BFS & DFS
+- [x] BFS & DFS [graph.h##bfs(), ##dfs()](src/graph.h)
 - [ ] Topological sorting (Kahn)
 - [ ] Floyd
 - [x] Dijkstra [dijkstra.h](src/dijkstra.h) [dijkstra.c](src/dijkstra.c)

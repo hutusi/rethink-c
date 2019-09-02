@@ -5,4 +5,4 @@ dist: bionic
 compiler:
   - clang
   - gcc
-script: cd build && cmake .. && make && make test
+script: cd build && cmake .. && make && make test CTEST_OUTPUT_ON_FAILURE=1

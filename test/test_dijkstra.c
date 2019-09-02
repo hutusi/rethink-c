@@ -23,7 +23,7 @@ static int max_in_array(int *distances, int num)
 
 static void test_dijkstra_1()
 {
-    AdjacencyMatrix *graph = adjacency_matrix_new(4);
+    AdjacencyMatrix *graph = adjacency_matrix_new(DirectedWeighted, 4);
     adjacency_matrix_reset(graph, -1);
     adjacency_matrix_set(graph, 1, 0, 1);
     adjacency_matrix_set(graph, 1, 2, 1);
@@ -39,7 +39,7 @@ static void test_dijkstra_1()
 
 static void test_dijkstra_2()
 {
-    AdjacencyMatrix *graph = adjacency_matrix_new(2);
+    AdjacencyMatrix *graph = adjacency_matrix_new(DirectedWeighted, 2);
     adjacency_matrix_reset(graph, -1);
     adjacency_matrix_set(graph, 0, 1, 1);
     int *distances = (int *)malloc(sizeof(int) * 4);
@@ -53,7 +53,7 @@ static void test_dijkstra_2()
 
 static void test_dijkstra_3()
 {
-    AdjacencyMatrix *graph = adjacency_matrix_new(4);
+    AdjacencyMatrix *graph = adjacency_matrix_new(DirectedWeighted, 4);
     adjacency_matrix_reset(graph, -1);
     adjacency_matrix_set(graph, 0, 1, 1);
     adjacency_matrix_set(graph, 1, 2, 1);
@@ -70,7 +70,7 @@ static void test_dijkstra_3()
 
 static void test_dijkstra_4()
 {
-    AdjacencyMatrix *graph = adjacency_matrix_new(4);
+    AdjacencyMatrix *graph = adjacency_matrix_new(DirectedWeighted, 4);
     adjacency_matrix_reset(graph, -1);
     adjacency_matrix_set(graph, 0, 1, 1);
     adjacency_matrix_set(graph, 1, 2, 1);
@@ -87,7 +87,7 @@ static void test_dijkstra_4()
 
 static void test_dijkstra_5()
 {
-    AdjacencyMatrix *graph = adjacency_matrix_new(3);
+    AdjacencyMatrix *graph = adjacency_matrix_new(DirectedWeighted, 3);
     adjacency_matrix_reset(graph, -1);
     adjacency_matrix_set(graph, 0, 1, 1);
     adjacency_matrix_set(graph, 1, 2, 2);
@@ -114,7 +114,7 @@ void test_dijkstra()
 int networkDelayTime(
     int **times, int timesSize, int *timesColSize, int N, int K)
 {
-    AdjacencyMatrix *graph = adjacency_matrix_new(N + 1);
+    AdjacencyMatrix *graph = adjacency_matrix_new(DirectedWeighted, N + 1);
     int *distances = (int *)malloc(sizeof(int) * (N + 1));
     adjacency_matrix_reset(graph, -1);
 

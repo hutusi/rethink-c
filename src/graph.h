@@ -14,17 +14,23 @@
 #ifndef RETHINK_C_GRAPH_H
 #define RETHINK_C_GRAPH_H
 
+typedef enum _GraphType {
+    UndirectedUnweighted = 0,
+    UndirectedWeighted = 1,
+    DirectedUnweighted = 2,
+    DirectedWeighted = 3
+} GraphType;
+
 /**
  * @brief Definition of a @ref AdjacencyMatrix.
  * WeightedGraph is alias.
  */
 typedef struct _AdjacencyMatrix {
+    GraphType type;
+    int num_vertexes;
     /** edges pointer point to _data */
     int **edges;
-    int num_vertexes;
-    /** private data store */
-    int *_data;
-} AdjacencyMatrix, WeightedGraph;
+} AdjacencyMatrix, Graph;
 
 /**
  * @brief Allcate a new AdjacencyMatrix.
@@ -33,7 +39,7 @@ typedef struct _AdjacencyMatrix {
  * @return AdjacencyMatrix*     The new AdjacencyMatrix if success, otherwise
  * NULL.
  */
-AdjacencyMatrix *adjacency_matrix_new(int num_vertexes);
+AdjacencyMatrix *adjacency_matrix_new(GraphType type, int num_vertexes);
 
 /**
  * @brief Delete an AdjacencyMatrix and free back memory.
@@ -76,5 +82,11 @@ void adjacency_matrix_set(AdjacencyMatrix *graph,
 int adjacency_matrix_get(const AdjacencyMatrix *graph,
                          int vertex1,
                          int vertex2);
+
+int adjacency_matrix_link(AdjacencyMatrix *graph, int vertex1, int vertex2);
+
+int adjacency_matrix_bfs(const AdjacencyMatrix *graph, int start, int end);
+
+int adjacency_matrix_dfs(const AdjacencyMatrix *graph, int start, int end);
 
 #endif /* #ifndef RETHINK_C_GRAPH_H */
