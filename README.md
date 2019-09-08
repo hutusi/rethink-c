@@ -57,10 +57,10 @@ make test
 
 ### Graphs
 - [x] Adjacency Matrix [graph.h](src/graph.h) [graph.c](src/graph.c)
-- [ ] Adjacency List
+- [x] Adjacency List [sparse_graph.h](src/sparse_graph.h) [sparse_graph.c](src/sparse_graph.c)
 - [ ] Union-Find
 - [x] BFS & DFS [graph.h##bfs(), ##dfs()](src/graph.h)
-- [ ] Topological sorting (Kahn)
+- [x] Topological sorting (Kahn) [sparse_graph_topo_sort()](src/sparse_graph.h)
 - [ ] Floyd
 - [x] Dijkstra [dijkstra.h](src/dijkstra.h) [dijkstra.c](src/dijkstra.c)
 - [ ] Prim

@@ -51,7 +51,7 @@ void adjacency_matrix_free(AdjacencyMatrix *graph);
 /**
  * @brief Reset all edges of an AdjacencyMatrix to a weight.
  *
- * @param graph     The AdjacencyMatrix.
+ * @param graph     The AdjacencyMatrix Graph.
  * @param weight    The weight.
  */
 void adjacency_matrix_reset(AdjacencyMatrix *graph, int weight);
@@ -60,7 +60,7 @@ void adjacency_matrix_reset(AdjacencyMatrix *graph, int weight);
  * @brief Set an edge from a vertex to another vertex of an AdjacencyMatrix
  *        to a weight.
  *
- * @param graph     The AdjacencyMatrix.
+ * @param graph     The AdjacencyMatrix Graph.
  * @param vertex1   From vertex.
  * @param vertex2   To vertex.
  * @param edge      The weight.
@@ -74,7 +74,7 @@ void adjacency_matrix_set(AdjacencyMatrix *graph,
  * @brief Get weight of an edge from a vertex to another vertex of an
  * AdjacencyMatrix.
  *
- * @param graph     The AdjacencyMatrix.
+ * @param graph     The AdjacencyMatrix Graph.
  * @param vertex1   From vertex.
  * @param vertex2   To vertex.
  * @return int      The weight.
@@ -83,10 +83,34 @@ int adjacency_matrix_get(const AdjacencyMatrix *graph,
                          int vertex1,
                          int vertex2);
 
+/**
+ * @brief Linke two vertex in a graph.
+ * 
+ * @param graph     Vertex 1.
+ * @param vertex1   Vertex 2.
+ * @param vertex2   The AdjacencyMatrix Graph.
+ * @return int 
+ */
 int adjacency_matrix_link(AdjacencyMatrix *graph, int vertex1, int vertex2);
 
+/**
+ * @brief Breadth first searching in a graph.
+ * 
+ * @param graph     The AdjacencyMatrix Graph.
+ * @param start     The start vertex.
+ * @param end       The end vertex.
+ * @return int      0 if reach the end vertex, -1 if not.
+ */
 int adjacency_matrix_bfs(const AdjacencyMatrix *graph, int start, int end);
 
+/**
+ * @brief Depth first searching in a graph.
+ * 
+ * @param graph     The AdjacencyMatrix Graph.
+ * @param start     The start vertex.
+ * @param end       The end vertex.
+ * @return int      0 if reach the end vertex, -1 if not.
+ */
 int adjacency_matrix_dfs(const AdjacencyMatrix *graph, int start, int end);
 
 #endif /* #ifndef RETHINK_C_GRAPH_H */
