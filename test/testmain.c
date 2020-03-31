@@ -18,6 +18,7 @@ extern void test_bstree_remove();
 extern void test_avltree();
 extern void test_rbtree();
 extern void test_heap();
+extern void test_skip_list();
 extern void test_bignum();
 extern void test_bignum_int_addition();
 extern void test_bignum_int_subtraction();
@@ -52,6 +53,7 @@ static TestcaseFunc all_tests[] = {test_arraylist,
                                    test_avltree,
                                    test_rbtree,
                                    test_heap,
+                                   test_skip_list,
                                    test_bignum,
                                    test_bignum_int_addition,
                                    test_bignum_int_subtraction,

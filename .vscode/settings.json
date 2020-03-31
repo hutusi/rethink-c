@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "__node_handle": "c",
+    "iterator": "c"
+  }
+}

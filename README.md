@@ -63,8 +63,7 @@ make test
 - [x] Topological sorting (Kahn) [sparse_graph_topo_sort()](src/sparse_graph.h)
 - [ ] Floyd
 - [x] Dijkstra [dijkstra.h](src/dijkstra.h) [dijkstra.c](src/dijkstra.c)
-- [ ] Prim
-- [ ] Kruskal
+- [ ] Minimum spanning trees: Prim, Kruskal
 - [ ] A-star
 
 ### String & Text

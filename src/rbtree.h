@@ -60,7 +60,7 @@ typedef struct _RBTreeNode {
     RBTreeColor color;
 } RBTreeNode;
 
-typedef int (*RBTreeCompareFunc)(RBTreeValue data1, RBTreeValue data2);
+typedef int (*RBTreeCompareFunc)(RBTreeKey data1, RBTreeKey data2);
 typedef void (*RBTreeFreeKeyFunc)(RBTreeKey key);
 typedef void (*RBTreeFreeValueFunc)(RBTreeValue value);
 
@@ -71,7 +71,7 @@ typedef void (*RBTreeFreeValueFunc)(RBTreeValue value);
 typedef struct _RBTree {
     /** Root node of the @ref RBTree pointer. */
     struct _RBTreeNode *root;
-    /** Compare two node value when do searching in RBTree. */
+    /** Compare two node key when do searching in RBTree. */
     RBTreeCompareFunc compare_func;
     RBTreeFreeKeyFunc free_key_func;
     RBTreeFreeValueFunc free_value_func;
@@ -125,7 +125,7 @@ RBTreeNode *rb_tree_leftmost_node(RBTreeNode *node);
 RBTreeNode *rb_tree_rightmost_node(RBTreeNode *node);
 
 /**
- * @brief Insert a RBTreeValue to a RBTree.
+ * @brief Insert a Key/Value to a RBTree.
  *
  * @param tree          The RBTree.
  * @param key           The key to insert.
@@ -149,7 +149,7 @@ RBTreeNode *rb_tree_remove_node(RBTree *tree, RBTreeNode *node);
  * @brief Find a RBTreeNode value in a RBTree.
  *
  * @param tree          The RBTree.
- * @param key           The RBTreeNode value to lookup.
+ * @param key           The RBTreeNode key to lookup.
  * @return RBTreeNode*  The matched RBTreeNode if success, otherwise NULL.
  */
 RBTreeNode *rb_tree_find_node(RBTree *tree, RBTreeKey key);

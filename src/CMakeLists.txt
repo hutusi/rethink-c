@@ -1,6 +1,6 @@
 add_library(algorithm compare.c dup.c text.c
                       arraylist.c queue.c list.c bitmap.c matrix.c 
-                      bstree.c avltree.c rbtree.c heap.c
+                      bstree.c avltree.c rbtree.c heap.c skip_list.c
                       bignum.c graph.c sparse_graph.c dijkstra.c prime.c hash.c hash_table.c
                       kmp.c bm.c sunday.c trie.c ac.c huffman.c
                       vector.c distance.c)
