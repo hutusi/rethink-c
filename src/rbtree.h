@@ -101,7 +101,7 @@ void rb_tree_free(RBTree *tree);
 /**
  * @brief Free a node in a RBTree.
  *
- * @param tree  The RBTree
+ * @param tree  The RBTree.
  * @param node  The node.
  */
 void rb_tree_free_node(RBTree *tree, RBTreeNode *node);

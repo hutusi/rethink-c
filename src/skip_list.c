@@ -11,6 +11,7 @@
 #include "skip_list.h"
 #include "def.h"
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,7 +35,7 @@ skip_list_node_new(int level, SkipListKey key, SkipListValue value)
     return node;
 }
 
-static void skip_list_node_free(SkipList *list, SkipListNode *node)
+void skip_list_free_node(SkipList *list, SkipListNode *node)
 {
     if (list->free_key_func && node->value) {
         list->free_key_func(node->key);
@@ -76,7 +77,7 @@ void skip_list_free(SkipList *list)
 
     while (node != NULL) {
         SkipListNode *next = node->next_array[0];
-        skip_list_node_free(list, node);
+        skip_list_free_node(list, node);
         node = next;
     }
 
@@ -132,6 +133,74 @@ skip_list_insert(SkipList *list, SkipListKey key, SkipListValue value)
     free(updates);
 
     return node;
+}
+
+SkipListNode *skip_list_remove_node(SkipList *list, SkipListKey key)
+{
+    SkipListNode *prev = list->head;
+    for (int i = list->level; i >= 0; i--) {
+        SkipListNode *next = prev->next_array[i];
+        while (next != NULL) {
+            int cmp = list->compare_func(key, next->key);
+            if (cmp > 0) {
+                prev = next;
+                next = next->next_array[i];
+            } else if (cmp < 0) {
+                break;
+            } else {
+                SkipListNode **updates = (SkipListNode **)malloc(
+                    (list->MAX_LEVEL + 1) * sizeof(SkipListNode *));
+
+                SkipListNode *node = next;
+                updates[i] = prev;
+
+                for (int j = i - 1; j >= 0; j--) {
+                    while (prev->next_array[j] != node)
+                        prev = prev->next_array[j];
+                    updates[j] = prev;
+                }
+
+                // update next_array on each level
+                for (int j = 0; j <= i; j++) {
+                    updates[j]->next_array[j] = node->next_array[j];
+                }
+
+                for (int j = list->level; j >= 0; j--) {
+                    if (list->head->next_array[j] == NULL) {
+                        list->level--;
+                    } else {
+                        break;
+                    }
+                }
+
+                free(updates);
+                return node;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+SkipListValue skip_list_get_value(SkipList *list, SkipListKey key)
+{
+    SkipListNode *prev = list->head;
+    for (int i = list->level; i >= 0; i--) {
+        SkipListNode *next = prev->next_array[i];
+        while (next != NULL) {
+            int cmp = list->compare_func(key, next->key);
+            if (cmp > 0) {
+                prev = next;
+                next = next->next_array[i];
+            } else if (cmp < 0) {
+                break;
+            } else {
+                return next->value;
+            }
+        }
+    }
+
+    return SKIP_LIST_NIL;
 }
 
 void skip_list_print(SkipList *list)

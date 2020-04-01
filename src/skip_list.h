@@ -88,7 +88,7 @@ void skip_list_free(SkipList *list);
 /**
  * @brief Free a node in a SkipList.
  *
- * @param list  The SkipList
+ * @param list  The SkipList.
  * @param node  The node.
  */
 void skip_list_free_node(SkipList *list, SkipListNode *node);
@@ -108,21 +108,22 @@ skip_list_insert(SkipList *list, SkipListKey key, SkipListValue value);
 /**
  * @brief Remove a SkipListNode from a SkipList.
  *
- * @param list          The SkipList.
- * @param node          The SkipListNode.
- * @return SkipListNode*  The removed SkipListNode if success,
- *                      otherwise return NULL.
+ * @param list              The SkipList.
+ * @param key               The Key to find @SkipListNode to remove.
+ * @return SkipListNode*    The removed SkipListNode if success,
+ *                          otherwise return NULL.
  */
-SkipListNode *skip_list_remove_node(SkipList *list, SkipListNode *node);
+SkipListNode *skip_list_remove_node(SkipList *list, SkipListKey key);
 
 /**
- * @brief Find a SkipListNode key in a SkipList.
+ * @brief Find a SkipListNode value in a SkipList.
  *
- * @param list          The SkipList.
- * @param key           The SkipListNode value to lookup.
- * @return SkipListNode*  The matched SkipListNode if success, otherwise NULL.
+ * @param list              The SkipList.
+ * @param key               The SkipListNode value to lookup.
+ * @return SkipListValue    The matched value of node if success, otherwise
+ * NULL.
  */
-SkipListNode *skip_list_find_node(SkipList *list, SkipListKey key);
+SkipListValue skip_list_get_value(SkipList *list, SkipListKey key);
 
 /**
  * @brief Print a @ref SkipList.
