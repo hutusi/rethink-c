@@ -24,7 +24,6 @@ skip_list_node_new(int level, SkipListKey key, SkipListValue value)
 
     node->key = key;
     node->value = value;
-    node->prev = NULL;
 
     node->next_array =
         (SkipListNode **)malloc((level + 1) * sizeof(SkipListNode *));
@@ -51,22 +50,16 @@ void skip_list_free_node(SkipList *list, SkipListNode *node)
 
 SkipList *skip_list_new(SkipListCompareFunc compare_func,
                         SkipListFreeKeyFunc free_key_func,
-                        SkipListFreeValueFunc free_value_func,
-                        int max_level)
+                        SkipListFreeValueFunc free_value_func)
 {
-    if (max_level < 2) {
-        return NULL;
-    }
-
     SkipList *list = (SkipList *)malloc(sizeof(SkipList));
     list->compare_func = compare_func;
     list->free_key_func = free_key_func;
     list->free_value_func = free_value_func;
-    list->MAX_LEVEL = max_level;
     list->level = 0;
 
     list->head =
-        skip_list_node_new(list->MAX_LEVEL, SKIP_LIST_NIL, SKIP_LIST_NIL);
+        skip_list_node_new(SKIP_LIST_MAX_LEVEL, SKIP_LIST_NIL, SKIP_LIST_NIL);
 
     return list;
 }
@@ -87,9 +80,9 @@ void skip_list_free(SkipList *list)
 static int skip_list_random_level(SkipList *list)
 {
     int level = 0;
-    while ((rand() & RAND_MAX) < (RAND_MAX * RANDOM_POINT)) {
+    while ((rand() & RAND_MAX) < (RAND_MAX / SKIP_LIST_RANDOM_FACTOR)) {
         level++;
-        if (level >= list->MAX_LEVEL)
+        if (level >= SKIP_LIST_MAX_LEVEL)
             break;
     }
     return level;
@@ -98,11 +91,11 @@ static int skip_list_random_level(SkipList *list)
 SkipListNode *
 skip_list_insert(SkipList *list, SkipListKey key, SkipListValue value)
 {
-    SkipListNode **updates =
-        (SkipListNode **)malloc((list->MAX_LEVEL + 1) * sizeof(SkipListNode *));
+    SkipListNode **updates = (SkipListNode **)malloc((SKIP_LIST_MAX_LEVEL + 1) *
+                                                     sizeof(SkipListNode *));
 
-    for (int i = list->MAX_LEVEL; i >= 0; i--) {
-        if (i == list->MAX_LEVEL) {
+    for (int i = SKIP_LIST_MAX_LEVEL; i >= 0; i--) {
+        if (i == SKIP_LIST_MAX_LEVEL) {
             updates[i] = list->head;
         } else {
             updates[i] = updates[i + 1];
@@ -116,11 +109,6 @@ skip_list_insert(SkipList *list, SkipListKey key, SkipListValue value)
 
     int level = skip_list_random_level(list);
     SkipListNode *node = skip_list_node_new(level, key, value);
-
-    // update prev on level 0
-    node->prev = updates[0];
-    if (updates[0]->next_array[0] != NULL)
-        updates[0]->next_array[0]->prev = node;
 
     // update next_array on each level
     for (int i = 0; i <= level; i++) {
@@ -149,7 +137,7 @@ SkipListNode *skip_list_remove_node(SkipList *list, SkipListKey key)
                 break;
             } else {
                 SkipListNode **updates = (SkipListNode **)malloc(
-                    (list->MAX_LEVEL + 1) * sizeof(SkipListNode *));
+                    (SKIP_LIST_MAX_LEVEL + 1) * sizeof(SkipListNode *));
 
                 SkipListNode *node = next;
                 updates[i] = prev;
@@ -182,7 +170,7 @@ SkipListNode *skip_list_remove_node(SkipList *list, SkipListKey key)
     return NULL;
 }
 
-SkipListValue skip_list_get_value(SkipList *list, SkipListKey key)
+SkipListValue skip_list_find(SkipList *list, SkipListKey key)
 {
     SkipListNode *prev = list->head;
     for (int i = list->level; i >= 0; i--) {

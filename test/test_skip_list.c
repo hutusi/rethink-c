@@ -8,7 +8,7 @@
 
 void test_skip_list_insert()
 {
-    SkipList *list = skip_list_new(int_compare, NULL, NULL, 5);
+    SkipList *list = skip_list_new(int_compare, NULL, NULL);
     int arr[] = {5,  6,  3,  2,  8,  1,  4,  0,  9,  7,  13, 11, 14,
                  18, 19, 17, 16, 12, 15, 10, 23, 21, 24, 28, 29, 27,
                  26, 22, 25, 20, 33, 31, 34, 38, 39, 37, 36, 32, 35,
@@ -27,6 +27,9 @@ void test_skip_list_insert()
     skip_list_free_node(list, node);
 
     skip_list_print(list);
+
+    int k = 20; 
+    assert(k == *((int *)skip_list_find(list, &k)));
 
     skip_list_free(list);
 }

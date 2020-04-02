@@ -16,7 +16,10 @@
 #ifndef RETHINK_C_SKIP_LIST_H
 #define RETHINK_C_SKIP_LIST_H
 
-#define RANDOM_POINT 1 / 4
+/** Max level of the @ref SkipList **/
+#define SKIP_LIST_MAX_LEVEL 16
+/** Random level factor of the @ref SkipList **/
+#define SKIP_LIST_RANDOM_FACTOR 4
 
 /**
  * @brief The type of a key to be stored in a @ref SkipListNode.
@@ -37,7 +40,6 @@ typedef void *SkipListValue;
 typedef struct _SkipListNode {
     SkipListKey key;
     SkipListValue value;
-    struct _SkipListNode *prev;
     struct _SkipListNode **next_array;
 } SkipListNode;
 
@@ -50,8 +52,6 @@ typedef void (*SkipListFreeValueFunc)(SkipListValue value);
  *
  */
 typedef struct _SkipList {
-    /** Max level of the @ref SkipList **/
-    int MAX_LEVEL;
     /** Current level of the @ref SkipList **/
     int level;
     /** The head node of the @ref SkipList **/
@@ -75,8 +75,7 @@ typedef struct _SkipList {
  */
 SkipList *skip_list_new(SkipListCompareFunc compare_func,
                         SkipListFreeKeyFunc free_key_func,
-                        SkipListFreeValueFunc free_value_func,
-                        int max_level);
+                        SkipListFreeValueFunc free_value_func);
 
 /**
  * @brief Delete a SkipList and free back memory.
@@ -123,7 +122,7 @@ SkipListNode *skip_list_remove_node(SkipList *list, SkipListKey key);
  * @return SkipListValue    The matched value of node if success, otherwise
  * NULL.
  */
-SkipListValue skip_list_get_value(SkipList *list, SkipListKey key);
+SkipListValue skip_list_find(SkipList *list, SkipListKey key);
 
 /**
  * @brief Print a @ref SkipList.
