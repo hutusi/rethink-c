@@ -52,7 +52,7 @@ make test
 - [x] Red Black Tree [rbtree.h](src/rbtree.h) [rbtree.c](src/rbtree.c)
 - [x] Binary Heap [heap.h](src/heap.h) [heap.c](src/heap.c)
 - [ ] Fibonacci Heap, Binomial Heap
-- [ ] Skip List
+- [x] Skip List [skip_list.h](src/skip_list.h) [skip_list.c](src/skip_list.c)
 - [ ] B+ Tree
 
 ### Graphs

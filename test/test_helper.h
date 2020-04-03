@@ -68,4 +68,6 @@ static inline void assert_double_eq(double a, double b, double tolerance)
 
 int string_equal(void *str1, void *str2);
 
+int *generate_random_numbers(int from, int to);
+
 #endif /* RETHINK_C_TEST_HELPER_H */

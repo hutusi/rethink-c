@@ -5,8 +5,6 @@
  *
  * @brief Skip List.
  *
- * ref: https://www.geeksforgeeks.org/skip-list/
- *
  * @date 2020-03-29
  *
  * @copyright Copyright (c) 2020, hutusi.com

@@ -9,13 +9,9 @@
 void test_skip_list_insert()
 {
     SkipList *list = skip_list_new(int_compare, NULL, NULL);
-    int arr[] = {5,  6,  3,  2,  8,  1,  4,  0,  9,  7,  13, 11, 14,
-                 18, 19, 17, 16, 12, 15, 10, 23, 21, 24, 28, 29, 27,
-                 26, 22, 25, 20, 33, 31, 34, 38, 39, 37, 36, 32, 35,
-                 30, 43, 41, 44, 48, 49, 47, 46, 42, 45, 40};
+    int *arr = generate_random_numbers(0, 99);
 
-    // assert(skip_list_insert(list, &(arr[0]), &(arr[0])));
-    for (int i = 0; i < 50; ++i) {
+    for (int i = 0; i < 100; ++i) {
         int *key = &(arr[i]);
         int *value = key;
         assert(skip_list_insert(list, key, value));
@@ -23,15 +19,16 @@ void test_skip_list_insert()
 
     skip_list_print(list);
 
+    int k = 20; 
+    assert(k == *((int *)skip_list_find(list, &k)));
+
     SkipListNode *node = skip_list_remove_node(list, &(arr[9]));
     skip_list_free_node(list, node);
 
     skip_list_print(list);
 
-    int k = 20; 
-    assert(k == *((int *)skip_list_find(list, &k)));
-
     skip_list_free(list);
+    free(arr);
 }
 
 void test_skip_list()

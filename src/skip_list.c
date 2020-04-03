@@ -8,6 +8,12 @@
  *
  */
 
+/**
+ * The implementaion of skip list reference to:
+ * https://www.geeksforgeeks.org/skip-list/
+ * 
+ */
+
 #include "skip_list.h"
 #include "def.h"
 #include <assert.h>
